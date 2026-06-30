@@ -24,7 +24,6 @@ public class betterarchery {
     
     @Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 		proxy.preInit(event);
 	}
     
