@@ -1,8 +1,6 @@
 package com.onyxi7.betterarchery;
 
 import com.onyxi7.betterarchery.proxy.CommonProxy;
-import com.onyxi7.betterarchery.handler.GuiHandler;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
