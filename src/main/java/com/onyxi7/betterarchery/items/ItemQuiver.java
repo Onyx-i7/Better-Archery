@@ -57,23 +57,24 @@ public class ItemQuiver extends Item implements IHasModel {
     }
     
     @Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
-		if (handIn == EnumHand.MAIN_HAND) {
-			ItemStack stack = playerIn.getHeldItem(handIn);
-        
-			if (!stack.hasTagCompound()) {
-				stack.setTagCompound(new NBTTagCompound());
-			}
-			if (!stack.getTagCompound().hasKey("uniqueID")) {
-				stack.getTagCompound().setInteger("uniqueID", stack.hashCode());
-			}
-        
-			if (!worldIn.isRemote) {
-				playerIn.openGui(com.onyxi7.betterarchery.betterarchery.instance, 
-							com.onyxi7.betterarchery.handler.GuiHandler.QUIVER_GUI, 
-							worldIn, 0, 0, 0);
-			}
-			return new ActionResult<>(EnumActionResult.SUCCESS, stack);
-		}
-    return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+        if (handIn == EnumHand.MAIN_HAND) {
+            ItemStack stack = playerIn.getHeldItem(handIn);
+            
+            if (!stack.hasTagCompound()) {
+                stack.setTagCompound(new NBTTagCompound());
+            }
+            if (!stack.getTagCompound().hasKey("uniqueID")) {
+                stack.getTagCompound().setInteger("uniqueID", stack.hashCode());
+            }
+            
+            if (!worldIn.isRemote) {
+                playerIn.openGui(com.onyxi7.betterarchery.betterarchery.instance, 
+                               com.onyxi7.betterarchery.handler.GuiHandler.QUIVER_GUI, 
+                               worldIn, 0, 0, 0);
+            }
+            return new ActionResult<>(EnumActionResult.SUCCESS, stack);
+        }
+        return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
+    }
 }
