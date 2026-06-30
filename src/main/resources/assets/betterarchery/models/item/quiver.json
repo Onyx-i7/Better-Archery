@@ -1,7 +1,7 @@
 {
 	"parent": "item/handheld",
 	"textures": {
-		"layer0": "lostquiver:quiver"
+		"layer0": "betterarchery:quiver"
 	}
 	
 }
