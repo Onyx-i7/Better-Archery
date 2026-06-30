@@ -85,19 +85,16 @@ public class ItemQuiver extends Item implements IHasModel {
             if (playerIn.inventory.hasItemStack(new ItemStack(Items.ARROW))) {
                 NBTTagCompound nbt = new NBTTagCompound();
                 int arrowsSlot = playerIn.inventory.getSlotFor(new ItemStack(Items.ARROW));
-    
-                // Verificar que el slot sea válido
-                if (arrowsSlot >= 0) {
-                    ItemStack arrowStack = playerIn.inventory.getStackInSlot(arrowsSlot);
-                    int arrowStackSize = arrowStack.getCount();
-                    nbt.setInteger("Arrows", arrowStackSize);
-        
-                    ItemStack quiverWithArrowsStack = new ItemStack(ItemInit.QUIVER_WITH_ARROWS);
-                    quiverWithArrowsStack.setTagCompound(nbt);
-                    playerIn.inventory.removeStackFromSlot(arrowsSlot);
-                    return new ActionResult<>(EnumActionResult.SUCCESS, quiverWithArrowsStack);
-                }
+                ItemStack arrowStack = playerIn.inventory.getStackInSlot(arrowsSlot);
+                int arrowStackSize = arrowStack.getCount();
+                nbt.setInteger("Arrows", arrowStackSize);
+                
+                ItemStack quiverWithArrowsStack = new ItemStack(ItemInit.QUIVER_WITH_ARROWS);
+                quiverWithArrowsStack.setTagCompound(nbt);
+                playerIn.inventory.removeStackFromSlot(arrowsSlot);
+                return new ActionResult<>(EnumActionResult.SUCCESS, quiverWithArrowsStack);
             }
+            
             return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
         }
         return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));

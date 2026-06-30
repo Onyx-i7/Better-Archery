@@ -70,18 +70,16 @@ public class ItemDrillArrow extends ItemArrow implements IHasModel {
     }
     
     @Override
-    public EntityArrow createArrow(World worldIn, ItemStack stack, EntityLivingBase shooter) {
-        // Por ahora devuelve una flecha normal
-        // Después creare EntityDrillArrow para que atraviese bloques
-        EntityArrow arrow = super.createArrow(worldIn, stack, shooter);
-        
-        // Si está rota, no debe poder dispararse, pero por si acaso
-        if (isBroken(stack.getMetadata())) {
-            arrow.setDamage(0);
-        }
-        
-        return arrow;
-    }
+	public EntityArrow createArrow(World worldIn, ItemStack stack, EntityLivingBase shooter) {
+		EntityDrillArrow arrow = new EntityDrillArrow(worldIn, shooter);
+    
+		// Si está rota, no debería poder dispararse
+		if (isBroken(stack.getMetadata())) {
+			arrow.setDamage(0);
+		}
+    
+		return arrow;
+	}
     
     @Override
     public boolean isInfinite(ItemStack stack, ItemStack bow, EntityPlayer player) {

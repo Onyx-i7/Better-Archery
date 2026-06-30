@@ -24,6 +24,17 @@ public class betterarchery {
     
     @Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
+		EntityRegistry.registerModEntity(
+			new ResourceLocation("betterarchery", "drill_arrow"),
+			EntityDrillArrow.class,
+			"drill_arrow",
+			0,
+			this,
+			64,
+			1,
+			true
+		);
+    
 		proxy.preInit(event);
 	}
     
