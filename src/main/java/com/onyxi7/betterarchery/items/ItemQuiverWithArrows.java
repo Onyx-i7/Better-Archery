@@ -1,4 +1,4 @@
-package com.onyxi7.betterarchery.objects.items;
+package com.onyxi7.betterarchery.items;
 
 import com.onyxi7.betterarchery.betterarchery;
 import com.onyxi7.betterarchery.init.ItemInit;
@@ -29,7 +29,7 @@ public class ItemQuiverWithArrows extends ItemArrow implements IHasModel {
     public static int MAX_SIZE;
     
     public ItemQuiverWithArrows(String name, int size) {
-        setUnlocalizedName(name);
+        setTranslationKey(name);
         setRegistryName(name);
         MAX_SIZE = size;
         ItemInit.ITEMS.add(this);
@@ -173,7 +173,6 @@ public class ItemQuiverWithArrows extends ItemArrow implements IHasModel {
         if (entityIn instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) entityIn;
             
-            // Verificar mano secundaria
             if (player.getHeldItemOffhand().getItem() instanceof ItemArrow) {
                 ItemStack newStack = player.getHeldItemOffhand();
                 if (newStack.hasTagCompound()) {
@@ -194,10 +193,10 @@ public class ItemQuiverWithArrows extends ItemArrow implements IHasModel {
             }
             
             for (int i = 1; i <= 2; i++) {
-                if (player.inventory.getStackInSlotFromEnd(i).getItem() instanceof ItemArrow) {
-                    ItemStack newStack = player.inventory.getStackInSlotFromEnd(i);
-                    if (newStack.hasTagCompound()) {
-                        NBTTagCompound nbt = newStack.getTagCompound();
+                ItemStack armorStack = player.inventory.armorInventory.get(i);
+                if (armorStack.getItem() instanceof ItemArrow) {
+                    if (armorStack.hasTagCompound()) {
+                        NBTTagCompound nbt = armorStack.getTagCompound();
                         if (nbt.hasKey("Arrows")) {
                             if (nbt.getInteger("Arrows") <= 0) {
                                 player.inventory.armorInventory.set(i, new ItemStack(ItemInit.QUIVER));
@@ -214,18 +213,32 @@ public class ItemQuiverWithArrows extends ItemArrow implements IHasModel {
                 }
             }
             
-            if (stack.hasTagCompound()) {
-                NBTTagCompound nbt = stack.getTagCompound();
-                if (nbt.hasKey("Arrows")) {
-                    if (nbt.getInteger("Arrows") <= 0) {
-                        entityIn.setItemStackToSlot(itemSlot, new ItemStack(ItemInit.QUIVER));
+            EntityEquipmentSlot slot = getSlotForItemSlot(itemSlot);
+            if (slot != null) {
+                if (stack.hasTagCompound()) {
+                    NBTTagCompound nbt = stack.getTagCompound();
+                    if (nbt.hasKey("Arrows")) {
+                        if (nbt.getInteger("Arrows") <= 0) {
+                            entityIn.setItemStackToSlot(slot, new ItemStack(ItemInit.QUIVER));
+                        }
+                    } else {
+                        entityIn.setItemStackToSlot(slot, new ItemStack(ItemInit.QUIVER));
                     }
                 } else {
-                    entityIn.setItemStackToSlot(itemSlot, new ItemStack(ItemInit.QUIVER));
+                    entityIn.setItemStackToSlot(slot, new ItemStack(ItemInit.QUIVER));
                 }
-            } else {
-                entityIn.setItemStackToSlot(itemSlot, new ItemStack(ItemInit.QUIVER));
             }
         }
+    }
+    
+    private EntityEquipmentSlot getSlotForItemSlot(int itemSlot) {
+        if (itemSlot >= 36 && itemSlot <= 39) {
+            return EntityEquipmentSlot.values()[39 - itemSlot]; // ARMOR slots
+        } else if (itemSlot == 40) {
+            return EntityEquipmentSlot.OFFHAND;
+        } else if (itemSlot >= 0 && itemSlot <= 8) {
+            return EntityEquipmentSlot.MAINHAND;
+        }
+        return null;
     }
 }

@@ -1,4 +1,4 @@
-package com.onyxi7.betterarchery.objects.items;
+package com.onyxi7.betterarchery.items;
 
 import com.onyxi7.betterarchery.betterarchery;
 import com.onyxi7.betterarchery.init.ItemInit;
@@ -24,7 +24,7 @@ import net.minecraft.world.World;
 public class ItemQuiver extends Item implements IHasModel {
     
     public ItemQuiver(String name) {
-        setUnlocalizedName(name);
+        setTranslationKey(name);
         setRegistryName(name);
         setCreativeTab(CreativeTabs.COMBAT);
         ItemInit.ITEMS.add(this);
