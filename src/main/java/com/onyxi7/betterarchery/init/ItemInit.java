@@ -1,7 +1,7 @@
 package com.onyxi7.betterarchery.init;
 
-import com.onyxi7.betterarchery.objects.items.ItemQuiver;
-import com.onyxi7.betterarchery.objects.items.ItemQuiverWithArrows;
+import com.onyxi7.betterarchery.items.ItemQuiver;
+import com.onyxi7.betterarchery.items.ItemQuiverWithArrows;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.item.Item;
