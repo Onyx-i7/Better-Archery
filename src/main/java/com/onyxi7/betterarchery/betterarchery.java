@@ -1,6 +1,8 @@
 package com.onyxi7.betterarchery;
 
 import com.onyxi7.betterarchery.proxy.CommonProxy;
+import com.onyxi7.betterarchery.handler.GuiHandler;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -22,10 +24,11 @@ public class betterarchery {
     @SidedProxy(clientSide = "com.onyxi7.betterarchery.proxy.ClientProxy", serverSide = "com.onyxi7.betterarchery.proxy.CommonProxy")
     public static CommonProxy proxy;
     
-    @EventHandler
-    public void preInit(FMLPreInitializationEvent event) {
-        proxy.preInit(event);
-    }
+    @Mod.EventHandler
+	public void preInit(FMLPreInitializationEvent event) {
+		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
+		proxy.preInit(event);
+	}
     
     @EventHandler
     public void init(FMLInitializationEvent event) {

@@ -57,46 +57,23 @@ public class ItemQuiver extends Item implements IHasModel {
     }
     
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
-        if (handIn != EnumHand.OFF_HAND) {
-            BlockPos pos = playerIn.getPosition();
-            BlockPos range1 = pos.add(-1, -1, -1);
-            BlockPos range2 = pos.add(1, 3, 1);
-            List<EntityArrow> arrows = worldIn.getEntitiesWithinAABB(EntityArrow.class, new AxisAlignedBB(range1, range2));
-            
-            if (!arrows.isEmpty()) {
-                NBTTagCompound nbt = new NBTTagCompound();
-                nbt.setInteger("Arrows", 0);
-                ItemStack quiverWithArrowsStack = new ItemStack(ItemInit.QUIVER_WITH_ARROWS);
-                
-                for (EntityArrow a : arrows) {
-                    if (nbt.getInteger("Arrows") < ItemQuiverWithArrows.MAX_SIZE) {
-                        worldIn.removeEntity(a);
-                        nbt.setInteger("Arrows", nbt.getInteger("Arrows") + 1);
-                        continue;
-                    }
-                    quiverWithArrowsStack.setTagCompound(nbt);
-                    return new ActionResult<>(EnumActionResult.SUCCESS, quiverWithArrowsStack);
-                }
-                quiverWithArrowsStack.setTagCompound(nbt);
-                return new ActionResult<>(EnumActionResult.SUCCESS, quiverWithArrowsStack);
-            }
-            
-            if (playerIn.inventory.hasItemStack(new ItemStack(Items.ARROW))) {
-                NBTTagCompound nbt = new NBTTagCompound();
-                int arrowsSlot = playerIn.inventory.getSlotFor(new ItemStack(Items.ARROW));
-                ItemStack arrowStack = playerIn.inventory.getStackInSlot(arrowsSlot);
-                int arrowStackSize = arrowStack.getCount();
-                nbt.setInteger("Arrows", arrowStackSize);
-                
-                ItemStack quiverWithArrowsStack = new ItemStack(ItemInit.QUIVER_WITH_ARROWS);
-                quiverWithArrowsStack.setTagCompound(nbt);
-                playerIn.inventory.removeStackFromSlot(arrowsSlot);
-                return new ActionResult<>(EnumActionResult.SUCCESS, quiverWithArrowsStack);
-            }
-            
-            return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
-        }
-        return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
-    }
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+		if (handIn == EnumHand.MAIN_HAND) {
+			ItemStack stack = playerIn.getHeldItem(handIn);
+        
+			if (!stack.hasTagCompound()) {
+				stack.setTagCompound(new NBTTagCompound());
+			}
+			if (!stack.getTagCompound().hasKey("uniqueID")) {
+				stack.getTagCompound().setInteger("uniqueID", stack.hashCode());
+			}
+        
+			if (!worldIn.isRemote) {
+				playerIn.openGui(com.onyxi7.betterarchery.betterarchery.instance, 
+							com.onyxi7.betterarchery.handler.GuiHandler.QUIVER_GUI, 
+							worldIn, 0, 0, 0);
+			}
+			return new ActionResult<>(EnumActionResult.SUCCESS, stack);
+		}
+    return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
 }
