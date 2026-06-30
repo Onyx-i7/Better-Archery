@@ -1,0 +1,15 @@
+[
+{
+  "modid": "betterarchery",
+  "name": "Better Archery",
+  "description": "Port mod",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Onyx-i7"],
+  "credits": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

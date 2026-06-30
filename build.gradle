@@ -1,0 +1,141 @@
+buildscript {
+    repositories {
+        maven {
+            name = 'GTNH Maven'
+            url = 'https://nexus.gtnewhorizons.com/repository/public/'
+        }
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath 'com.gtnewhorizons:retrofuturagradle:2.0.2'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+apply plugin: 'com.gtnewhorizons.retrofuturagradle'
+
+// =============================================================================
+// MOD CONFIGURATION
+// =============================================================================
+
+version = "1.0"
+group = "com.onyxi7.betterarchery"
+
+// Gradle 9 syntax
+base {
+    archivesName = 'BetterArchery-1.12.2'
+}
+
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(8))
+}
+
+minecraft {
+    mcVersion = '1.12.2'
+    username = 'Developer'
+}
+
+// =============================================================================
+// REPOSITORIES
+// =============================================================================
+
+repositories {
+    mavenCentral()
+    maven {
+        name = 'CurseForge'
+        url = 'https://www.cursemaven.com'
+    }
+}
+
+// =============================================================================
+// DEPENDENCIES
+// =============================================================================
+
+dependencies {
+    // If you need add dependencies in the future, use:
+    // implementation rfg.deobf('curse.maven:modid-projectid:fileid')
+    // compileOnly rfg.deobf('curse.maven:modid-projectid:fileid')
+}
+
+// =============================================================================
+// RESOURCE PROCESSING
+// =============================================================================
+
+tasks.named('processResources', ProcessResources).configure {
+    def replaceProperties = [
+        version: project.version,
+        mcversion: project.minecraft.mcVersion,
+        modid: 'betterarchery',
+        modName: 'Better Archery',
+        description: 'A port of Better Archery'
+    ]
+    inputs.properties replaceProperties
+
+    filesMatching(['mcmod.info', 'pack.mcmeta']) {
+        expand replaceProperties + [project: project]
+    }
+}
+
+// =============================================================================
+// JAR CONFIGURATION
+// =============================================================================
+
+tasks.named('jar', Jar).configure {
+    manifest {
+        attributes([
+            'FMLCorePluginContainsFMLMod': 'true',
+            'ForceLoadAsMod': 'true',
+            'Specification-Version': project.version,
+            'Implementation-Version': project.version,
+            'Built-On': new Date().format('yyyy-MM-dd HH:mm:ss'),
+            'Built-With': "Gradle ${gradle.gradleVersion}"
+        ])
+    }
+}
+
+// =============================================================================
+// BUILD TASKS
+// =============================================================================
+
+build.dependsOn jar
+
+// Custom task to verify build outputs
+tasks.register('verifyBuild') {
+    doLast {
+        println "============================================="
+        println "Build verification complete"
+        println "============================================="
+        println "Mod ID: betterarchery"
+        println "Version: ${version}"
+        println "Minecraft: ${minecraft.mcVersion}"
+        println "Output: build/libs/${base.archivesName.get()}-${version}.jar"
+        println "============================================="
+    }
+}
+
+build.finalizedBy verifyBuild
+
+// =============================================================================
+// IDE CONFIGURATION
+// =============================================================================
+
+idea {
+    module {
+        inheritOutputDirs = true
+    }
+}
+
+// =============================================================================
+// ADDITIONAL TASKS
+// =============================================================================
+
+// Task to generate development environment
+tasks.register('setupDevEnvironment') {
+    doLast {
+        println "Setting up development environment..."
+        println "Run './gradlew setupDecompWorkspace' if needed"
+    }
+}
