@@ -23,13 +23,27 @@ public class QuiverInventory implements IInventory {
         this.playerInv = ownerInv;
         this.playerInvIndex = invIndex;
         this.inv = new ItemStack[size];
-        ItemStack stack = ownerInv.mainInventory.get(invIndex);
-        getInventory(stack, false);
+        
+        for (int i = 0; i < size; i++) {
+            this.inv[i] = ItemStack.EMPTY;
+        }
+        
+        ItemStack stack = ownerInv.getStackInSlot(invIndex);
+        if (!stack.isEmpty()) {
+            getInventory(stack, false);
+        }
     }
     
     public QuiverInventory(ItemStack quiverStack) {
         this.inv = new ItemStack[size];
-        getInventory(quiverStack, true);
+        
+        for (int i = 0; i < size; i++) {
+            this.inv[i] = ItemStack.EMPTY;
+        }
+        
+        if (!quiverStack.isEmpty()) {
+            getInventory(quiverStack, true);
+        }
     }
     
     private void getInventory(ItemStack quiverStack, boolean noUpdate) {
@@ -41,10 +55,12 @@ public class QuiverInventory implements IInventory {
                     NBTTagCompound nbtStack = itemList.getCompoundTagAt(i);
                     ItemStack stack = new ItemStack(nbtStack);
                     byte slot = nbtStack.getByte("Slot");
-                    if (noUpdate) {
-                        setInventorySlotContentsNoUpdate(slot, stack);
-                    } else {
-                        setInventorySlotContents(slot, stack);
+                    if (slot >= 0 && slot < size) {
+                        if (noUpdate) {
+                            setInventorySlotContentsNoUpdate(slot, stack);
+                        } else {
+                            setInventorySlotContents(slot, stack);
+                        }
                     }
                 }
             }
@@ -86,7 +102,7 @@ public class QuiverInventory implements IInventory {
     }
     
     public void setInventorySlotContentsNoUpdate(int slot, ItemStack stack) {
-        this.inv[slot] = stack;
+        this.inv[slot] = stack.isEmpty() ? ItemStack.EMPTY : stack;
     }
     
     @Override
@@ -95,14 +111,17 @@ public class QuiverInventory implements IInventory {
         if (!stack.isEmpty()) {
             if (stack.getCount() <= amt) {
                 setInventorySlotContents(slot, ItemStack.EMPTY);
+                return stack;
             } else {
-                stack = stack.splitStack(amt);
+                ItemStack result = stack.splitStack(amt);
                 if (stack.getCount() == 0) {
                     setInventorySlotContents(slot, ItemStack.EMPTY);
                 }
+                markDirty();
+                return result;
             }
         }
-        return stack;
+        return ItemStack.EMPTY;
     }
     
     @Override
@@ -110,8 +129,9 @@ public class QuiverInventory implements IInventory {
         ItemStack stack = getStackInSlot(slot);
         if (!stack.isEmpty()) {
             setInventorySlotContents(slot, ItemStack.EMPTY);
+            return stack;
         }
-        return stack;
+        return ItemStack.EMPTY;
     }
     
     @Override
@@ -128,7 +148,7 @@ public class QuiverInventory implements IInventory {
     @Override
     public void markDirty() {
         for (int i = 0; i < size; i++) {
-            if (!this.inv[i].isEmpty() && this.inv[i].getCount() <= 0) {
+            if (this.inv[i].getCount() <= 0) {
                 this.inv[i] = ItemStack.EMPTY;
             }
         }
@@ -136,8 +156,8 @@ public class QuiverInventory implements IInventory {
         NBTTagList quiverCompound = new NBTTagList();
         int j = 0;
         for (ItemStack item : this.inv) {
-            NBTTagCompound itemCompound = new NBTTagCompound();
             if (!item.isEmpty()) {
+                NBTTagCompound itemCompound = new NBTTagCompound();
                 item.writeToNBT(itemCompound);
                 itemCompound.setByte("Slot", (byte) j);
                 quiverCompound.appendTag(itemCompound);
@@ -145,21 +165,27 @@ public class QuiverInventory implements IInventory {
             j++;
         }
         
-        ItemStack quiverStack = this.playerInv.mainInventory.get(this.playerInvIndex);
-        if (!quiverStack.hasTagCompound()) {
-            quiverStack.setTagCompound(new NBTTagCompound());
+        ItemStack quiverStack = this.playerInv.getStackInSlot(this.playerInvIndex);
+        if (!quiverStack.isEmpty()) {
+            if (!quiverStack.hasTagCompound()) {
+                quiverStack.setTagCompound(new NBTTagCompound());
+            }
+            quiverStack.getTagCompound().setTag("quiver", quiverCompound);
+            updateDamage(quiverStack);
         }
-        quiverStack.getTagCompound().setTag("quiver", quiverCompound);
-        updateDamage(quiverStack);
     }
     
     public void updateDamage() {
-        updateDamage(this.playerInv.mainInventory.get(this.playerInvIndex));
+        if (this.playerInv != null) {
+            updateDamage(this.playerInv.getStackInSlot(this.playerInvIndex));
+        }
     }
     
     public void updateDamage(ItemStack quiverStack) {
-        int damage = getArrowCount();
-        quiverStack.setItemDamage(damage);
+        if (!quiverStack.isEmpty()) {
+            int damage = getArrowCount();
+            quiverStack.setItemDamage(damage);
+        }
     }
     
     @Override

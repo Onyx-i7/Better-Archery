@@ -3,7 +3,6 @@ package com.onyxi7.betterarchery.items.quiver;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemStack;
@@ -19,12 +18,15 @@ public class QuiverContainer extends Container {
         this.heldItem = playerInv.getCurrentItem();
         this.playerInventory = playerInv;
         
-        if (this.heldItem.getTagCompound() == null) {
+        if (this.heldItem.isEmpty()) {
+            this.heldItem = ItemStack.EMPTY;
+        } else if (!this.heldItem.hasTagCompound()) {
             this.heldItem.setTagCompound(new NBTTagCompound());
         }
         
         int x = 89 - 18 * QuiverInventory.size / 2;
         
+        // Slots del carcaj
         for (int i = 0; i < QuiverInventory.size; i++) {
             addSlotToContainer(new Slot(quiverInv, i, x, 16) {
                 @Override
@@ -35,6 +37,7 @@ public class QuiverContainer extends Container {
             x += 18;
         }
         
+        // Inventario del jugador (3x9)
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
                 int slotIndex = i * 9 + j + 9;
@@ -44,6 +47,7 @@ public class QuiverContainer extends Container {
             }
         }
         
+        // Hotbar del jugador (9 slots)
         for (int i = 0; i < 9; i++) {
             int slotPosX = 8 + i * 18;
             int slotPosY = 124;
@@ -56,9 +60,8 @@ public class QuiverContainer extends Container {
     @Override
     public boolean canInteractWith(EntityPlayer player) {
         ItemStack curItem = player.inventory.getCurrentItem();
-        if (!curItem.isEmpty() && 
-            curItem.getTagCompound() != null && 
-            this.heldItem.getTagCompound() != null) {
+        if (!curItem.isEmpty() && !this.heldItem.isEmpty() && 
+            curItem.getTagCompound() != null && this.heldItem.getTagCompound() != null) {
             return curItem.getTagCompound().getInteger("uniqueID") == 
                    this.heldItem.getTagCompound().getInteger("uniqueID");
         }
@@ -75,16 +78,20 @@ public class QuiverContainer extends Container {
             stackCopy = stack.copy();
             
             if (slotIndex < QuiverInventory.size) {
+                // Del carcaj al inventario
                 if (!mergeItemStack(stack, QuiverInventory.size, inventorySlots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
+                slot.onSlotChanged();
             } else {
+                // Del inventario al carcaj
                 if (!(stack.getItem() instanceof ItemArrow)) {
                     return ItemStack.EMPTY;
                 }
                 
                 int itemsLeft = stack.getCount();
                 
+                // Primero intentar combinar con stacks existentes
                 int i = 0;
                 while (itemsLeft > 0 && i < QuiverInventory.size) {
                     ItemStack stackInSlot = this.quiverInventory.getStackInSlot(i);
@@ -102,6 +109,7 @@ public class QuiverContainer extends Container {
                     i++;
                 }
                 
+                // Luego poner en slots vacíos
                 i = 0;
                 while (itemsLeft > 0 && i < QuiverInventory.size) {
                     ItemStack stackInSlot = this.quiverInventory.getStackInSlot(i);
@@ -119,7 +127,6 @@ public class QuiverContainer extends Container {
                 }
                 
                 this.quiverInventory.markDirty();
-                this.playerInventory.markDirty();
                 
                 if (itemsLeft <= 0) {
                     slot.putStack(ItemStack.EMPTY);
@@ -142,7 +149,10 @@ public class QuiverContainer extends Container {
     
     public void transferAllStacks() {
         for (int i = 0; i < QuiverInventory.size; i++) {
-            transferStackInSlot(null, i);
+            ItemStack stack = quiverInventory.getStackInSlot(i);
+            if (!stack.isEmpty()) {
+                transferStackInSlot(null, i);
+            }
         }
     }
 }
