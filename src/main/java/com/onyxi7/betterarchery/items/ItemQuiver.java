@@ -76,4 +76,5 @@ public class ItemQuiver extends Item implements IHasModel {
 			return new ActionResult<>(EnumActionResult.SUCCESS, stack);
 		}
     return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
+	}
 }
