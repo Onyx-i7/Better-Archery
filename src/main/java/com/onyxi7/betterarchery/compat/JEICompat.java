@@ -2,10 +2,8 @@ package com.onyxi7.betterarchery.compat;
 
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
-import mezz.jei.api.ISubtypeRegistry;
 import mezz.jei.api.JEIPlugin;
 import com.onyxi7.betterarchery.init.ItemInit;
-import com.onyxi7.betterarchery.items.arrows.ItemPotionArrow;
 import net.minecraft.item.ItemStack;
 
 @JEIPlugin
@@ -13,14 +11,6 @@ public class JEICompat implements IModPlugin {
     
     @Override
     public void register(IModRegistry registry) {
-        ISubtypeRegistry subtypeRegistry = registry.getJeiHelpers().getSubtypeRegistry();
-        subtypeRegistry.registerSubtypeInterpreter(ItemInit.POTION_ARROW, stack -> {
-            if (stack.hasTagCompound() && stack.getTagCompound().hasKey("PotionType")) {
-                return stack.getTagCompound().getString("PotionType");
-            }
-            return "empty";
-        });
-        
         registry.addIngredientInfo(new ItemStack(ItemInit.QUIVER), ItemStack.class, 
             "betterarchery.jei.quiver.description");
         
