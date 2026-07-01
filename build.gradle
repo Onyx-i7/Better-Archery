@@ -24,7 +24,6 @@ apply plugin: 'com.gtnewhorizons.retrofuturagradle'
 version = "1.0"
 group = "com.onyxi7.betterarchery"
 
-// Gradle 9 syntax
 base {
     archivesName = 'BetterArchery-1.12.2'
 }
@@ -44,9 +43,15 @@ minecraft {
 
 repositories {
     mavenCentral()
+    
     maven {
         name = 'CurseForge'
         url = 'https://www.cursemaven.com'
+    }
+    
+    maven {
+        name = 'CleanroomMC'
+        url = 'https://maven.cleanroommc.com'
     }
 }
 
@@ -55,9 +60,7 @@ repositories {
 // =============================================================================
 
 dependencies {
-    // If you need add dependencies in the future, use:
-    // implementation rfg.deobf('curse.maven:modid-projectid:fileid')
-    // compileOnly rfg.deobf('curse.maven:modid-projectid:fileid')
+    compileOnly rfg.deobf('curse.maven:had-enough-items-557549:8081514')
 }
 
 // =============================================================================
@@ -102,7 +105,6 @@ tasks.named('jar', Jar).configure {
 
 build.dependsOn jar
 
-// Custom task to verify build outputs
 tasks.register('verifyBuild') {
     doLast {
         println "============================================="
@@ -132,7 +134,6 @@ idea {
 // ADDITIONAL TASKS
 // =============================================================================
 
-// Task to generate development environment
 tasks.register('setupDevEnvironment') {
     doLast {
         println "Setting up development environment..."
