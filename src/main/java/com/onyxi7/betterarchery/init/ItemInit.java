@@ -13,11 +13,14 @@ import com.onyxi7.betterarchery.items.bows.LongBow;
 import com.onyxi7.betterarchery.items.bows.RecurveBow;
 import com.onyxi7.betterarchery.items.bows.CompositeBow;
 import com.onyxi7.betterarchery.items.bows.YumiBow;
+import com.onyxi7.betterarchery.init.CreativeTabInit;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.item.Item;
 
 public class ItemInit {
+    
+    private static final CreativeTabInit TAB_INIT = null;
     
     public static final List<Item> ITEMS = new ArrayList<>();
     

@@ -19,7 +19,7 @@ public class ItemEnderArrow extends ItemArrow implements IHasModel {
     public ItemEnderArrow(String name) {
         setTranslationKey(name);
         setRegistryName(name);
-        setCreativeTab(CreativeTabs.COMBAT);
+        setCreativeTab(CreativeTabInit.BETTER_ARCHERY_TAB);
         ItemInit.ITEMS.add(this);
     }
     

@@ -31,7 +31,7 @@ public class CustomBow extends ItemBow implements IHasModel {
     public CustomBow(String name, int durability) {
         setTranslationKey(name);
         setRegistryName(name);
-        setCreativeTab(CreativeTabs.COMBAT);
+        setCreativeTab(CreativeTabInit.BETTER_ARCHERY_TAB);
         setMaxDamage(durability);
         ItemInit.ITEMS.add(this);
     }

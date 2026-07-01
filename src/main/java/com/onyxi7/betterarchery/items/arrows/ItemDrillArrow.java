@@ -23,7 +23,7 @@ public class ItemDrillArrow extends ItemArrow implements IHasModel {
     public ItemDrillArrow(String name) {
         setTranslationKey(name);
         setRegistryName(name);
-        setCreativeTab(CreativeTabs.COMBAT);
+        setCreativeTab(CreativeTabInit.BETTER_ARCHERY_TAB);
         setHasSubtypes(true);
         setMaxDamage(0);
         ItemInit.ITEMS.add(this);

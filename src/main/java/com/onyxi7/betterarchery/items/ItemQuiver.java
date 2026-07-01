@@ -4,7 +4,6 @@ import com.onyxi7.betterarchery.betterarchery;
 import com.onyxi7.betterarchery.init.ItemInit;
 import com.onyxi7.betterarchery.util.interfaces.IHasModel;
 import java.util.List;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -14,6 +13,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -27,7 +27,7 @@ public class ItemQuiver extends Item implements IHasModel {
     public ItemQuiver(String name) {
         setTranslationKey(name);
         setRegistryName(name);
-        setCreativeTab(CreativeTabs.COMBAT);
+        setCreativeTab(CreativeTabInit.BETTER_ARCHERY_TAB);
         ItemInit.ITEMS.add(this);
     }
     

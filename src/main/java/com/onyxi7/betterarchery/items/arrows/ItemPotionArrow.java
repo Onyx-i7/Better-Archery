@@ -27,7 +27,7 @@ public class ItemPotionArrow extends ItemArrow implements IHasModel {
     public ItemPotionArrow(String name) {
         setTranslationKey(name);
         setRegistryName(name);
-        setCreativeTab(CreativeTabs.COMBAT);
+        setCreativeTab(CreativeTabInit.BETTER_ARCHERY_TAB);
         setHasSubtypes(true);
         ItemInit.ITEMS.add(this);
     }
