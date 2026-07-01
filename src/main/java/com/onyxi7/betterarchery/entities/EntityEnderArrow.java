@@ -47,8 +47,8 @@ public class EntityEnderArrow extends EntityArrow {
             this.world.playSound(null, player.posX, player.posY, player.posZ,
                 SoundEvents.ENTITY_ENDERMEN_TELEPORT,
                 SoundCategory.PLAYERS, 1.0F, 1.0F);
-            
-            this.setDead();
         }
+        
+        this.setDead();
     }
 }

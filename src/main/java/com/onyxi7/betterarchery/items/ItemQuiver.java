@@ -54,51 +54,62 @@ public class ItemQuiver extends Item implements IHasModel {
     }
     
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
-        if (handIn == EnumHand.OFF_HAND) {
-            return new ActionResult<>(EnumActionResult.PASS, playerIn.getHeldItem(handIn));
-        }
-        
-        ItemStack heldStack = playerIn.getHeldItem(handIn);
-        
-        BlockPos pos = playerIn.getPosition();
-        BlockPos range1 = pos.add(-1, -1, -1);
-        BlockPos range2 = pos.add(1, 3, 1);
-        List<EntityArrow> arrows = worldIn.getEntitiesWithinAABB(EntityArrow.class, new AxisAlignedBB(range1, range2));
-        
-        if (!arrows.isEmpty()) {
-            int count = 0;
-            for (EntityArrow a : arrows) {
-                if (count < ItemQuiverWithArrows.MAX_SIZE) {
-                    worldIn.removeEntity(a);
-                    count++;
-                }
-            }
-            
-            if (count > 0) {
-                NBTTagCompound nbt = new NBTTagCompound();
-                nbt.setInteger("Arrows", count);
-                ItemStack quiverWithArrows = new ItemStack(ItemInit.QUIVER_WITH_ARROWS);
-                quiverWithArrows.setTagCompound(nbt);
-                return new ActionResult<>(EnumActionResult.SUCCESS, quiverWithArrows);
-            }
-        }
-        
-        for (int i = 0; i < playerIn.inventory.getSizeInventory(); i++) {
-            ItemStack slotStack = playerIn.inventory.getStackInSlot(i);
-            if (!slotStack.isEmpty() && slotStack.getItem() instanceof ItemArrow) {
-                int arrowCount = slotStack.getCount();
-                
-                NBTTagCompound nbt = new NBTTagCompound();
-                nbt.setInteger("Arrows", arrowCount);
-                ItemStack quiverWithArrows = new ItemStack(ItemInit.QUIVER_WITH_ARROWS);
-                quiverWithArrows.setTagCompound(nbt);
-                
-                playerIn.inventory.removeStackFromSlot(i);
-                return new ActionResult<>(EnumActionResult.SUCCESS, quiverWithArrows);
-            }
-        }
-        
-        return new ActionResult<>(EnumActionResult.SUCCESS, heldStack);
-    }
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+		if (handIn == EnumHand.OFF_HAND) {
+			return new ActionResult<>(EnumActionResult.PASS, playerIn.getHeldItem(handIn));
+		}
+		
+		ItemStack heldStack = playerIn.getHeldItem(handIn);
+		
+		BlockPos pos = playerIn.getPosition();
+		BlockPos range1 = pos.add(-1, -1, -1);
+		BlockPos range2 = pos.add(1, 3, 1);
+		List<EntityArrow> arrows = worldIn.getEntitiesWithinAABB(EntityArrow.class, new AxisAlignedBB(range1, range2));
+		
+		if (!arrows.isEmpty()) {
+			int count = 0;
+			for (EntityArrow a : arrows) {
+				if (count < ItemQuiverWithArrows.MAX_SIZE) {
+					worldIn.removeEntity(a);
+					count++;
+				}
+			}
+			
+			if (count > 0) {
+				NBTTagCompound nbt = new NBTTagCompound();
+				nbt.setInteger("Arrows", count);
+				nbt.setString("ArrowType", "minecraft:arrow");
+				ItemStack quiverWithArrows = new ItemStack(ItemInit.QUIVER_WITH_ARROWS);
+				quiverWithArrows.setTagCompound(nbt);
+				return new ActionResult<>(EnumActionResult.SUCCESS, quiverWithArrows);
+			}
+		}
+		
+		for (int i = 0; i < playerIn.inventory.getSizeInventory(); i++) {
+			ItemStack slotStack = playerIn.inventory.getStackInSlot(i);
+			if (!slotStack.isEmpty() && slotStack.getItem() instanceof ItemArrow) {
+				int arrowCount = slotStack.getCount();
+				
+				NBTTagCompound nbt = new NBTTagCompound();
+				nbt.setInteger("Arrows", arrowCount);
+				
+				ResourceLocation regName = slotStack.getItem().getRegistryName();
+				if (regName != null) {
+					nbt.setString("ArrowType", regName.toString());
+				}
+				
+				if (slotStack.hasTagCompound()) {
+					nbt.setTag("ArrowNBT", slotStack.getTagCompound().copy());
+				}
+				
+				ItemStack quiverWithArrows = new ItemStack(ItemInit.QUIVER_WITH_ARROWS);
+				quiverWithArrows.setTagCompound(nbt);
+				
+				playerIn.inventory.removeStackFromSlot(i);
+				return new ActionResult<>(EnumActionResult.SUCCESS, quiverWithArrows);
+			}
+		}
+		
+		return new ActionResult<>(EnumActionResult.SUCCESS, heldStack);
+	}
 }

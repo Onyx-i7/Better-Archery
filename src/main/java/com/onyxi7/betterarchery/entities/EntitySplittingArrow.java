@@ -29,23 +29,41 @@ public class EntitySplittingArrow extends EntityArrow {
     
     @Override
     protected void onHit(RayTraceResult raytraceResultIn) {
-        if (!this.world.isRemote && raytraceResultIn.entityHit != null && this.shootingEntity instanceof EntityLivingBase) {
-            EntityLivingBase shooter = (EntityLivingBase) this.shootingEntity;
-            
-            for (int i = 0; i < 3; i++) {
-                EntityTippedArrow splitArrow = new EntityTippedArrow(this.world, shooter);
+        if (!this.world.isRemote && raytraceResultIn.entityHit != null) {
+            if (this.shootingEntity instanceof EntityLivingBase) {
+                EntityLivingBase shooter = (EntityLivingBase) this.shootingEntity;
                 
-                splitArrow.posX = this.posX;
-                splitArrow.posY = this.posY;
-                splitArrow.posZ = this.posZ;
-                
-                double spread = 0.3;
-                splitArrow.motionX = this.motionX + (this.world.rand.nextDouble() - 0.5) * spread;
-                splitArrow.motionY = this.motionY + (this.world.rand.nextDouble() - 0.5) * spread;
-                splitArrow.motionZ = this.motionZ + (this.world.rand.nextDouble() - 0.5) * spread;
-                
-                splitArrow.setDamage(this.getDamage() * 0.5);
-                this.world.spawnEntity(splitArrow);
+                for (int i = 0; i < 3; i++) {
+                    EntityTippedArrow splitArrow = new EntityTippedArrow(this.world, shooter);
+                    
+                    splitArrow.posX = this.posX;
+                    splitArrow.posY = this.posY;
+                    splitArrow.posZ = this.posZ;
+                    
+                    double spread = 0.3;
+                    splitArrow.motionX = this.motionX + (this.world.rand.nextDouble() - 0.5) * spread;
+                    splitArrow.motionY = this.motionY + (this.world.rand.nextDouble() - 0.5) * spread;
+                    splitArrow.motionZ = this.motionZ + (this.world.rand.nextDouble() - 0.5) * spread;
+                    
+                    splitArrow.setDamage(this.getDamage() * 0.5);
+                    this.world.spawnEntity(splitArrow);
+                }
+            } else {
+                for (int i = 0; i < 3; i++) {
+                    EntityTippedArrow splitArrow = new EntityTippedArrow(this.world);
+                    
+                    splitArrow.posX = this.posX;
+                    splitArrow.posY = this.posY;
+                    splitArrow.posZ = this.posZ;
+                    
+                    double spread = 0.3;
+                    splitArrow.motionX = this.motionX + (this.world.rand.nextDouble() - 0.5) * spread;
+                    splitArrow.motionY = this.motionY + (this.world.rand.nextDouble() - 0.5) * spread;
+                    splitArrow.motionZ = this.motionZ + (this.world.rand.nextDouble() - 0.5) * spread;
+                    
+                    splitArrow.setDamage(this.getDamage() * 0.5);
+                    this.world.spawnEntity(splitArrow);
+                }
             }
         }
         

@@ -9,6 +9,7 @@ import com.onyxi7.betterarchery.entities.EntityImpactArrow;
 import com.onyxi7.betterarchery.entities.EntityEnderArrow;
 import com.onyxi7.betterarchery.entities.EntitySplittingArrow;
 import com.onyxi7.betterarchery.entities.EntityQuiverSkeleton;
+import com.onyxi7.betterarchery.init.DispenserInit;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -146,6 +147,7 @@ public class betterarchery {
 			net.minecraft.init.Biomes.ICE_PLAINS,
 			net.minecraft.init.Biomes.COLD_TAIGA
 		);
+		DispenserInit.init();
 		
 		proxy.init(event);
 	}

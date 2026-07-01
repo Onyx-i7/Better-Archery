@@ -52,17 +52,17 @@ public class ItemQuiverWithArrows extends ItemArrow implements IHasModel {
     }
     
     @Override
-	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		int arrows = getArrowCount(stack);
-		Item arrowType = getArrowType(stack);
-		String arrowName = arrowType != null ? arrowType.getItemStackDisplayName(new ItemStack(arrowType)) : "Arrow";
-		
-		if (arrows >= MAX_SIZE) {
-			tooltip.add(net.minecraft.util.text.translation.I18n.translateToLocalFormatted("tooltip.quiver.arrows.full", arrows));
-		} else {
-			tooltip.add(net.minecraft.util.text.translation.I18n.translateToLocalFormatted("tooltip.quiver.arrows", arrows));
-		}
-	}
+    public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        int arrows = getArrowCount(stack);
+        ItemStack arrowStack = getArrowStack(stack);
+        String arrowName = !arrowStack.isEmpty() ? arrowStack.getDisplayName() : "Arrow";
+        
+        if (arrows >= MAX_SIZE) {
+            tooltip.add(arrowName + ": " + arrows + " (Full)");
+        } else {
+            tooltip.add(arrowName + ": " + arrows);
+        }
+    }
     
     // Obtener cantidad de flechas
     public static int getArrowCount(ItemStack stack) {
@@ -80,26 +80,56 @@ public class ItemQuiverWithArrows extends ItemArrow implements IHasModel {
         stack.getTagCompound().setInteger("Arrows", count);
     }
     
-    // Obtener tipo de flecha guardada
-    public static Item getArrowType(ItemStack stack) {
-        if (stack.hasTagCompound() && stack.getTagCompound().hasKey("ArrowType")) {
-            String typeName = stack.getTagCompound().getString("ArrowType");
-            ResourceLocation loc = new ResourceLocation(typeName);
-            if (ForgeRegistries.ITEMS.containsKey(loc)) {
-                return ForgeRegistries.ITEMS.getValue(loc);
-            }
+    // Obtener el stack de flecha guardado (con tipo y NBT)
+    public static ItemStack getArrowStack(ItemStack quiverStack) {
+        if (!quiverStack.hasTagCompound()) {
+            return ItemStack.EMPTY;
         }
-        return Items.ARROW; // Por defecto, flecha normal
+        
+        NBTTagCompound nbt = quiverStack.getTagCompound();
+        
+        if (!nbt.hasKey("ArrowType")) {
+            return new ItemStack(Items.ARROW);
+        }
+        
+        String typeName = nbt.getString("ArrowType");
+        ResourceLocation loc = new ResourceLocation(typeName);
+        Item arrowItem = ForgeRegistries.ITEMS.getValue(loc);
+        
+        if (arrowItem == null) {
+            return new ItemStack(Items.ARROW);
+        }
+        
+        ItemStack arrowStack = new ItemStack(arrowItem);
+        
+        // Restaurar el NBT de la flecha si existe
+        if (nbt.hasKey("ArrowNBT")) {
+            NBTTagCompound arrowNBT = nbt.getCompoundTag("ArrowNBT");
+            arrowStack.setTagCompound(arrowNBT);
+        }
+        
+        return arrowStack;
     }
     
-    // Guardar tipo de flecha
-    public static void setArrowType(ItemStack stack, Item arrowItem) {
-        if (!stack.hasTagCompound()) {
-            stack.setTagCompound(new NBTTagCompound());
+    // Guardar el tipo de flecha y su NBT
+    public static void setArrowStack(ItemStack quiverStack, ItemStack arrowStack) {
+        if (!quiverStack.hasTagCompound()) {
+            quiverStack.setTagCompound(new NBTTagCompound());
         }
-        ResourceLocation regName = arrowItem.getRegistryName();
+        
+        NBTTagCompound nbt = quiverStack.getTagCompound();
+        
+        // Guardar el registry name del item
+        ResourceLocation regName = arrowStack.getItem().getRegistryName();
         if (regName != null) {
-            stack.getTagCompound().setString("ArrowType", regName.toString());
+            nbt.setString("ArrowType", regName.toString());
+        }
+        
+        // Guardar el NBT de la flecha si tiene
+        if (arrowStack.hasTagCompound()) {
+            nbt.setTag("ArrowNBT", arrowStack.getTagCompound().copy());
+        } else {
+            nbt.removeTag("ArrowNBT");
         }
     }
     
@@ -111,15 +141,19 @@ public class ItemQuiverWithArrows extends ItemArrow implements IHasModel {
         
         ItemStack heldStack = playerIn.getHeldItem(handIn);
         int currentArrows = getArrowCount(heldStack);
-        Item currentType = getArrowType(heldStack);
+        ItemStack currentArrowStack = getArrowStack(heldStack);
         
         // Si está agachado: sacar flechas del carcaj
         if (playerIn.isSneaking()) {
             int arrowsToGive = Math.min(currentArrows, 64);
-            if (arrowsToGive > 0) {
+            if (arrowsToGive > 0 && !currentArrowStack.isEmpty()) {
                 setArrowCount(heldStack, currentArrows - arrowsToGive);
-                ItemStack arrowStack = new ItemStack(currentType, arrowsToGive);
-                playerIn.inventory.addItemStackToInventory(arrowStack);
+                
+                // Crear el stack de flechas con el tipo correcto
+                ItemStack arrowStackToGive = currentArrowStack.copy();
+                arrowStackToGive.setCount(arrowsToGive);
+                
+                playerIn.inventory.addItemStackToInventory(arrowStackToGive);
             }
             return new ActionResult<>(EnumActionResult.SUCCESS, heldStack);
         }
@@ -142,7 +176,7 @@ public class ItemQuiverWithArrows extends ItemArrow implements IHasModel {
                 setArrowCount(heldStack, currentArrows + pickedUp);
                 // Las flechas del suelo siempre son flechas normales
                 if (currentArrows == 0) {
-                    setArrowType(heldStack, Items.ARROW);
+                    setArrowStack(heldStack, new ItemStack(Items.ARROW));
                 }
                 return new ActionResult<>(EnumActionResult.SUCCESS, heldStack);
             }
@@ -155,7 +189,9 @@ public class ItemQuiverWithArrows extends ItemArrow implements IHasModel {
                 Item slotArrowType = slotStack.getItem();
                 
                 // Verificar si el tipo coincide o el carcaj está vacío
-                boolean typeMatch = (currentArrows == 0) || (slotArrowType == currentType);
+                boolean typeMatch = (currentArrows == 0) || 
+                                   (slotArrowType == currentArrowStack.getItem() && 
+                                    ItemStack.areItemStackTagsEqual(slotStack, currentArrowStack));
                 
                 if (typeMatch) {
                     int arrowCount = slotStack.getCount();
@@ -169,14 +205,14 @@ public class ItemQuiverWithArrows extends ItemArrow implements IHasModel {
                         // Cabe todo el stack
                         setArrowCount(heldStack, currentArrows + arrowCount);
                         if (currentArrows == 0) {
-                            setArrowType(heldStack, slotArrowType);
+                            setArrowStack(heldStack, slotStack);
                         }
                         playerIn.inventory.removeStackFromSlot(i);
                     } else {
                         // Solo cabe parte del stack
                         setArrowCount(heldStack, MAX_SIZE);
                         if (currentArrows == 0) {
-                            setArrowType(heldStack, slotArrowType);
+                            setArrowStack(heldStack, slotStack);
                         }
                         slotStack.shrink(spaceLeft);
                     }
@@ -185,12 +221,19 @@ public class ItemQuiverWithArrows extends ItemArrow implements IHasModel {
             }
         }
         
-        // No hay nada que hacer, devolver el mismo stack
         return new ActionResult<>(EnumActionResult.SUCCESS, heldStack);
     }
     
     @Override
     public EntityArrow createArrow(World worldIn, ItemStack stack, EntityLivingBase shooter) {
+        ItemStack arrowStack = getArrowStack(stack);
+        
+        if (!arrowStack.isEmpty() && arrowStack.getItem() instanceof ItemArrow) {
+            ItemArrow arrowItem = (ItemArrow) arrowStack.getItem();
+            return arrowItem.createArrow(worldIn, arrowStack, shooter);
+        }
+        
+        // Fallback a flecha normal
         EntityTippedArrow entitytippedarrow = new EntityTippedArrow(worldIn, shooter);
         return entitytippedarrow;
     }
