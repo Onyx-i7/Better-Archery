@@ -124,6 +124,15 @@ public class betterarchery {
 			true
 		);
 		
+		System.out.println("[BetterArchery] Forcing config reload...");
+		net.minecraftforge.common.config.ConfigManager.sync("betterarchery", net.minecraftforge.common.config.Config.Type.INSTANCE);
+		
+		System.out.println("[BetterArchery] Config values after reload:");
+		System.out.println("[BetterArchery] Drill Max Blocks: " + BetterArcheryConfig.arrows.drillArrowMaxBlocks);
+		System.out.println("[BetterArchery] Drill Power Loss: " + BetterArcheryConfig.arrows.drillArrowPowerLoss);
+		System.out.println("[BetterArchery] Impact Radius: " + BetterArcheryConfig.arrows.impactArrowExplosionRadius);
+		System.out.println("[BetterArchery] Quiver Skeleton Enabled: " + BetterArcheryConfig.mobs.enableQuiverSkeleton);
+		
 		proxy.preInit(event);
 	}
     

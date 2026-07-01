@@ -27,8 +27,10 @@ public class EntityDrillArrow extends EntityArrow {
     }
     
     public EntityDrillArrow(World worldIn, EntityLivingBase shooter) {
-        super(worldIn, shooter);
-    }
+		super(worldIn, shooter);
+		System.out.println("[BetterArchery] EntityDrillArrow created - Config MaxBlocks: " + 
+						 BetterArcheryConfig.arrows.drillArrowMaxBlocks);
+	}
     
     public void setDrillPower(float power) {
         this.drillPower = power;
@@ -44,40 +46,47 @@ public class EntityDrillArrow extends EntityArrow {
     }
     
     @Override
-    public void onUpdate() {
-        super.onUpdate();
-        
-        // If it's in the air, check for collisions with blocks
-        if (!this.inGround && !this.world.isRemote) {
-            Vec3d currentPos = new Vec3d(this.posX, this.posY, this.posZ);
-            Vec3d motion = new Vec3d(this.motionX, this.motionY, this.motionZ);
-            Vec3d nextPos = currentPos.add(motion);
-            
-            RayTraceResult rayTrace = this.world.rayTraceBlocks(currentPos, nextPos, false, true, false);
-            
-            if (rayTrace != null && rayTrace.typeOfHit == RayTraceResult.Type.BLOCK) {
-                BlockPos blockPos = rayTrace.getBlockPos();
-                IBlockState blockState = this.world.getBlockState(blockPos);
-                
-                // Check if you can destroy this block
-                if (canDestroyBlock(blockState, blockPos)) {
-                    destroyBlock(blockPos);
-                    
-                    // Losing strength when destroying a block
-                    this.drillPower -= 0.2F;
-                    this.blocksDestroyed++;
-                    
-                    // If you've run out of strength or destroyed too many blocks, destroy the arrow
-                    if (this.drillPower <= 0 || this.blocksDestroyed >= BetterArcheryConfig.arrows.drillArrowMaxBlocks) {
+	public void onUpdate() {
+		super.onUpdate();
+		
+		if (!this.inGround && !this.world.isRemote) {
+			if (this.ticksExisted % 20 == 0) {
+				System.out.println("[BetterArchery] DrillArrow onUpdate - Power: " + this.drillPower + 
+								 ", BlocksDestroyed: " + this.blocksDestroyed + 
+								 ", MaxBlocks: " + BetterArcheryConfig.arrows.drillArrowMaxBlocks +
+								 ", PowerLoss: " + BetterArcheryConfig.arrows.drillArrowPowerLoss);
+			}
+			
+			Vec3d currentPos = new Vec3d(this.posX, this.posY, this.posZ);
+			Vec3d motion = new Vec3d(this.motionX, this.motionY, this.motionZ);
+			Vec3d nextPos = currentPos.add(motion);
+			
+			RayTraceResult rayTrace = this.world.rayTraceBlocks(currentPos, nextPos, false, true, false);
+			
+			if (rayTrace != null && rayTrace.typeOfHit == RayTraceResult.Type.BLOCK) {
+				BlockPos blockPos = rayTrace.getBlockPos();
+				IBlockState blockState = this.world.getBlockState(blockPos);
+				
+				if (canDestroyBlock(blockState, blockPos)) {
+					destroyBlock(blockPos);
+					
+					this.drillPower -= (float) BetterArcheryConfig.arrows.drillArrowPowerLoss;
+					this.blocksDestroyed++;
+					
+					System.out.println("[BetterArchery] DrillArrow destroyed block - New power: " + this.drillPower + 
+									 ", Blocks: " + this.blocksDestroyed);
+					
+					if (this.drillPower <= 0 || this.blocksDestroyed >= BetterArcheryConfig.arrows.drillArrowMaxBlocks) {
+						System.out.println("[BetterArchery] DrillArrow stopping - Power: " + this.drillPower + 
+										 ", Max reached: " + (this.blocksDestroyed >= BetterArcheryConfig.arrows.drillArrowMaxBlocks));
 						this.setDead();
 					}
-                } else {
-                    // If it cannot destroy the block, bounce or stop
-                    this.setDead();
-                }
-            }
-        }
-    }
+				} else {
+					this.setDead();
+				}
+			}
+		}
+	}
     
     private boolean canDestroyBlock(IBlockState blockState, BlockPos pos) {
         float hardness = blockState.getBlockHardness(this.world, pos);
