@@ -42,104 +42,102 @@ public class ItemQuiverWithArrows extends ItemArrow implements IHasModel {
     
     @Override
     public boolean isValidArmor(ItemStack stack, EntityEquipmentSlot armorType, Entity entity) {
-        if (armorType == EntityEquipmentSlot.CHEST || 
-            armorType == EntityEquipmentSlot.LEGS || 
-            armorType == EntityEquipmentSlot.MAINHAND || 
-            armorType == EntityEquipmentSlot.OFFHAND) {
-            return true;
-        }
-        return false;
+        return armorType == EntityEquipmentSlot.CHEST || 
+               armorType == EntityEquipmentSlot.LEGS || 
+               armorType == EntityEquipmentSlot.MAINHAND || 
+               armorType == EntityEquipmentSlot.OFFHAND;
     }
     
     @Override
     public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        if (stack.hasTagCompound() && stack.getTagCompound().hasKey("Arrows")) {
-            if (stack.getTagCompound().getInteger("Arrows") < MAX_SIZE) {
-                tooltip.add("Arrows: " + stack.getTagCompound().getInteger("Arrows"));
-            } else {
-                tooltip.add("Arrows: " + stack.getTagCompound().getInteger("Arrows") + " (Full)");
-            }
+        int arrows = getArrowCount(stack);
+        if (arrows >= MAX_SIZE) {
+            tooltip.add("Arrows: " + arrows + " (Full)");
+        } else {
+            tooltip.add("Arrows: " + arrows);
         }
+    }
+    
+    // Método para obtener el conteo de flechas
+    public static int getArrowCount(ItemStack stack) {
+        if (stack.hasTagCompound() && stack.getTagCompound().hasKey("Arrows")) {
+            return stack.getTagCompound().getInteger("Arrows");
+        }
+        return 0;
+    }
+    
+    // Método para establecer el conteo de flechas
+    public static void setArrowCount(ItemStack stack, int count) {
+        if (!stack.hasTagCompound()) {
+            stack.setTagCompound(new NBTTagCompound());
+        }
+        stack.getTagCompound().setInteger("Arrows", count);
     }
     
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
-        if (handIn != EnumHand.OFF_HAND) {
-            if (!playerIn.isSneaking()) {
-                BlockPos pos = playerIn.getPosition();
-                BlockPos range1 = pos.add(-1, -1, -1);
-                BlockPos range2 = pos.add(1, 3, 1);
-                List<EntityArrow> arrows = worldIn.getEntitiesWithinAABB(EntityArrow.class, new AxisAlignedBB(range1, range2));
-                
-                if (!arrows.isEmpty()) {
-                    ItemStack itemStack = playerIn.getHeldItem(handIn);
-                    NBTTagCompound nbt = itemStack.getTagCompound();
-                    if (nbt == null) {
-                        nbt = new NBTTagCompound();
-                    }
-                    
-                    for (EntityArrow a : arrows) {
-                        if (nbt.getInteger("Arrows") < MAX_SIZE) {
-                            worldIn.removeEntity(a);
-                            nbt.setInteger("Arrows", nbt.getInteger("Arrows") + 1);
-                            continue;
-                        }
-                        itemStack.setTagCompound(nbt);
-                        return new ActionResult<>(EnumActionResult.SUCCESS, itemStack);
-                    }
-                    itemStack.setTagCompound(nbt);
-                    return new ActionResult<>(EnumActionResult.SUCCESS, itemStack);
-                }
-                
-                ItemStack itemStack = playerIn.getHeldItem(handIn);
-                if (playerIn.inventory.hasItemStack(new ItemStack(Items.ARROW))) {
-                    NBTTagCompound nbt = itemStack.getTagCompound();
-                    if (nbt == null) {
-                        nbt = new NBTTagCompound();
-                    }
-                    
-                    int arrowsSlot = playerIn.inventory.getSlotFor(new ItemStack(Items.ARROW));
-                    ItemStack arrowStack = playerIn.inventory.getStackInSlot(arrowsSlot);
-                    int arrowStackSize = arrowStack.getCount();
-                    int quiverArrowsCount = nbt.getInteger("Arrows");
-                    
-                    if (quiverArrowsCount + arrowStackSize > MAX_SIZE) {
-                        if (quiverArrowsCount != MAX_SIZE) {
-                            int arrowsSet = arrowStackSize + quiverArrowsCount - MAX_SIZE;
-                            int inQuiver = arrowStackSize - arrowsSet;
-                            playerIn.inventory.setInventorySlotContents(arrowsSlot, new ItemStack(Items.ARROW, arrowsSet));
-                            nbt.setInteger("Arrows", nbt.getInteger("Arrows") + inQuiver);
-                            itemStack.setTagCompound(nbt);
-                            return new ActionResult<>(EnumActionResult.SUCCESS, itemStack);
-                        }
-                        return new ActionResult<>(EnumActionResult.SUCCESS, itemStack);
-                    }
-                    
-                    nbt.setInteger("Arrows", nbt.getInteger("Arrows") + arrowStackSize);
-                    itemStack.setTagCompound(nbt);
-                    playerIn.inventory.removeStackFromSlot(arrowsSlot);
-                }
-                return new ActionResult<>(EnumActionResult.SUCCESS, itemStack);
-            }
-            
-            ItemStack quiverWithArrowsStack = playerIn.getHeldItem(handIn);
-            NBTTagCompound nbt = quiverWithArrowsStack.getTagCompound();
-            if (nbt == null) {
-                nbt = new NBTTagCompound();
-            }
-            
-            int arrowsCount = nbt.getInteger("Arrows");
-            if (arrowsCount >= 64) {
-                nbt.setInteger("Arrows", nbt.getInteger("Arrows") - 64);
-                playerIn.inventory.addItemStackToInventory(new ItemStack(Items.ARROW, 64));
-            } else {
-                nbt.setInteger("Arrows", 0);
-                playerIn.inventory.addItemStackToInventory(new ItemStack(Items.ARROW, arrowsCount));
-            }
-            quiverWithArrowsStack.setTagCompound(nbt);
-            return new ActionResult<>(EnumActionResult.SUCCESS, quiverWithArrowsStack);
+        if (handIn == EnumHand.OFF_HAND) {
+            return new ActionResult<>(EnumActionResult.PASS, playerIn.getHeldItem(handIn));
         }
-        return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
+        
+        ItemStack heldStack = playerIn.getHeldItem(handIn);
+        int currentArrows = getArrowCount(heldStack);
+        
+        // Si está agachado: sacar flechas del carcaj
+        if (playerIn.isSneaking()) {
+            int arrowsToGive = Math.min(currentArrows, 64);
+            if (arrowsToGive > 0) {
+                setArrowCount(heldStack, currentArrows - arrowsToGive);
+                playerIn.inventory.addItemStackToInventory(new ItemStack(Items.ARROW, arrowsToGive));
+            }
+            return new ActionResult<>(EnumActionResult.SUCCESS, heldStack);
+        }
+        
+        // 1. Recoger flechas del suelo
+        BlockPos pos = playerIn.getPosition();
+        BlockPos range1 = pos.add(-1, -1, -1);
+        BlockPos range2 = pos.add(1, 3, 1);
+        List<EntityArrow> arrows = worldIn.getEntitiesWithinAABB(EntityArrow.class, new AxisAlignedBB(range1, range2));
+        
+        if (!arrows.isEmpty()) {
+            int pickedUp = 0;
+            for (EntityArrow a : arrows) {
+                if (currentArrows + pickedUp < MAX_SIZE) {
+                    worldIn.removeEntity(a);
+                    pickedUp++;
+                }
+            }
+            if (pickedUp > 0) {
+                setArrowCount(heldStack, currentArrows + pickedUp);
+                return new ActionResult<>(EnumActionResult.SUCCESS, heldStack);
+            }
+        }
+        
+        // 2. Buscar CUALQUIER flecha en el inventario
+        for (int i = 0; i < playerIn.inventory.getSizeInventory(); i++) {
+            ItemStack slotStack = playerIn.inventory.getStackInSlot(i);
+            if (!slotStack.isEmpty() && slotStack.getItem() instanceof ItemArrow) {
+                int arrowCount = slotStack.getCount();
+                int spaceLeft = MAX_SIZE - currentArrows;
+                
+                if (spaceLeft <= 0) {
+                    return new ActionResult<>(EnumActionResult.SUCCESS, heldStack);
+                }
+                
+                if (arrowCount <= spaceLeft) {
+                    // Cabe todo el stack
+                    setArrowCount(heldStack, currentArrows + arrowCount);
+                    playerIn.inventory.removeStackFromSlot(i);
+                } else {
+                    // Solo cabe parte del stack
+                    setArrowCount(heldStack, MAX_SIZE);
+                    slotStack.shrink(spaceLeft);
+                }
+                return new ActionResult<>(EnumActionResult.SUCCESS, heldStack);
+            }
+        }
+        
+        return new ActionResult<>(EnumActionResult.PASS, heldStack);
     }
     
     @Override
@@ -149,33 +147,22 @@ public class ItemQuiverWithArrows extends ItemArrow implements IHasModel {
     }
     
     @Override
-	public boolean isInfinite(ItemStack stack, ItemStack bow, EntityPlayer player) {
-		// Solo funcionar si el carcaj está en la mano secundaria
-		if (player.getHeldItemOffhand() != stack) {
-			return false;
-		}
-		
-		int enchant = EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, bow);
-		if (enchant > 0) {
-			return true; // Con Infinity, no consumir flechas
-		}
-		
-		NBTTagCompound nbt = stack.getTagCompound();
-		if (nbt == null) {
-			return false;
-		}
-		
-		int arrows = nbt.getInteger("Arrows");
-		if (arrows <= 0) {
-			return false; // Sin flechas
-		}
-		
-		// Consumir una flecha del carcaj
-		nbt.setInteger("Arrows", arrows - 1);
-		stack.setTagCompound(nbt);
-		
-		return true;
-	}
+    public boolean isInfinite(ItemStack stack, ItemStack bow, EntityPlayer player) {
+        // Verificar que el carcaj tiene flechas
+        int arrows = getArrowCount(stack);
+        if (arrows <= 0) {
+            return false;
+        }
+        
+        int enchant = EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, bow);
+        if (enchant > 0) {
+            return true; // Infinity: no consumir
+        }
+        
+        // Consumir una flecha
+        setArrowCount(stack, arrows - 1);
+        return true;
+    }
     
     @Override
     public int getItemStackLimit(ItemStack stack) {
@@ -183,59 +170,33 @@ public class ItemQuiverWithArrows extends ItemArrow implements IHasModel {
     }
     
     @Override
-	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-		// Solo ejecutar en el servidor evitando la duplicación
-		if (worldIn.isRemote) {
-			return;
-		}
-    
-		if (!(entityIn instanceof EntityPlayer)) {
-			return;
-		}
-    
-		EntityPlayer player = (EntityPlayer) entityIn;
-    
-		// Verificar si este stack tiene flechas
-		if (stack.isEmpty() || !stack.hasTagCompound()) {
-			return;
-		}
-    
-		NBTTagCompound nbt = stack.getTagCompound();
-		if (!nbt.hasKey("Arrows")) {
-			return;
-		}
-		
-		int arrows = nbt.getInteger("Arrows");
-		
-		// Si no hay flechas, convertir a carcaj vacío
-		if (arrows <= 0) {
-			ItemStack emptyQuiver = new ItemStack(ItemInit.QUIVER);
-			
-			// Determinar dónde está el carcaj y reemplazarlo una sola vez
-			if (player.getHeldItemMainhand() == stack) {
-				player.setHeldItem(EnumHand.MAIN_HAND, emptyQuiver);
-			} else if (player.getHeldItemOffhand() == stack) {
-				player.setHeldItem(EnumHand.OFF_HAND, emptyQuiver);
-			} else {
-				// Buscar en el inventario
-				for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
-					if (player.inventory.getStackInSlot(i) == stack) {
-						player.inventory.setInventorySlotContents(i, emptyQuiver);
-						break;
-					}
-				}
-			}
-		}
-	}
-    
-    private EntityEquipmentSlot getSlotForItemSlot(int itemSlot) {
-        if (itemSlot >= 36 && itemSlot <= 39) {
-            return EntityEquipmentSlot.values()[39 - itemSlot]; // ARMOR slots
-        } else if (itemSlot == 40) {
-            return EntityEquipmentSlot.OFFHAND;
-        } else if (itemSlot >= 0 && itemSlot <= 8) {
-            return EntityEquipmentSlot.MAINHAND;
+    public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+        // Solo en servidor
+        if (worldIn.isRemote) {
+            return;
         }
-        return null;
+        
+        if (!(entityIn instanceof EntityPlayer)) {
+            return;
+        }
+        
+        int arrows = getArrowCount(stack);
+        
+        // Si se quedó sin flechas, convertir a carcaj vacío
+        if (arrows <= 0) {
+            EntityPlayer player = (EntityPlayer) entityIn;
+            ItemStack emptyQuiver = new ItemStack(ItemInit.QUIVER);
+            
+            for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
+                ItemStack slotStack = player.inventory.getStackInSlot(i);
+                if (!slotStack.isEmpty() && slotStack.getItem() == this) {
+                    int slotArrows = getArrowCount(slotStack);
+                    if (slotArrows <= 0) {
+                        player.inventory.setInventorySlotContents(i, emptyQuiver);
+                        return;
+                    }
+                }
+            }
+        }
     }
 }
