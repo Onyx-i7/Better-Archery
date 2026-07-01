@@ -1,10 +1,6 @@
 package com.onyxi7.betterarchery;
 
 import com.onyxi7.betterarchery.proxy.CommonProxy;
-import com.onyxi7.betterarchery.entities.EntityDrillArrow;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -33,6 +29,17 @@ public class betterarchery {
 			EntityDrillArrow.class,
 			"drill_arrow",
 			0,
+			this,
+			64,
+			1,
+			true
+		);
+		
+		EntityRegistry.registerModEntity(
+			new ResourceLocation("betterarchery", "potion_arrow"),
+			EntityPotionArrow.class,
+			"potion_arrow",
+			1,
 			this,
 			64,
 			1,

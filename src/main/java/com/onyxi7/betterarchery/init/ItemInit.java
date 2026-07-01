@@ -17,4 +17,6 @@ public class ItemInit {
     
     // Flechas especiales
     public static final Item DRILL_ARROW = new ItemDrillArrow("drill_arrow");
+    
+    public static final Item POTION_ARROW = new ItemPotionArrow("potion_arrow");
 }
