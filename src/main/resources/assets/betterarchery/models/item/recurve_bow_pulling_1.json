@@ -3,6 +3,5 @@
     "textures": {
         "layer0": "betterarchery:items/quiverbowrecurve2",
         "layer1": "betterarchery:items/quiverbowrecurvestring2"
-        "layer2": "minecraft:items/arrow"
     }
 }

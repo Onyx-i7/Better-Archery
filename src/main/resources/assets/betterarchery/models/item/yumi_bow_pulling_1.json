@@ -3,6 +3,5 @@
     "textures": {
         "layer0": "betterarchery:items/quiverbowyumi2",
         "layer1": "betterarchery:items/quiverbowyumistring2"
-        "layer2": "minecraft:items/arrow"
     }
 }
