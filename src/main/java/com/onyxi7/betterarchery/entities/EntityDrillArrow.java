@@ -28,8 +28,6 @@ public class EntityDrillArrow extends EntityArrow {
     
     public EntityDrillArrow(World worldIn, EntityLivingBase shooter) {
 		super(worldIn, shooter);
-		System.out.println("[BetterArchery] EntityDrillArrow created - Config MaxBlocks: " + 
-						 BetterArcheryConfig.arrows.drillArrowMaxBlocks);
 	}
     
     public void setDrillPower(float power) {
@@ -50,11 +48,7 @@ public class EntityDrillArrow extends EntityArrow {
 		super.onUpdate();
 		
 		if (!this.inGround && !this.world.isRemote) {
-			if (this.ticksExisted % 20 == 0) {
-				System.out.println("[BetterArchery] DrillArrow onUpdate - Power: " + this.drillPower + 
-								 ", BlocksDestroyed: " + this.blocksDestroyed + 
-								 ", MaxBlocks: " + BetterArcheryConfig.arrows.drillArrowMaxBlocks +
-								 ", PowerLoss: " + BetterArcheryConfig.arrows.drillArrowPowerLoss);
+			if (this.ticksExisted % 20 == 0) 
 			}
 			
 			Vec3d currentPos = new Vec3d(this.posX, this.posY, this.posZ);
@@ -73,12 +67,14 @@ public class EntityDrillArrow extends EntityArrow {
 					this.drillPower -= (float) BetterArcheryConfig.arrows.drillArrowPowerLoss;
 					this.blocksDestroyed++;
 					
-					System.out.println("[BetterArchery] DrillArrow destroyed block - New power: " + this.drillPower + 
-									 ", Blocks: " + this.blocksDestroyed);
+					if (BetterArcheryConfig.general.debugMode) {
+						System.out.println("[BetterArchery] DrillArrow destroyed block...");
+					}
 					
 					if (this.drillPower <= 0 || this.blocksDestroyed >= BetterArcheryConfig.arrows.drillArrowMaxBlocks) {
-						System.out.println("[BetterArchery] DrillArrow stopping - Power: " + this.drillPower + 
-										 ", Max reached: " + (this.blocksDestroyed >= BetterArcheryConfig.arrows.drillArrowMaxBlocks));
+						if (BetterArcheryConfig.general.debugMode) {
+							System.out.println("[BetterArchery] DrillArrow destroyed block...");
+						}
 						this.setDead();
 					}
 				} else {

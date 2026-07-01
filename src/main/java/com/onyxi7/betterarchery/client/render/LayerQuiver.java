@@ -3,6 +3,7 @@ package com.onyxi7.betterarchery.client.render;
 import com.onyxi7.betterarchery.init.ItemInit;
 import com.onyxi7.betterarchery.items.ItemQuiver;
 import com.onyxi7.betterarchery.items.ItemQuiverWithArrows;
+import com.onyxi7.betterarchery.config.BetterArcheryConfig;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
@@ -25,7 +26,10 @@ public class LayerQuiver implements LayerRenderer<EntityLivingBase> {
     }
     
     @Override
-    public void doRenderLayer(EntityLivingBase entity, float limbSwing, float limbSwingAmount, 
+    public void doRenderLayer(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+		if (!BetterArcheryConfig.general.renderQuiverOnBack) {
+			return;
+		}
                               float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
         
         if (!(entity instanceof EntityPlayer)) {
