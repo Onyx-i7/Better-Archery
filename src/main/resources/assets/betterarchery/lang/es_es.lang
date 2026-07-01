@@ -24,6 +24,7 @@ entity.betterarchery.quiver_skeleton.name=Esqueleto con Carcaj
 # Tooltips del Carcaj
 tooltip.quiver.arrows=Flechas: %d
 tooltip.quiver.arrows.full=Flechas: %d (Lleno)
+tooltip.quiver.empty=Carcaj Vacío - Click derecho para recoger flechas
 
 # Tooltips de flechas
 tooltip.drill_arrow.desc=Atraviesa bloques y enemigos

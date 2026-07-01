@@ -24,6 +24,8 @@ entity.betterarchery.quiver_skeleton.name=Quiver Skeleton
 # Tooltips del Carcaj
 tooltip.quiver.arrows=Arrows: %d
 tooltip.quiver.arrows.full=Arrows: %d (Full)
+tooltip.quiver.empty=Empty Quiver - Right click to collect arrows
+
 
 # Arrow Tooltips
 tooltip.drill_arrow.desc=Pierces through blocks and enemies
