@@ -149,19 +149,33 @@ public class ItemQuiverWithArrows extends ItemArrow implements IHasModel {
     }
     
     @Override
-    public boolean isInfinite(ItemStack stack, ItemStack bow, EntityPlayer player) {
-        int enchant = EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, bow);
-        if (enchant <= 0) {
-            NBTTagCompound nbt = stack.getTagCompound();
-            if (nbt == null) {
-                nbt = new NBTTagCompound();
-            }
-            nbt.setInteger("Arrows", nbt.getInteger("Arrows") - 1);
-            stack.setTagCompound(nbt);
-            return true;
-        }
-        return true;
-    }
+	public boolean isInfinite(ItemStack stack, ItemStack bow, EntityPlayer player) {
+		// Solo funcionar si el carcaj está en la mano secundaria
+		if (player.getHeldItemOffhand() != stack) {
+			return false;
+		}
+		
+		int enchant = EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, bow);
+		if (enchant > 0) {
+			return true; // Con Infinity, no consumir flechas
+		}
+		
+		NBTTagCompound nbt = stack.getTagCompound();
+		if (nbt == null) {
+			return false;
+		}
+		
+		int arrows = nbt.getInteger("Arrows");
+		if (arrows <= 0) {
+			return false; // Sin flechas
+		}
+		
+		// Consumir una flecha del carcaj
+		nbt.setInteger("Arrows", arrows - 1);
+		stack.setTagCompound(nbt);
+		
+		return true;
+	}
     
     @Override
     public int getItemStackLimit(ItemStack stack) {
