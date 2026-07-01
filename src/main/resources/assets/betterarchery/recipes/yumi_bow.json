@@ -1,19 +1,19 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "LFL",
-    "L L",
-    "LFL"
+    "  B",
+    " BS",
+    "B S"
   ],
   "key": {
-    "L": {
-      "item": "minecraft:leather"
+    "B": {
+      "item": "minecraft:stick"
     },
-    "F": {
+    "S": {
       "item": "minecraft:string"
     }
   },
   "result": {
-    "item": "betterarchery:quiver"
+    "item": "betterarchery:yumi_bow"
   }
 }

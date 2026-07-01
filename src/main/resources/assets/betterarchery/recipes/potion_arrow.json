@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:arrow"
+    },
+    {
+      "item": "minecraft:potion",
+      "data": 0
+    }
+  ],
+  "result": {
+    "item": "betterarchery:potion_arrow",
+    "count": 4
+  }
+}

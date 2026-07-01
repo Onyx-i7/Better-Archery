@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "T",
+    "A",
+    "S"
+  ],
+  "key": {
+    "T": {
+      "item": "minecraft:torch"
+    },
+    "A": {
+      "item": "minecraft:arrow"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "betterarchery:torch_arrow",
+    "count": 4
+  }
+}
