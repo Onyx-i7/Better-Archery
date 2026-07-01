@@ -68,7 +68,7 @@ public class ItemPotionArrow extends ItemArrow implements IHasModel {
             new net.minecraft.util.ResourceLocation(potionType)
         );
         if (type != null) {
-            return PotionUtils.getColorFromPotion(type);
+            return PotionUtils.getColorFromEffects(type);
         }
         return 0x385DC6; // Color azul por defecto
     }
