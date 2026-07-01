@@ -128,27 +128,29 @@ public class betterarchery {
     
     @Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
-		net.minecraftforge.fml.common.registry.EntityRegistry.addSpawn(
-			EntityQuiverSkeleton.class,
-			3, // weight
-			1, // min group size
-			1, // max group size
-			net.minecraft.entity.EnumCreatureType.MONSTER,
-			net.minecraft.init.Biomes.PLAINS,
-			net.minecraft.init.Biomes.FOREST,
-			net.minecraft.init.Biomes.TAIGA,
-			net.minecraft.init.Biomes.DESERT,
-			net.minecraft.init.Biomes.JUNGLE,
-			net.minecraft.init.Biomes.BIRCH_FOREST,
-			net.minecraft.init.Biomes.ROOFED_FOREST,
-			net.minecraft.init.Biomes.EXTREME_HILLS,
-			net.minecraft.init.Biomes.SAVANNA,
-			net.minecraft.init.Biomes.MESA,
-			net.minecraft.init.Biomes.ICE_PLAINS,
-			net.minecraft.init.Biomes.COLD_TAIGA
-		);
-		DispenserInit.init();
+		if (BetterArcheryConfig.mobs.enableQuiverSkeleton) {
+			net.minecraftforge.fml.common.registry.EntityRegistry.addSpawn(
+				EntityQuiverSkeleton.class,
+				BetterArcheryConfig.mobs.quiverSkeletonSpawnWeight,
+				1,
+				1,
+				net.minecraft.entity.EnumCreatureType.MONSTER,
+				net.minecraft.init.Biomes.PLAINS,
+				net.minecraft.init.Biomes.FOREST,
+				net.minecraft.init.Biomes.TAIGA,
+				net.minecraft.init.Biomes.DESERT,
+				net.minecraft.init.Biomes.JUNGLE,
+				net.minecraft.init.Biomes.BIRCH_FOREST,
+				net.minecraft.init.Biomes.ROOFED_FOREST,
+				net.minecraft.init.Biomes.EXTREME_HILLS,
+				net.minecraft.init.Biomes.SAVANNA,
+				net.minecraft.init.Biomes.MESA,
+				net.minecraft.init.Biomes.ICE_PLAINS,
+				net.minecraft.init.Biomes.COLD_TAIGA
+			);
+		}
 		
+		DispenserInit.init();
 		proxy.init(event);
 	}
     

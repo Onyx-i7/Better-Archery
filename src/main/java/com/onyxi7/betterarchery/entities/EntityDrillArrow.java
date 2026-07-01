@@ -67,9 +67,9 @@ public class EntityDrillArrow extends EntityArrow {
                     this.blocksDestroyed++;
                     
                     // If you've run out of strength or destroyed too many blocks, destroy the arrow
-                    if (this.drillPower <= 0 || this.blocksDestroyed >= MAX_BLOCKS_DESTROYED) {
-                        this.setDead();
-                    }
+                    if (this.drillPower <= 0 || this.blocksDestroyed >= BetterArcheryConfig.arrows.drillArrowMaxBlocks) {
+						this.setDead();
+					}
                 } else {
                     // If it cannot destroy the block, bounce or stop
                     this.setDead();
@@ -86,8 +86,8 @@ public class EntityDrillArrow extends EntityArrow {
         // - Very hard blocks (hardness >= 50, such as obsidian)
         // - If you no longer have the strength
         if (hardness < 0 || hardness >= 50.0F || this.drillPower <= 0) {
-            return false;
-        }
+			return false;
+		}
         
         // The force required to destroy it depends on the hardness of the block
         // Harder blocks require more force
@@ -98,6 +98,8 @@ public class EntityDrillArrow extends EntityArrow {
     private void destroyBlock(BlockPos pos) {
         // Destroy the block without dropping any items 
         this.world.destroyBlock(pos, false);
+        this.drillPower -= (float) BetterArcheryConfig.arrows.drillArrowPowerLoss;
+		this.blocksDestroyed++;
     }
     
     @Override

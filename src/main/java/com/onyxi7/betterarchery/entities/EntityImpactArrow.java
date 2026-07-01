@@ -28,18 +28,16 @@ public class EntityImpactArrow extends EntityArrow {
     }
     
     @Override
-    protected void onHit(RayTraceResult raytraceResultIn) {
-        super.onHit(raytraceResultIn);
-        
-        if (!this.world.isRemote) {
-            EntityTNTPrimed tnt = new EntityTNTPrimed(this.world, this.posX, this.posY, this.posZ, 
-                this.shootingEntity instanceof EntityLivingBase ? (EntityLivingBase) this.shootingEntity : null);
-            
-            tnt.setFuse(0);
-            
-            this.world.spawnEntity(tnt);
-            
-            this.setDead();
-        }
-    }
+	protected void onHit(RayTraceResult raytraceResultIn) {
+		super.onHit(raytraceResultIn);
+		
+		if (!this.world.isRemote) {
+			EntityTNTPrimed tnt = new EntityTNTPrimed(this.world, this.posX, this.posY, this.posZ, 
+				this.shootingEntity instanceof EntityLivingBase ? (EntityLivingBase) this.shootingEntity : null);
+			
+			tnt.setFuse(0);
+			this.world.spawnEntity(tnt);
+			this.setDead();
+		}
+	}
 }

@@ -4,7 +4,6 @@ import com.onyxi7.betterarchery.betterarchery;
 import com.onyxi7.betterarchery.init.ItemInit;
 import com.onyxi7.betterarchery.util.interfaces.IHasModel;
 import com.onyxi7.betterarchery.init.CreativeTabInit;
-import com.onyxi7.betterarchery.entities.EntityDrillArrow;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -81,8 +80,9 @@ public class CustomBow extends ItemBow implements IHasModel {
                         }
                         
 						// If it's a Drill Arrow, apply the force based on the charge time
-						if (entityarrow instanceof EntityDrillArrow) {
-							EntityDrillArrow drillArrow = (EntityDrillArrow) entityarrow;
+						if (entityarrow instanceof com.onyxi7.betterarchery.entities.EntityDrillArrow) {
+							com.onyxi7.betterarchery.entities.EntityDrillArrow drillArrow = 
+								(com.onyxi7.betterarchery.entities.EntityDrillArrow) entityarrow;
 							
 							// Calculate force based on load time (0.0 to 1.0)
 							float chargePower = getArrowVelocity(i);
