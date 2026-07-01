@@ -9,6 +9,10 @@ import com.onyxi7.betterarchery.items.arrows.ItemTorchArrow;
 import com.onyxi7.betterarchery.items.arrows.ItemImpactArrow;
 import com.onyxi7.betterarchery.items.arrows.ItemEnderArrow;
 import com.onyxi7.betterarchery.items.arrows.ItemSplittingArrow;
+import com.onyxi7.betterarchery.items.bows.LongBow;
+import com.onyxi7.betterarchery.items.bows.RecurveBow;
+import com.onyxi7.betterarchery.items.bows.CompositeBow;
+import com.onyxi7.betterarchery.items.bows.YumiBow;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.item.Item;
@@ -29,4 +33,10 @@ public class ItemInit {
 	public static final Item IMPACT_ARROW = new ItemImpactArrow("impact_arrow");
 	public static final Item ENDER_ARROW = new ItemEnderArrow("ender_arrow");
 	public static final Item SPLITTING_ARROW = new ItemSplittingArrow("splitting_arrow");
+	
+	// Arcos personalizados
+	public static final Item LONG_BOW = new LongBow("long_bow");
+	public static final Item RECURVE_BOW = new RecurveBow("recurve_bow");
+	public static final Item COMPOSITE_BOW = new CompositeBow("composite_bow");
+	public static final Item YUMI_BOW = new YumiBow("yumi_bow");
 }

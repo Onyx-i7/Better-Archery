@@ -8,3 +8,7 @@ item.torch_arrow.name=Torch Arrow
 item.impact_arrow.name=Impact Arrow
 item.ender_arrow.name=Ender Arrow
 item.splitting_arrow.name=Splitting Arrow
+item.long_bow.name=Long Bow
+item.recurve_bow.name=Recurve Bow
+item.composite_bow.name=Composite Bow
+item.yumi_bow.name=Yumi Bow
