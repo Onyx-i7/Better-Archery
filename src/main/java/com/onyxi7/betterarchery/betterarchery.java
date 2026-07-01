@@ -8,6 +8,7 @@ import com.onyxi7.betterarchery.entities.EntityTorchArrow;
 import com.onyxi7.betterarchery.entities.EntityImpactArrow;
 import com.onyxi7.betterarchery.entities.EntityEnderArrow;
 import com.onyxi7.betterarchery.entities.EntitySplittingArrow;
+import com.onyxi7.betterarchery.entities.EntityQuiverSkeleton;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -45,6 +46,17 @@ public class betterarchery {
 		);
 		
 		EntityRegistry.registerModEntity(
+			new ResourceLocation("betterarchery", "potion_arrow"),
+			EntityPotionArrow.class,
+			"potion_arrow",
+			1,
+			this,
+			64,
+			1,
+			true
+		);
+		
+		EntityRegistry.registerModEntity(
 			new ResourceLocation("betterarchery", "fire_arrow"),
 			EntityFireArrow.class,
 			"fire_arrow",
@@ -54,7 +66,7 @@ public class betterarchery {
 			1,
 			true
 		);
-
+		
 		EntityRegistry.registerModEntity(
 			new ResourceLocation("betterarchery", "torch_arrow"),
 			EntityTorchArrow.class,
@@ -65,7 +77,7 @@ public class betterarchery {
 			1,
 			true
 		);
-
+		
 		EntityRegistry.registerModEntity(
 			new ResourceLocation("betterarchery", "impact_arrow"),
 			EntityImpactArrow.class,
@@ -76,7 +88,7 @@ public class betterarchery {
 			1,
 			true
 		);
-
+		
 		EntityRegistry.registerModEntity(
 			new ResourceLocation("betterarchery", "ender_arrow"),
 			EntityEnderArrow.class,
@@ -87,7 +99,7 @@ public class betterarchery {
 			1,
 			true
 		);
-
+		
 		EntityRegistry.registerModEntity(
 			new ResourceLocation("betterarchery", "splitting_arrow"),
 			EntitySplittingArrow.class,
@@ -98,14 +110,45 @@ public class betterarchery {
 			1,
 			true
 		);
-    
+		
+		EntityRegistry.registerModEntity(
+			new ResourceLocation("betterarchery", "quiver_skeleton"),
+			EntityQuiverSkeleton.class,
+			"quiver_skeleton",
+			7,
+			this,
+			80,
+			3,
+			true
+		);
+		
 		proxy.preInit(event);
 	}
     
-    @EventHandler
-    public void init(FMLInitializationEvent event) {
-        proxy.init(event);
-    }
+    @Mod.EventHandler
+	public void init(FMLInitializationEvent event) {
+		net.minecraftforge.fml.common.registry.EntityRegistry.addSpawn(
+			EntityQuiverSkeleton.class,
+			3, // weight
+			1, // min group size
+			1, // max group size
+			net.minecraft.entity.EnumCreatureType.MONSTER,
+			net.minecraft.init.Biomes.PLAINS,
+			net.minecraft.init.Biomes.FOREST,
+			net.minecraft.init.Biomes.TAIGA,
+			net.minecraft.init.Biomes.DESERT,
+			net.minecraft.init.Biomes.JUNGLE,
+			net.minecraft.init.Biomes.BIRCH_FOREST,
+			net.minecraft.init.Biomes.ROOFED_FOREST,
+			net.minecraft.init.Biomes.EXTREME_HILLS,
+			net.minecraft.init.Biomes.SAVANNA,
+			net.minecraft.init.Biomes.MESA,
+			net.minecraft.init.Biomes.ICE_PLAINS,
+			net.minecraft.init.Biomes.COLD_TAIGA
+		);
+		
+		proxy.init(event);
+	}
     
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
