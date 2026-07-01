@@ -32,37 +32,37 @@ public class ClientProxy extends CommonProxy {
         
         RenderingRegistry.registerEntityRenderingHandler(
             EntityFireArrow.class,
-            manager -> new RenderCustomArrow(manager, new ResourceLocation("betterarchery:textures/entity/firearrow.png"))
+            manager -> new RenderCustomArrow(manager, new ResourceLocation("betterarchery:textures/entity/arrow.png"))
         );
         
         RenderingRegistry.registerEntityRenderingHandler(
             EntityTorchArrow.class,
-            manager -> new RenderCustomArrow(manager, new ResourceLocation("betterarchery:textures/entity/torcharrow.png"))
+            manager -> new RenderCustomArrow(manager, new ResourceLocation("betterarchery:textures/entity/arrow.png"))
         );
         
         RenderingRegistry.registerEntityRenderingHandler(
             EntityImpactArrow.class,
-            manager -> new RenderCustomArrow(manager, new ResourceLocation("betterarchery:textures/entity/impactarrow.png"))
+            manager -> new RenderCustomArrow(manager, new ResourceLocation("betterarchery:textures/entity/arrow.png"))
         );
         
         RenderingRegistry.registerEntityRenderingHandler(
             EntityEnderArrow.class,
-            manager -> new RenderCustomArrow(manager, new ResourceLocation("betterarchery:textures/entity/enderarrow.png"))
+            manager -> new RenderCustomArrow(manager, new ResourceLocation("betterarchery:textures/entity/arrow.png"))
         );
         
         RenderingRegistry.registerEntityRenderingHandler(
             EntitySplittingArrow.class,
-            manager -> new RenderCustomArrow(manager, new ResourceLocation("betterarchery:textures/entity/splittingarrow.png"))
+            manager -> new RenderCustomArrow(manager, new ResourceLocation("betterarchery:textures/entity/arrow.png"))
         );
         
         RenderingRegistry.registerEntityRenderingHandler(
             EntityDrillArrow.class,
-            manager -> new RenderCustomArrow(manager, new ResourceLocation("betterarchery:textures/entity/drillarrow.png"))
+            manager -> new RenderCustomArrow(manager, new ResourceLocation("betterarchery:textures/entity/arrow.png"))
         );
         
         RenderingRegistry.registerEntityRenderingHandler(
             EntityPotionArrow.class,
-            manager -> new RenderCustomArrow(manager, new ResourceLocation("betterarchery:textures/entity/potionarrow.png"))
+            manager -> new RenderCustomArrow(manager, new ResourceLocation("betterarchery:textures/entity/arrow.png"))
         );
     }
     
