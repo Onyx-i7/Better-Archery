@@ -2,6 +2,7 @@ package com.onyxi7.betterarchery.entities;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.entity.projectile.EntityTippedArrow;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.RayTraceResult;
@@ -28,21 +29,16 @@ public class EntitySplittingArrow extends EntityArrow {
     
     @Override
     protected void onHit(RayTraceResult raytraceResultIn) {
-        // Crear 3 flechas adicionales en diferentes direcciones
-        if (!this.world.isRemote && raytraceResultIn.entityHit != null) {
+        if (!this.world.isRemote && raytraceResultIn.entityHit != null && this.shootingEntity instanceof EntityLivingBase) {
+            EntityLivingBase shooter = (EntityLivingBase) this.shootingEntity;
+            
             for (int i = 0; i < 3; i++) {
-                EntityArrow splitArrow = new EntityArrow(this.world, this.shootingEntity) {
-                    @Override
-                    protected ItemStack getArrowStack() {
-                        return new ItemStack(Items.ARROW);
-                    }
-                };
+                EntityTippedArrow splitArrow = new EntityTippedArrow(this.world, shooter);
                 
                 splitArrow.posX = this.posX;
                 splitArrow.posY = this.posY;
                 splitArrow.posZ = this.posZ;
                 
-                // Dirección aleatoria dispersa
                 double spread = 0.3;
                 splitArrow.motionX = this.motionX + (this.world.rand.nextDouble() - 0.5) * spread;
                 splitArrow.motionY = this.motionY + (this.world.rand.nextDouble() - 0.5) * spread;

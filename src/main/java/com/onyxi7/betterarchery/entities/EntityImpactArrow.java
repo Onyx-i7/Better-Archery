@@ -1,14 +1,12 @@
 package com.onyxi7.betterarchery.entities;
 
 import java.util.List;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -39,10 +37,8 @@ public class EntityImpactArrow extends EntityArrow {
         super.onHit(raytraceResultIn);
         
         if (!this.world.isRemote) {
-            // Crear una explosión
             Vec3d pos = new Vec3d(this.posX, this.posY, this.posZ);
             
-            // Dañar entidades cercanas
             List<EntityLivingBase> entities = this.world.getEntitiesWithinAABB(
                 EntityLivingBase.class,
                 new AxisAlignedBB(
@@ -56,8 +52,14 @@ public class EntityImpactArrow extends EntityArrow {
                     double distance = entity.getDistance(pos.x, pos.y, pos.z);
                     float damage = (float) (6.0F * (1.0 - distance / EXPLOSION_RADIUS));
                     if (damage > 0) {
-                        entity.attackEntityFrom(DamageSource.causeIndirectDamage(this, this.shootingEntity), damage);
-                        // Knockback
+                        DamageSource source;
+                        if (this.shootingEntity instanceof EntityLivingBase) {
+                            source = DamageSource.causeIndirectDamage(this, (EntityLivingBase) this.shootingEntity);
+                        } else {
+                            source = DamageSource.causeIndirectDamage(this, null);
+                        }
+                        entity.attackEntityFrom(source, damage);
+                        
                         double dx = entity.posX - pos.x;
                         double dy = entity.posY - pos.y;
                         double dz = entity.posZ - pos.z;
@@ -71,7 +73,6 @@ public class EntityImpactArrow extends EntityArrow {
                 }
             }
             
-            // Partículas de explosión
             this.world.newExplosion(this, this.posX, this.posY, this.posZ, 0.5F, false, false);
             
             this.setDead();
