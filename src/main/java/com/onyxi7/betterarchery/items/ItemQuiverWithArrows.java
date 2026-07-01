@@ -169,67 +169,50 @@ public class ItemQuiverWithArrows extends ItemArrow implements IHasModel {
     }
     
     @Override
-    public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        if (entityIn instanceof EntityPlayer) {
-            EntityPlayer player = (EntityPlayer) entityIn;
-            
-            if (player.getHeldItemOffhand().getItem() instanceof ItemArrow) {
-                ItemStack newStack = player.getHeldItemOffhand();
-                if (newStack.hasTagCompound()) {
-                    NBTTagCompound nbt = newStack.getTagCompound();
-                    if (nbt.hasKey("Arrows")) {
-                        if (nbt.getInteger("Arrows") <= 0) {
-                            player.setHeldItem(EnumHand.OFF_HAND, new ItemStack(ItemInit.QUIVER));
-                            return;
-                        }
-                    } else {
-                        player.setHeldItem(EnumHand.OFF_HAND, new ItemStack(ItemInit.QUIVER));
-                        return;
-                    }
-                } else {
-                    player.setHeldItem(EnumHand.OFF_HAND, new ItemStack(ItemInit.QUIVER));
-                    return;
-                }
-            }
-            
-            for (int i = 1; i <= 2; i++) {
-                ItemStack armorStack = player.inventory.armorInventory.get(i);
-                if (armorStack.getItem() instanceof ItemArrow) {
-                    if (armorStack.hasTagCompound()) {
-                        NBTTagCompound nbt = armorStack.getTagCompound();
-                        if (nbt.hasKey("Arrows")) {
-                            if (nbt.getInteger("Arrows") <= 0) {
-                                player.inventory.armorInventory.set(i, new ItemStack(ItemInit.QUIVER));
-                                return;
-                            }
-                        } else {
-                            player.inventory.armorInventory.set(i, new ItemStack(ItemInit.QUIVER));
-                            return;
-                        }
-                    } else {
-                        player.inventory.armorInventory.set(i, new ItemStack(ItemInit.QUIVER));
-                        return;
-                    }
-                }
-            }
-            
-            EntityEquipmentSlot slot = getSlotForItemSlot(itemSlot);
-            if (slot != null) {
-                if (stack.hasTagCompound()) {
-                    NBTTagCompound nbt = stack.getTagCompound();
-                    if (nbt.hasKey("Arrows")) {
-                        if (nbt.getInteger("Arrows") <= 0) {
-                            entityIn.setItemStackToSlot(slot, new ItemStack(ItemInit.QUIVER));
-                        }
-                    } else {
-                        entityIn.setItemStackToSlot(slot, new ItemStack(ItemInit.QUIVER));
-                    }
-                } else {
-                    entityIn.setItemStackToSlot(slot, new ItemStack(ItemInit.QUIVER));
-                }
-            }
-        }
-    }
+	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+		// Solo ejecutar en el servidor evitando la duplicación
+		if (worldIn.isRemote) {
+			return;
+		}
+    
+		if (!(entityIn instanceof EntityPlayer)) {
+			return;
+		}
+    
+		EntityPlayer player = (EntityPlayer) entityIn;
+    
+		// Verificar si este stack tiene flechas
+		if (stack.isEmpty() || !stack.hasTagCompound()) {
+			return;
+		}
+    
+		NBTTagCompound nbt = stack.getTagCompound();
+		if (!nbt.hasKey("Arrows")) {
+			return;
+		}
+		
+		int arrows = nbt.getInteger("Arrows");
+		
+		// Si no hay flechas, convertir a carcaj vacío
+		if (arrows <= 0) {
+			ItemStack emptyQuiver = new ItemStack(ItemInit.QUIVER);
+			
+			// Determinar dónde está el carcaj y reemplazarlo una sola vez
+			if (player.getHeldItemMainhand() == stack) {
+				player.setHeldItem(EnumHand.MAIN_HAND, emptyQuiver);
+			} else if (player.getHeldItemOffhand() == stack) {
+				player.setHeldItem(EnumHand.OFF_HAND, emptyQuiver);
+			} else {
+				// Buscar en el inventario
+				for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
+					if (player.inventory.getStackInSlot(i) == stack) {
+						player.inventory.setInventorySlotContents(i, emptyQuiver);
+						break;
+					}
+				}
+			}
+		}
+	}
     
     private EntityEquipmentSlot getSlotForItemSlot(int itemSlot) {
         if (itemSlot >= 36 && itemSlot <= 39) {
