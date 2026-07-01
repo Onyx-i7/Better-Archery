@@ -67,9 +67,26 @@ public class ItemPotionArrow extends ItemArrow implements IHasModel {
 		PotionType type = ForgeRegistries.POTION_TYPES.getValue(
 			new net.minecraft.util.ResourceLocation(potionType)
 		);
-		if (type != null) {
-			return PotionUtils.getColorFromEffects(type.getEffects());
+		
+		if (type != null && !type.getEffects().isEmpty()) {
+			// Calcula el color promedio de todos los efectos
+			int r = 0, g = 0, b = 0;
+			int count = type.getEffects().size();
+			
+			for (PotionEffect effect : type.getEffects()) {
+				int color = effect.getPotion().getLiquidColor();
+				r += (color >> 16) & 0xFF;
+				g += (color >> 8) & 0xFF;
+				b += color & 0xFF;
+			}
+			
+			r /= count;
+			g /= count;
+			b /= count;
+			
+			return (r << 16) | (g << 8) | b;
 		}
+		
 		return 0x385DC6; // Color azul por defecto
 	}
     
