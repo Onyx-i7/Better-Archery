@@ -8,7 +8,8 @@
   "url": "https://github.com/Onyx-i7/Better-Archery",
   "updateUrl": "",
   "authorList": [ "Zaggy1024", "Onyx-i7"],
-  "credits": "",
+  "credits": "Zaggy1024",
+  "logoFile": "logo.png",
   "screenshots": [],
   "dependencies": []
 }
