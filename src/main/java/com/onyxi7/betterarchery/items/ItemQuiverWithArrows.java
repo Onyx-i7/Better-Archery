@@ -52,17 +52,17 @@ public class ItemQuiverWithArrows extends ItemArrow implements IHasModel {
     }
     
     @Override
-    public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        int arrows = getArrowCount(stack);
-        Item arrowType = getArrowType(stack);
-        String arrowName = arrowType != null ? arrowType.getItemStackDisplayName(new ItemStack(arrowType)) : "Arrow";
-        
-        if (arrows >= MAX_SIZE) {
-            tooltip.add(arrowName + ": " + arrows + " (Full)");
-        } else {
-            tooltip.add(arrowName + ": " + arrows);
-        }
-    }
+	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		int arrows = getArrowCount(stack);
+		Item arrowType = getArrowType(stack);
+		String arrowName = arrowType != null ? arrowType.getItemStackDisplayName(new ItemStack(arrowType)) : "Arrow";
+		
+		if (arrows >= MAX_SIZE) {
+			tooltip.add(net.minecraft.util.text.translation.I18n.translateToLocalFormatted("tooltip.quiver.arrows.full", arrows));
+		} else {
+			tooltip.add(net.minecraft.util.text.translation.I18n.translateToLocalFormatted("tooltip.quiver.arrows", arrows));
+		}
+	}
     
     // Obtener cantidad de flechas
     public static int getArrowCount(ItemStack stack) {

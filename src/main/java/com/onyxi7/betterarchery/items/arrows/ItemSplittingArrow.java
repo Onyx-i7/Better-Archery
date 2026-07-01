@@ -24,9 +24,9 @@ public class ItemSplittingArrow extends ItemArrow implements IHasModel {
     }
     
     @Override
-    public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        tooltip.add("§bSe divide en múltiples flechas");
-    }
+	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		tooltip.add(net.minecraft.util.text.translation.I18n.translateToLocal("tooltip.splitting_arrow.desc"));
+	}
     
     @Override
     public EntityArrow createArrow(World worldIn, ItemStack stack, EntityLivingBase shooter) {

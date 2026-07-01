@@ -23,10 +23,10 @@ public class ItemImpactArrow extends ItemArrow implements IHasModel {
         ItemInit.ITEMS.add(this);
     }
     
-    @Override
-    public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        tooltip.add("§4Explota al impactar");
-    }
+	@Override
+	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		tooltip.add(net.minecraft.util.text.translation.I18n.translateToLocal("tooltip.impact_arrow.desc"));
+	}
     
     @Override
     public EntityArrow createArrow(World worldIn, ItemStack stack, EntityLivingBase shooter) {

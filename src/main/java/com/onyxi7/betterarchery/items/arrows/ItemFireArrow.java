@@ -24,9 +24,9 @@ public class ItemFireArrow extends ItemArrow implements IHasModel {
     }
     
     @Override
-    public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        tooltip.add("§cPrende fuego al objetivo");
-    }
+	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		tooltip.add(net.minecraft.util.text.translation.I18n.translateToLocal("tooltip.fire_arrow.desc"));
+	}
     
     @Override
     public EntityArrow createArrow(World worldIn, ItemStack stack, EntityLivingBase shooter) {

@@ -24,9 +24,9 @@ public class ItemEnderArrow extends ItemArrow implements IHasModel {
     }
     
     @Override
-    public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        tooltip.add("§5Te teletransporta al objetivo");
-    }
+	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		tooltip.add(net.minecraft.util.text.translation.I18n.translateToLocal("tooltip.ender_arrow.desc"));
+	}
     
     @Override
     public EntityArrow createArrow(World worldIn, ItemStack stack, EntityLivingBase shooter) {

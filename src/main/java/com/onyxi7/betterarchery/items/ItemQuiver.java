@@ -31,9 +31,13 @@ public class ItemQuiver extends Item implements IHasModel {
     }
     
     @Override
-    public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        tooltip.add("Arrows: 0");
-    }
+	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		if (isBroken(stack.getMetadata())) {
+			tooltip.add(net.minecraft.util.text.translation.I18n.translateToLocal("tooltip.drill_arrow.broken"));
+		} else {
+			tooltip.add(net.minecraft.util.text.translation.I18n.translateToLocal("tooltip.drill_arrow.desc"));
+		}
+	}
     
     @Override
     public void registerModels() {

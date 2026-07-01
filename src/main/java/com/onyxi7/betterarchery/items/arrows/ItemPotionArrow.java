@@ -107,19 +107,19 @@ public class ItemPotionArrow extends ItemArrow implements IHasModel {
     }
     
     @Override
-    public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        String potionType = getPotionType(stack);
-        PotionType type = ForgeRegistries.POTION_TYPES.getValue(
-            new net.minecraft.util.ResourceLocation(potionType)
-        );
-        
-        if (type != null && !type.getEffects().isEmpty()) {
-            for (PotionEffect effect : type.getEffects()) {
-                String effectName = net.minecraft.util.text.translation.I18n.translateToLocal(effect.getEffectName()).trim();
-                tooltip.add(effectName);
-            }
-        }
-    }
+	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		String potionType = getPotionType(stack);
+		PotionType type = ForgeRegistries.POTION_TYPES.getValue(
+			new net.minecraft.util.ResourceLocation(potionType)
+		);
+		
+		if (type != null && !type.getEffects().isEmpty()) {
+			for (PotionEffect effect : type.getEffects()) {
+				String effectName = net.minecraft.util.text.translation.I18n.translateToLocal(effect.getEffectName()).trim();
+				tooltip.add(effectName);
+			}
+		}
+	}
     
     @Override
     public EntityArrow createArrow(World worldIn, ItemStack stack, EntityLivingBase shooter) {
