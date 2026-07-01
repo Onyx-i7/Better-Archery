@@ -21,14 +21,51 @@ public class ClientProxy extends CommonProxy {
     }
     
     @Override
-    public void preInit(FMLPreInitializationEvent event) {
-        super.preInit(event);
-        
-        RenderingRegistry.registerEntityRenderingHandler(
-            EntityQuiverSkeleton.class,
-            RenderQuiverSkeleton::new
-        );
-    }
+	public void preInit(FMLPreInitializationEvent event) {
+		super.preInit(event);
+		
+		// Record a render of the Quiver Skeleton
+		RenderingRegistry.registerEntityRenderingHandler(
+			com.onyxi7.betterarchery.entities.EntityQuiverSkeleton.class,
+			RenderQuiverSkeleton::new
+		);
+		
+		// Register arrow renderers
+		RenderingRegistry.registerEntityRenderingHandler(
+			com.onyxi7.betterarchery.entities.EntityFireArrow.class,
+			manager -> new RenderCustomArrow(manager, new ResourceLocation("betterarchery:textures/entity/firearrow.png"))
+		);
+		
+		RenderingRegistry.registerEntityRenderingHandler(
+			com.onyxi7.betterarchery.entities.EntityTorchArrow.class,
+			manager -> new RenderCustomArrow(manager, new ResourceLocation("betterarchery:textures/entity/torcharrow.png"))
+		);
+		
+		RenderingRegistry.registerEntityRenderingHandler(
+			com.onyxi7.betterarchery.entities.EntityImpactArrow.class,
+			manager -> new RenderCustomArrow(manager, new ResourceLocation("betterarchery:textures/entity/impactarrow.png"))
+		);
+		
+		RenderingRegistry.registerEntityRenderingHandler(
+			com.onyxi7.betterarchery.entities.EntityEnderArrow.class,
+			manager -> new RenderCustomArrow(manager, new ResourceLocation("betterarchery:textures/entity/enderarrow.png"))
+		);
+		
+		RenderingRegistry.registerEntityRenderingHandler(
+			com.onyxi7.betterarchery.entities.EntitySplittingArrow.class,
+			manager -> new RenderCustomArrow(manager, new ResourceLocation("betterarchery:textures/entity/splittingarrow.png"))
+		);
+		
+		RenderingRegistry.registerEntityRenderingHandler(
+			com.onyxi7.betterarchery.entities.EntityDrillArrow.class,
+			manager -> new RenderCustomArrow(manager, new ResourceLocation("betterarchery:textures/entity/drillarrow.png"))
+		);
+		
+		RenderingRegistry.registerEntityRenderingHandler(
+			com.onyxi7.betterarchery.entities.EntityPotionArrow.class,
+			manager -> new RenderCustomArrow(manager, new ResourceLocation("betterarchery:textures/entity/potionarrow.png"))
+		);
+	}
     
     @Override
     public void init(FMLInitializationEvent event) {
