@@ -1,0 +1,7 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "betterarchery:items/quiverbowcomposite3",
+        "layer1": "betterarchery:items/quiverbowcompositestring3"
+    }
+}
