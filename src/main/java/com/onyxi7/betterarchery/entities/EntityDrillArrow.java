@@ -14,9 +14,8 @@ import net.minecraft.world.World;
 
 public class EntityDrillArrow extends EntityArrow {
     
-    private float drillPower = 1.0F; // Drilling force (based on bow load)
+    private float drillPower = 1.0F;
     private int blocksDestroyed = 0;
-    private static final int MAX_BLOCKS_DESTROYED = 10; // Maximum of 10 blocks
     
     public EntityDrillArrow(World worldIn) {
         super(worldIn);
@@ -27,8 +26,12 @@ public class EntityDrillArrow extends EntityArrow {
     }
     
     public EntityDrillArrow(World worldIn, EntityLivingBase shooter) {
-		super(worldIn, shooter);
-	}
+        super(worldIn, shooter);
+        if (BetterArcheryConfig.general.debugMode) {
+            System.out.println("[BetterArchery] EntityDrillArrow created - Config MaxBlocks: " + 
+                             BetterArcheryConfig.arrows.drillArrowMaxBlocks);
+        }
+    }
     
     public void setDrillPower(float power) {
         this.drillPower = power;
@@ -44,68 +47,65 @@ public class EntityDrillArrow extends EntityArrow {
     }
     
     @Override
-	public void onUpdate() {
-		super.onUpdate();
-		
-		if (!this.inGround && !this.world.isRemote) {
-			if (this.ticksExisted % 20 == 0) 
-			}
-			
-			Vec3d currentPos = new Vec3d(this.posX, this.posY, this.posZ);
-			Vec3d motion = new Vec3d(this.motionX, this.motionY, this.motionZ);
-			Vec3d nextPos = currentPos.add(motion);
-			
-			RayTraceResult rayTrace = this.world.rayTraceBlocks(currentPos, nextPos, false, true, false);
-			
-			if (rayTrace != null && rayTrace.typeOfHit == RayTraceResult.Type.BLOCK) {
-				BlockPos blockPos = rayTrace.getBlockPos();
-				IBlockState blockState = this.world.getBlockState(blockPos);
-				
-				if (canDestroyBlock(blockState, blockPos)) {
-					destroyBlock(blockPos);
-					
-					this.drillPower -= (float) BetterArcheryConfig.arrows.drillArrowPowerLoss;
-					this.blocksDestroyed++;
-					
-					if (BetterArcheryConfig.general.debugMode) {
-						System.out.println("[BetterArchery] DrillArrow destroyed block...");
-					}
-					
-					if (this.drillPower <= 0 || this.blocksDestroyed >= BetterArcheryConfig.arrows.drillArrowMaxBlocks) {
-						if (BetterArcheryConfig.general.debugMode) {
-							System.out.println("[BetterArchery] DrillArrow destroyed block...");
-						}
-						this.setDead();
-					}
-				} else {
-					this.setDead();
-				}
-			}
-		}
-	}
+    public void onUpdate() {
+        super.onUpdate();
+        
+        if (!this.inGround && !this.world.isRemote) {
+            Vec3d currentPos = new Vec3d(this.posX, this.posY, this.posZ);
+            Vec3d motion = new Vec3d(this.motionX, this.motionY, this.motionZ);
+            Vec3d nextPos = currentPos.add(motion);
+            
+            RayTraceResult rayTrace = this.world.rayTraceBlocks(currentPos, nextPos, false, true, false);
+            
+            if (rayTrace != null && rayTrace.typeOfHit == RayTraceResult.Type.BLOCK) {
+                BlockPos blockPos = rayTrace.getBlockPos();
+                IBlockState blockState = this.world.getBlockState(blockPos);
+                
+                if (canDestroyBlock(blockState, blockPos)) {
+                    destroyBlock(blockPos);
+                    
+                    this.drillPower -= (float) BetterArcheryConfig.arrows.drillArrowPowerLoss;
+                    this.blocksDestroyed++;
+                    
+                    if (BetterArcheryConfig.general.debugMode) {
+                        System.out.println("[BetterArchery] DrillArrow destroyed block - Power: " + this.drillPower + 
+                                         ", Blocks: " + this.blocksDestroyed + "/" + BetterArcheryConfig.arrows.drillArrowMaxBlocks);
+                    }
+                    
+                    if (this.drillPower <= 0 || this.blocksDestroyed >= BetterArcheryConfig.arrows.drillArrowMaxBlocks) {
+                        if (BetterArcheryConfig.general.debugMode) {
+                            System.out.println("[BetterArchery] DrillArrow stopping");
+                        }
+                        this.setDead();
+                        return;
+                    }
+                    
+                    net.minecraft.util.EnumFacing facing = rayTrace.sideHit;
+                    this.setPosition(
+                        this.posX + facing.getXOffset() * 0.5,
+                        this.posY + facing.getYOffset() * 0.5,
+                        this.posZ + facing.getZOffset() * 0.5
+                    );
+                } else {
+                    super.onHit(rayTrace);
+                }
+            }
+        }
+    }
     
     private boolean canDestroyBlock(IBlockState blockState, BlockPos pos) {
         float hardness = blockState.getBlockHardness(this.world, pos);
         
-        // Do NOT destroy:
-        // - Blocks with a hardness of -1 (bedrock, portals, etc.)
-        // - Very hard blocks (hardness >= 50, such as obsidian)
-        // - If you no longer have the strength
         if (hardness < 0 || hardness >= 50.0F || this.drillPower <= 0) {
-			return false;
-		}
+            return false;
+        }
         
-        // The force required to destroy it depends on the hardness of the block
-        // Harder blocks require more force
         float requiredPower = hardness / 10.0F;
         return this.drillPower >= requiredPower;
     }
     
     private void destroyBlock(BlockPos pos) {
-        // Destroy the block without dropping any items 
         this.world.destroyBlock(pos, false);
-        this.drillPower -= (float) BetterArcheryConfig.arrows.drillArrowPowerLoss;
-		this.blocksDestroyed++;
     }
     
     @Override
@@ -114,20 +114,17 @@ public class EntityDrillArrow extends EntityArrow {
             BlockPos blockPos = raytraceResultIn.getBlockPos();
             IBlockState blockState = this.world.getBlockState(blockPos);
             
-            // If you don't destroy the block, do it
             if (canDestroyBlock(blockState, blockPos)) {
                 destroyBlock(blockPos);
-                this.drillPower -= 0.2F;
+                this.drillPower -= (float) BetterArcheryConfig.arrows.drillArrowPowerLoss;
                 this.blocksDestroyed++;
                 
-                // If you still have strength, continue (do not call super.onHit)
-                if (this.drillPower > 0 && this.blocksDestroyed < MAX_BLOCKS_DESTROYED) {
-                    return; // The arrow continues
+                if (this.drillPower > 0 && this.blocksDestroyed < BetterArcheryConfig.arrows.drillArrowMaxBlocks) {
+                    return;
                 }
             }
         }
         
-        // If you cannot continue, this is normal arrow behavior
         super.onHit(raytraceResultIn);
     }
     
