@@ -18,6 +18,8 @@ item.recurve_bow.name=Recurve Bow
 item.composite_bow.name=Composite Bow
 item.yumi_bow.name=Yumi Bow
 
+itemGroup.betterarchery_tab=Better Archery
+
 # Entity
 entity.betterarchery.quiver_skeleton.name=Quiver Skeleton
 

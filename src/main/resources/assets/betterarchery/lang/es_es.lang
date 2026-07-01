@@ -18,6 +18,8 @@ item.recurve_bow.name=Arco Recurvo
 item.composite_bow.name=Arco Compuesto
 item.yumi_bow.name=Arco Yumi
 
+itemGroup.betterarchery_tab=Better Archery
+
 # Entidad
 entity.betterarchery.quiver_skeleton.name=Esqueleto con Carcaj
 
