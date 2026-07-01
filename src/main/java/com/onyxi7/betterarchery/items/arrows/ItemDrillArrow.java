@@ -3,6 +3,7 @@ package com.onyxi7.betterarchery.items.arrows;
 import com.onyxi7.betterarchery.betterarchery;
 import com.onyxi7.betterarchery.entities.EntityDrillArrow;
 import com.onyxi7.betterarchery.init.ItemInit;
+import com.onyxi7.betterarchery.init.CreativeTabInit;
 import com.onyxi7.betterarchery.util.interfaces.IHasModel;
 import java.util.List;
 import net.minecraft.client.util.ITooltipFlag;

@@ -3,6 +3,7 @@ package com.onyxi7.betterarchery.items.bows;
 import com.onyxi7.betterarchery.betterarchery;
 import com.onyxi7.betterarchery.init.ItemInit;
 import com.onyxi7.betterarchery.util.interfaces.IHasModel;
+import com.onyxi7.betterarchery.init.CreativeTabInit;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
