@@ -28,4 +28,22 @@ public class ClientProxy extends CommonProxy {
             renderPlayer.addLayer(new LayerQuiver(renderPlayer));
         }
     }
+    
+    @Override
+	public void preInit(FMLPreInitializationEvent event) {
+		super.preInit(event);
+		
+		// Record property pulls for the bows
+		net.minecraft.client.renderer.ItemModelMesher mesher = 
+			net.minecraft.client.Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
+		
+		// For each bow, record the property pull
+		for (Item item : ItemInit.ITEMS) {
+			if (item instanceof CustomBow) {
+				mesher.getPropertyManager().getProperty(
+					new net.minecraft.util.ResourceLocation("pull")
+				);
+			}
+		}
+	}
 }
