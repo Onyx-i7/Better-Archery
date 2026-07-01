@@ -43,3 +43,14 @@ tooltip.long_bow.desc=Lento pero poderoso, las flechas viajan más rápido y lej
 tooltip.recurve_bow.desc=Arco equilibrado con mayor daño y velocidad
 tooltip.composite_bow.desc=Velocidad de carga muy rápida con alto daño
 tooltip.yumi_bow.desc=Arco japonés con excelente alcance y velocidad
+
+# JEI/HEI Descriptions
+betterarchery.jei.quiver.description=Carcaj vacío. Click derecho para recoger flechas del suelo o tu inventario. Colócalo en tu mano secundaria para suministrar flechas automáticamente a tu arco.
+betterarchery.jei.quiver_with_arrows.description=Carcaj con flechas. Muestra el tipo y cantidad de flechas dentro. Agacharse + click derecho para extraer flechas.
+betterarchery.jei.drill_arrow.description=Flecha Taladro: Atraviesa bloques y enemigos. Destruye bloques blandos en su camino.
+betterarchery.jei.fire_arrow.description=Flecha de Fuego: Prende fuego a los objetivos e ignora bloques al impactar.
+betterarchery.jei.torch_arrow.description=Flecha Antorcha: Coloca una antorcha donde cae. Perfecta para iluminar cuevas.
+betterarchery.jei.impact_arrow.description=Flecha de Impacto: Explota al impactar, causando daño en área y empuje a las entidades cercanas.
+betterarchery.jei.ender_arrow.description=Flecha de Ender: Te teletransporta a donde cae. ¡Como una Perla de Ender pero con arco!
+betterarchery.jei.splitting_arrow.description=Flecha Divisora: Se divide en 3 flechas al impactar, golpeando múltiples objetivos.
+betterarchery.jei.potion_arrow.description=Flecha de Poción: Aplica efectos de poción al impactar. Craftea con cualquier poción para transferir su efecto.
