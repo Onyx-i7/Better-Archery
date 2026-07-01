@@ -11,4 +11,5 @@ Original mod: [https://www.curseforge.com/minecraft/mc-mods/better-bows](https:/
 Currently, this port is 17% complete (or 20% to round it off). For now, optimization won't be my top priority; I'll port it first and then work on optimizations and other tasks, including bug fixes
 
 ## NEWS ABOUT THE PORT'S DEVELOPMENT
+**11:31 p.m. Venezuelan time, June 30**: All the bows from the original mod have been ported/completed thanks to a `CustomBow.java` system I created, which serves as the main component while the bows function as plugins or extensions to it \
 **10:48 p.m. Venezuela time, June 30**: The process is complete, and all the arrows from the original mod have been ported. Now I just need to work on the bows and a few other features that were in the original mod
