@@ -14,15 +14,18 @@ import net.minecraft.entity.projectile.EntityTippedArrow;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class ItemQuiverWithArrows extends ItemArrow implements IHasModel {
     
@@ -51,14 +54,17 @@ public class ItemQuiverWithArrows extends ItemArrow implements IHasModel {
     @Override
     public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         int arrows = getArrowCount(stack);
+        Item arrowType = getArrowType(stack);
+        String arrowName = arrowType != null ? arrowType.getItemStackDisplayName(new ItemStack(arrowType)) : "Arrow";
+        
         if (arrows >= MAX_SIZE) {
-            tooltip.add("Arrows: " + arrows + " (Full)");
+            tooltip.add(arrowName + ": " + arrows + " (Full)");
         } else {
-            tooltip.add("Arrows: " + arrows);
+            tooltip.add(arrowName + ": " + arrows);
         }
     }
     
-    // Método para obtener el conteo de flechas
+    // Obtener cantidad de flechas
     public static int getArrowCount(ItemStack stack) {
         if (stack.hasTagCompound() && stack.getTagCompound().hasKey("Arrows")) {
             return stack.getTagCompound().getInteger("Arrows");
@@ -66,7 +72,7 @@ public class ItemQuiverWithArrows extends ItemArrow implements IHasModel {
         return 0;
     }
     
-    // Método para establecer el conteo de flechas
+    // Establecer cantidad de flechas
     public static void setArrowCount(ItemStack stack, int count) {
         if (!stack.hasTagCompound()) {
             stack.setTagCompound(new NBTTagCompound());
@@ -74,21 +80,46 @@ public class ItemQuiverWithArrows extends ItemArrow implements IHasModel {
         stack.getTagCompound().setInteger("Arrows", count);
     }
     
+    // Obtener tipo de flecha guardada
+    public static Item getArrowType(ItemStack stack) {
+        if (stack.hasTagCompound() && stack.getTagCompound().hasKey("ArrowType")) {
+            String typeName = stack.getTagCompound().getString("ArrowType");
+            ResourceLocation loc = new ResourceLocation(typeName);
+            if (ForgeRegistries.ITEMS.containsKey(loc)) {
+                return ForgeRegistries.ITEMS.getValue(loc);
+            }
+        }
+        return Items.ARROW; // Por defecto, flecha normal
+    }
+    
+    // Guardar tipo de flecha
+    public static void setArrowType(ItemStack stack, Item arrowItem) {
+        if (!stack.hasTagCompound()) {
+            stack.setTagCompound(new NBTTagCompound());
+        }
+        ResourceLocation regName = arrowItem.getRegistryName();
+        if (regName != null) {
+            stack.getTagCompound().setString("ArrowType", regName.toString());
+        }
+    }
+    
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
         if (handIn == EnumHand.OFF_HAND) {
-            return new ActionResult<>(EnumActionResult.PASS, playerIn.getHeldItem(handIn));
+            return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
         }
         
         ItemStack heldStack = playerIn.getHeldItem(handIn);
         int currentArrows = getArrowCount(heldStack);
+        Item currentType = getArrowType(heldStack);
         
         // Si está agachado: sacar flechas del carcaj
         if (playerIn.isSneaking()) {
             int arrowsToGive = Math.min(currentArrows, 64);
             if (arrowsToGive > 0) {
                 setArrowCount(heldStack, currentArrows - arrowsToGive);
-                playerIn.inventory.addItemStackToInventory(new ItemStack(Items.ARROW, arrowsToGive));
+                ItemStack arrowStack = new ItemStack(currentType, arrowsToGive);
+                playerIn.inventory.addItemStackToInventory(arrowStack);
             }
             return new ActionResult<>(EnumActionResult.SUCCESS, heldStack);
         }
@@ -109,35 +140,53 @@ public class ItemQuiverWithArrows extends ItemArrow implements IHasModel {
             }
             if (pickedUp > 0) {
                 setArrowCount(heldStack, currentArrows + pickedUp);
+                // Las flechas del suelo siempre son flechas normales
+                if (currentArrows == 0) {
+                    setArrowType(heldStack, Items.ARROW);
+                }
                 return new ActionResult<>(EnumActionResult.SUCCESS, heldStack);
             }
         }
         
-        // 2. Buscar CUALQUIER flecha en el inventario
+        // 2. Buscar flechas en el inventario
         for (int i = 0; i < playerIn.inventory.getSizeInventory(); i++) {
             ItemStack slotStack = playerIn.inventory.getStackInSlot(i);
             if (!slotStack.isEmpty() && slotStack.getItem() instanceof ItemArrow) {
-                int arrowCount = slotStack.getCount();
-                int spaceLeft = MAX_SIZE - currentArrows;
+                Item slotArrowType = slotStack.getItem();
                 
-                if (spaceLeft <= 0) {
+                // Verificar si el tipo coincide o el carcaj está vacío
+                boolean typeMatch = (currentArrows == 0) || (slotArrowType == currentType);
+                
+                if (typeMatch) {
+                    int arrowCount = slotStack.getCount();
+                    int spaceLeft = MAX_SIZE - currentArrows;
+                    
+                    if (spaceLeft <= 0) {
+                        return new ActionResult<>(EnumActionResult.SUCCESS, heldStack);
+                    }
+                    
+                    if (arrowCount <= spaceLeft) {
+                        // Cabe todo el stack
+                        setArrowCount(heldStack, currentArrows + arrowCount);
+                        if (currentArrows == 0) {
+                            setArrowType(heldStack, slotArrowType);
+                        }
+                        playerIn.inventory.removeStackFromSlot(i);
+                    } else {
+                        // Solo cabe parte del stack
+                        setArrowCount(heldStack, MAX_SIZE);
+                        if (currentArrows == 0) {
+                            setArrowType(heldStack, slotArrowType);
+                        }
+                        slotStack.shrink(spaceLeft);
+                    }
                     return new ActionResult<>(EnumActionResult.SUCCESS, heldStack);
                 }
-                
-                if (arrowCount <= spaceLeft) {
-                    // Cabe todo el stack
-                    setArrowCount(heldStack, currentArrows + arrowCount);
-                    playerIn.inventory.removeStackFromSlot(i);
-                } else {
-                    // Solo cabe parte del stack
-                    setArrowCount(heldStack, MAX_SIZE);
-                    slotStack.shrink(spaceLeft);
-                }
-                return new ActionResult<>(EnumActionResult.SUCCESS, heldStack);
             }
         }
         
-        return new ActionResult<>(EnumActionResult.PASS, heldStack);
+        // No hay nada que hacer, devolver el mismo stack
+        return new ActionResult<>(EnumActionResult.SUCCESS, heldStack);
     }
     
     @Override
@@ -148,7 +197,6 @@ public class ItemQuiverWithArrows extends ItemArrow implements IHasModel {
     
     @Override
     public boolean isInfinite(ItemStack stack, ItemStack bow, EntityPlayer player) {
-        // Verificar que el carcaj tiene flechas
         int arrows = getArrowCount(stack);
         if (arrows <= 0) {
             return false;
@@ -156,10 +204,9 @@ public class ItemQuiverWithArrows extends ItemArrow implements IHasModel {
         
         int enchant = EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, bow);
         if (enchant > 0) {
-            return true; // Infinity: no consumir
+            return true;
         }
         
-        // Consumir una flecha
         setArrowCount(stack, arrows - 1);
         return true;
     }
@@ -171,7 +218,6 @@ public class ItemQuiverWithArrows extends ItemArrow implements IHasModel {
     
     @Override
     public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        // Solo en servidor
         if (worldIn.isRemote) {
             return;
         }
@@ -182,7 +228,6 @@ public class ItemQuiverWithArrows extends ItemArrow implements IHasModel {
         
         int arrows = getArrowCount(stack);
         
-        // Si se quedó sin flechas, convertir a carcaj vacío
         if (arrows <= 0) {
             EntityPlayer player = (EntityPlayer) entityIn;
             ItemStack emptyQuiver = new ItemStack(ItemInit.QUIVER);
