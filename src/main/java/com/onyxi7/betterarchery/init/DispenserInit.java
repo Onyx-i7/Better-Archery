@@ -2,119 +2,146 @@ package com.onyxi7.betterarchery.init;
 
 import com.onyxi7.betterarchery.entities.*;
 import net.minecraft.block.BlockDispenser;
-import net.minecraft.dispenser.BehaviorProjectileDispense;
+import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
 import net.minecraft.dispenser.IBlockSource;
+import net.minecraft.dispenser.IPosition;
 import net.minecraft.entity.IProjectile;
+import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntityDispenser;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 public class DispenserInit {
     
     public static void init() {
-        
         // Fire Arrow
-        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemInit.FIRE_ARROW, new BehaviorProjectileDispense() {
+        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemInit.FIRE_ARROW, new BehaviorDefaultDispenseItem() {
             @Override
-            protected IProjectile getProjectileEntity(World worldIn, IBlockSource source) {
-                EnumFacing enumfacing = BlockDispenser.getFacing(source.getBlockState());
-                double x = source.getX() + (double) enumfacing.getXOffset() * 1.125F;
-                double y = source.getY() + (double) enumfacing.getYOffset() * 1.125F;
-                double z = source.getZ() + (double) enumfacing.getZOffset() * 1.125F;
-                EntityFireArrow arrow = new EntityFireArrow(worldIn, x, y, z);
-                arrow.pickupStatus = net.minecraft.entity.projectile.EntityArrow.PickupStatus.DISALLOWED;
-                return arrow;
+            public ItemStack dispenseStack(IBlockSource source, ItemStack stack) {
+                EnumFacing enumfacing = source.getBlockState().getValue(BlockDispenser.FACING);
+                IPosition iposition = BlockDispenser.getDispensePosition(source);
+                World world = source.getWorld();
+                
+                EntityFireArrow arrow = new EntityFireArrow(world, iposition.getX(), iposition.getY(), iposition.getZ());
+                arrow.pickupStatus = EntityArrow.PickupStatus.DISALLOWED;
+                arrow.shoot(enumfacing.getXOffset(), enumfacing.getYOffset() + 0.1F, enumfacing.getZOffset(), 1.1F, 6.0F);
+                world.spawnEntity(arrow);
+                
+                stack.shrink(1);
+                return stack;
             }
         });
         
         // Torch Arrow
-        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemInit.TORCH_ARROW, new BehaviorProjectileDispense() {
+        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemInit.TORCH_ARROW, new BehaviorDefaultDispenseItem() {
             @Override
-            protected IProjectile getProjectileEntity(World worldIn, IBlockSource source) {
-                EnumFacing enumfacing = BlockDispenser.getFacing(source.getBlockState());
-                double x = source.getX() + (double) enumfacing.getXOffset() * 1.125F;
-                double y = source.getY() + (double) enumfacing.getYOffset() * 1.125F;
-                double z = source.getZ() + (double) enumfacing.getZOffset() * 1.125F;
-                EntityTorchArrow arrow = new EntityTorchArrow(worldIn, x, y, z);
-                arrow.pickupStatus = net.minecraft.entity.projectile.EntityArrow.PickupStatus.DISALLOWED;
-                return arrow;
+            public ItemStack dispenseStack(IBlockSource source, ItemStack stack) {
+                EnumFacing enumfacing = source.getBlockState().getValue(BlockDispenser.FACING);
+                IPosition iposition = BlockDispenser.getDispensePosition(source);
+                World world = source.getWorld();
+                
+                EntityTorchArrow arrow = new EntityTorchArrow(world, iposition.getX(), iposition.getY(), iposition.getZ());
+                arrow.pickupStatus = EntityArrow.PickupStatus.DISALLOWED;
+                arrow.shoot(enumfacing.getXOffset(), enumfacing.getYOffset() + 0.1F, enumfacing.getZOffset(), 1.1F, 6.0F);
+                world.spawnEntity(arrow);
+                
+                stack.shrink(1);
+                return stack;
             }
         });
         
         // Impact Arrow
-        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemInit.IMPACT_ARROW, new BehaviorProjectileDispense() {
+        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemInit.IMPACT_ARROW, new BehaviorDefaultDispenseItem() {
             @Override
-            protected IProjectile getProjectileEntity(World worldIn, IBlockSource source) {
-                EnumFacing enumfacing = BlockDispenser.getFacing(source.getBlockState());
-                double x = source.getX() + (double) enumfacing.getXOffset() * 1.125F;
-                double y = source.getY() + (double) enumfacing.getYOffset() * 1.125F;
-                double z = source.getZ() + (double) enumfacing.getZOffset() * 1.125F;
-                EntityImpactArrow arrow = new EntityImpactArrow(worldIn, x, y, z);
-                arrow.pickupStatus = net.minecraft.entity.projectile.EntityArrow.PickupStatus.DISALLOWED;
-                return arrow;
+            public ItemStack dispenseStack(IBlockSource source, ItemStack stack) {
+                EnumFacing enumfacing = source.getBlockState().getValue(BlockDispenser.FACING);
+                IPosition iposition = BlockDispenser.getDispensePosition(source);
+                World world = source.getWorld();
+                
+                EntityImpactArrow arrow = new EntityImpactArrow(world, iposition.getX(), iposition.getY(), iposition.getZ());
+                arrow.pickupStatus = EntityArrow.PickupStatus.DISALLOWED;
+                arrow.shoot(enumfacing.getXOffset(), enumfacing.getYOffset() + 0.1F, enumfacing.getZOffset(), 1.1F, 6.0F);
+                world.spawnEntity(arrow);
+                
+                stack.shrink(1);
+                return stack;
             }
         });
         
         // Ender Arrow
-        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemInit.ENDER_ARROW, new BehaviorProjectileDispense() {
+        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemInit.ENDER_ARROW, new BehaviorDefaultDispenseItem() {
             @Override
-            protected IProjectile getProjectileEntity(World worldIn, IBlockSource source) {
-                EnumFacing enumfacing = BlockDispenser.getFacing(source.getBlockState());
-                double x = source.getX() + (double) enumfacing.getXOffset() * 1.125F;
-                double y = source.getY() + (double) enumfacing.getYOffset() * 1.125F;
-                double z = source.getZ() + (double) enumfacing.getZOffset() * 1.125F;
-                EntityEnderArrow arrow = new EntityEnderArrow(worldIn, x, y, z);
-                arrow.pickupStatus = net.minecraft.entity.projectile.EntityArrow.PickupStatus.DISALLOWED;
-                return arrow;
+            public ItemStack dispenseStack(IBlockSource source, ItemStack stack) {
+                EnumFacing enumfacing = source.getBlockState().getValue(BlockDispenser.FACING);
+                IPosition iposition = BlockDispenser.getDispensePosition(source);
+                World world = source.getWorld();
+                
+                EntityEnderArrow arrow = new EntityEnderArrow(world, iposition.getX(), iposition.getY(), iposition.getZ());
+                arrow.pickupStatus = EntityArrow.PickupStatus.DISALLOWED;
+                arrow.shoot(enumfacing.getXOffset(), enumfacing.getYOffset() + 0.1F, enumfacing.getZOffset(), 1.1F, 6.0F);
+                world.spawnEntity(arrow);
+                
+                stack.shrink(1);
+                return stack;
             }
         });
         
         // Splitting Arrow
-        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemInit.SPLITTING_ARROW, new BehaviorProjectileDispense() {
+        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemInit.SPLITTING_ARROW, new BehaviorDefaultDispenseItem() {
             @Override
-            protected IProjectile getProjectileEntity(World worldIn, IBlockSource source) {
-                EnumFacing enumfacing = BlockDispenser.getFacing(source.getBlockState());
-                double x = source.getX() + (double) enumfacing.getXOffset() * 1.125F;
-                double y = source.getY() + (double) enumfacing.getYOffset() * 1.125F;
-                double z = source.getZ() + (double) enumfacing.getZOffset() * 1.125F;
-                EntitySplittingArrow arrow = new EntitySplittingArrow(worldIn, x, y, z);
-                arrow.pickupStatus = net.minecraft.entity.projectile.EntityArrow.PickupStatus.DISALLOWED;
-                return arrow;
+            public ItemStack dispenseStack(IBlockSource source, ItemStack stack) {
+                EnumFacing enumfacing = source.getBlockState().getValue(BlockDispenser.FACING);
+                IPosition iposition = BlockDispenser.getDispensePosition(source);
+                World world = source.getWorld();
+                
+                EntitySplittingArrow arrow = new EntitySplittingArrow(world, iposition.getX(), iposition.getY(), iposition.getZ());
+                arrow.pickupStatus = EntityArrow.PickupStatus.DISALLOWED;
+                arrow.shoot(enumfacing.getXOffset(), enumfacing.getYOffset() + 0.1F, enumfacing.getZOffset(), 1.1F, 6.0F);
+                world.spawnEntity(arrow);
+                
+                stack.shrink(1);
+                return stack;
             }
         });
         
         // Drill Arrow
-        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemInit.DRILL_ARROW, new BehaviorProjectileDispense() {
+        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemInit.DRILL_ARROW, new BehaviorDefaultDispenseItem() {
             @Override
-            protected IProjectile getProjectileEntity(World worldIn, IBlockSource source) {
-                EnumFacing enumfacing = BlockDispenser.getFacing(source.getBlockState());
-                double x = source.getX() + (double) enumfacing.getXOffset() * 1.125F;
-                double y = source.getY() + (double) enumfacing.getYOffset() * 1.125F;
-                double z = source.getZ() + (double) enumfacing.getZOffset() * 1.125F;
-                EntityDrillArrow arrow = new EntityDrillArrow(worldIn, x, y, z);
-                arrow.pickupStatus = net.minecraft.entity.projectile.EntityArrow.PickupStatus.DISALLOWED;
-                return arrow;
+            public ItemStack dispenseStack(IBlockSource source, ItemStack stack) {
+                EnumFacing enumfacing = source.getBlockState().getValue(BlockDispenser.FACING);
+                IPosition iposition = BlockDispenser.getDispensePosition(source);
+                World world = source.getWorld();
+                
+                EntityDrillArrow arrow = new EntityDrillArrow(world, iposition.getX(), iposition.getY(), iposition.getZ());
+                arrow.pickupStatus = EntityArrow.PickupStatus.DISALLOWED;
+                arrow.shoot(enumfacing.getXOffset(), enumfacing.getYOffset() + 0.1F, enumfacing.getZOffset(), 1.1F, 6.0F);
+                world.spawnEntity(arrow);
+                
+                stack.shrink(1);
+                return stack;
             }
         });
         
-        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemInit.POTION_ARROW, new BehaviorProjectileDispense() {
+        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemInit.POTION_ARROW, new BehaviorDefaultDispenseItem() {
             @Override
-            protected IProjectile getProjectileEntity(World worldIn, IBlockSource source) {
-                EnumFacing enumfacing = BlockDispenser.getFacing(source.getBlockState());
-                double x = source.getX() + (double) enumfacing.getXOffset() * 1.125F;
-                double y = source.getY() + (double) enumfacing.getYOffset() * 1.125F;
-                double z = source.getZ() + (double) enumfacing.getZOffset() * 1.125F;
-                EntityPotionArrow arrow = new EntityPotionArrow(worldIn, x, y, z);
+            public ItemStack dispenseStack(IBlockSource source, ItemStack stack) {
+                EnumFacing enumfacing = source.getBlockState().getValue(BlockDispenser.FACING);
+                IPosition iposition = BlockDispenser.getDispensePosition(source);
+                World world = source.getWorld();
                 
-                ItemStack stack = source.getBlockTileEntity().getStackInSlot(0);
-                if (!stack.isEmpty()) {
-                    String potionType = com.onyxi7.betterarchery.items.arrows.ItemPotionArrow.getPotionType(stack);
-                    arrow.setPotionType(potionType);
-                }
+                EntityPotionArrow arrow = new EntityPotionArrow(world, iposition.getX(), iposition.getY(), iposition.getZ());
                 
-                arrow.pickupStatus = net.minecraft.entity.projectile.EntityArrow.PickupStatus.DISALLOWED;
-                return arrow;
+                String potionType = com.onyxi7.betterarchery.items.arrows.ItemPotionArrow.getPotionType(stack);
+                arrow.setPotionType(potionType);
+                
+                arrow.pickupStatus = EntityArrow.PickupStatus.DISALLOWED;
+                arrow.shoot(enumfacing.getXOffset(), enumfacing.getYOffset() + 0.1F, enumfacing.getZOffset(), 1.1F, 6.0F);
+                world.spawnEntity(arrow);
+                
+                stack.shrink(1);
+                return stack;
             }
         });
     }
