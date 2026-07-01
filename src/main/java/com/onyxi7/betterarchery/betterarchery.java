@@ -3,6 +3,11 @@ package com.onyxi7.betterarchery;
 import com.onyxi7.betterarchery.proxy.CommonProxy;
 import com.onyxi7.betterarchery.entities.EntityDrillArrow;
 import com.onyxi7.betterarchery.entities.EntityPotionArrow;
+import com.onyxi7.betterarchery.entities.EntityFireArrow;
+import com.onyxi7.betterarchery.entities.EntityTorchArrow;
+import com.onyxi7.betterarchery.entities.EntityImpactArrow;
+import com.onyxi7.betterarchery.entities.EntityEnderArrow;
+import com.onyxi7.betterarchery.entities.EntitySplittingArrow;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -40,10 +45,54 @@ public class betterarchery {
 		);
 		
 		EntityRegistry.registerModEntity(
-			new ResourceLocation("betterarchery", "potion_arrow"),
-			EntityPotionArrow.class,
-			"potion_arrow",
+			new ResourceLocation("betterarchery", "fire_arrow"),
+			EntityFireArrow.class,
+			"fire_arrow",
+			2,
+			this,
+			64,
 			1,
+			true
+		);
+
+		EntityRegistry.registerModEntity(
+			new ResourceLocation("betterarchery", "torch_arrow"),
+			EntityTorchArrow.class,
+			"torch_arrow",
+			3,
+			this,
+			64,
+			1,
+			true
+		);
+
+		EntityRegistry.registerModEntity(
+			new ResourceLocation("betterarchery", "impact_arrow"),
+			EntityImpactArrow.class,
+			"impact_arrow",
+			4,
+			this,
+			64,
+			1,
+			true
+		);
+
+		EntityRegistry.registerModEntity(
+			new ResourceLocation("betterarchery", "ender_arrow"),
+			EntityEnderArrow.class,
+			"ender_arrow",
+			5,
+			this,
+			64,
+			1,
+			true
+		);
+
+		EntityRegistry.registerModEntity(
+			new ResourceLocation("betterarchery", "splitting_arrow"),
+			EntitySplittingArrow.class,
+			"splitting_arrow",
+			6,
 			this,
 			64,
 			1,
