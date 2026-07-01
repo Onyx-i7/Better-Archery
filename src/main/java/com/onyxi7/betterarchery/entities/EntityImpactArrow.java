@@ -1,19 +1,14 @@
 package com.onyxi7.betterarchery.entities;
 
-import java.util.List;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class EntityImpactArrow extends EntityArrow {
-    
-    private static final float EXPLOSION_RADIUS = 2.0F;
     
     public EntityImpactArrow(World worldIn) {
         super(worldIn);
@@ -37,43 +32,12 @@ public class EntityImpactArrow extends EntityArrow {
         super.onHit(raytraceResultIn);
         
         if (!this.world.isRemote) {
-            Vec3d pos = new Vec3d(this.posX, this.posY, this.posZ);
+            EntityTNTPrimed tnt = new EntityTNTPrimed(this.world, this.posX, this.posY, this.posZ, 
+                this.shootingEntity instanceof EntityLivingBase ? (EntityLivingBase) this.shootingEntity : null);
             
-            List<EntityLivingBase> entities = this.world.getEntitiesWithinAABB(
-                EntityLivingBase.class,
-                new AxisAlignedBB(
-                    pos.x - EXPLOSION_RADIUS, pos.y - EXPLOSION_RADIUS, pos.z - EXPLOSION_RADIUS,
-                    pos.x + EXPLOSION_RADIUS, pos.y + EXPLOSION_RADIUS, pos.z + EXPLOSION_RADIUS
-                )
-            );
+            tnt.setFuse(0);
             
-            for (EntityLivingBase entity : entities) {
-                if (entity != this.shootingEntity) {
-                    double distance = entity.getDistance(pos.x, pos.y, pos.z);
-                    float damage = (float) (6.0F * (1.0 - distance / EXPLOSION_RADIUS));
-                    if (damage > 0) {
-                        DamageSource source;
-                        if (this.shootingEntity instanceof EntityLivingBase) {
-                            source = DamageSource.causeIndirectDamage(this, (EntityLivingBase) this.shootingEntity);
-                        } else {
-                            source = DamageSource.causeIndirectDamage(this, null);
-                        }
-                        entity.attackEntityFrom(source, damage);
-                        
-                        double dx = entity.posX - pos.x;
-                        double dy = entity.posY - pos.y;
-                        double dz = entity.posZ - pos.z;
-                        double len = Math.sqrt(dx * dx + dy * dy + dz * dz);
-                        if (len > 0) {
-                            entity.motionX += (dx / len) * 0.5;
-                            entity.motionY += (dy / len) * 0.3;
-                            entity.motionZ += (dz / len) * 0.5;
-                        }
-                    }
-                }
-            }
-            
-            this.world.newExplosion(this, this.posX, this.posY, this.posZ, 0.5F, false, false);
+            this.world.spawnEntity(tnt);
             
             this.setDead();
         }
