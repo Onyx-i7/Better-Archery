@@ -10,6 +10,7 @@ import com.onyxi7.betterarchery.entities.EntityEnderArrow;
 import com.onyxi7.betterarchery.entities.EntitySplittingArrow;
 import com.onyxi7.betterarchery.entities.EntityQuiverSkeleton;
 import com.onyxi7.betterarchery.init.DispenserInit;
+import com.onyxi7.betterarchery.config.BetterArcheryConfig;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.Mod;

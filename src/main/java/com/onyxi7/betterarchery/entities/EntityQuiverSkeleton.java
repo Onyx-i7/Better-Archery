@@ -2,6 +2,7 @@ package com.onyxi7.betterarchery.entities;
 
 import com.onyxi7.betterarchery.init.ItemInit;
 import com.onyxi7.betterarchery.items.ItemQuiverWithArrows;
+import com.onyxi7.betterarchery.config.BetterArcheryConfig;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.inventory.EntityEquipmentSlot;

@@ -1,5 +1,6 @@
 package com.onyxi7.betterarchery.entities;
 
+import com.onyxi7.betterarchery.config.BetterArcheryConfig;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityArrow;
