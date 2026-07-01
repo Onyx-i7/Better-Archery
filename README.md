@@ -9,3 +9,6 @@ Original mod: [https://www.curseforge.com/minecraft/mc-mods/better-bows](https:/
 **NOTE**: It looks like this is going to take a while, it’s taking me a long time to recreate the mod. I can’t even imagine how difficult it will be to adapt it to versions later than 1.13; it’s very complicated to understand functions like this one, `field_77779_bT`, and I still have other mods in mind that I want to adapt
 
 Currently, this port is 17% complete (or 20% to round it off). For now, optimization won't be my top priority; I'll port it first and then work on optimizations and other tasks, including bug fixes
+
+## NEWS ABOUT THE PORT'S DEVELOPMENT
+**10:48 p.m. Venezuela time, June 30**: The process is complete, and all the arrows from the original mod have been ported. Now I just need to work on the bows and a few other features that were in the original mod
