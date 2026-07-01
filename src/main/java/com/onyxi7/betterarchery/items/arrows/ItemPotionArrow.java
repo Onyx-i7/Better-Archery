@@ -62,16 +62,16 @@ public class ItemPotionArrow extends ItemArrow implements IHasModel {
     }
     
     // Obtener el color de la poción
-    public static int getPotionColor(ItemStack stack) {
-        String potionType = getPotionType(stack);
-        PotionType type = ForgeRegistries.POTION_TYPES.getValue(
-            new net.minecraft.util.ResourceLocation(potionType)
-        );
-        if (type != null) {
-            return PotionUtils.getColorFromEffects(type);
-        }
-        return 0x385DC6; // Color azul por defecto
-    }
+	public static int getPotionColor(ItemStack stack) {
+		String potionType = getPotionType(stack);
+		PotionType type = ForgeRegistries.POTION_TYPES.getValue(
+			new net.minecraft.util.ResourceLocation(potionType)
+		);
+		if (type != null) {
+			return PotionUtils.getColorFromEffects(type.getEffects());
+		}
+		return 0x385DC6; // Color azul por defecto
+	}
     
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
