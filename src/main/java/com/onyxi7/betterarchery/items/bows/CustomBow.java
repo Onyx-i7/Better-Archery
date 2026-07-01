@@ -1,6 +1,7 @@
 package com.onyxi7.betterarchery.items.bows;
 
 import com.onyxi7.betterarchery.betterarchery;
+import com.onyxi7.betterarchery.init.ItemInit;
 import com.onyxi7.betterarchery.util.interfaces.IHasModel;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -10,7 +11,7 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
@@ -26,15 +27,13 @@ public class CustomBow extends ItemBow implements IHasModel {
     protected float pullBackMult = 0.75F;
     protected float arrowSpeedMult = 1.0F;
     protected float damageMult = 1.0F;
-    protected int maxDurability;
     
     public CustomBow(String name, int durability) {
         setTranslationKey(name);
         setRegistryName(name);
         setCreativeTab(CreativeTabs.COMBAT);
         setMaxDamage(durability);
-        this.maxDurability = durability;
-        betterarchery.ITEMS.add(this);
+        ItemInit.ITEMS.add(this);
     }
     
     @Override
@@ -46,7 +45,7 @@ public class CustomBow extends ItemBow implements IHasModel {
             ItemStack itemstack = this.findAmmo(entityplayer);
 
             int i = this.getMaxItemUseDuration(stack) - timeLeft;
-            i = ForgeEventFactory.onArrowLoose(stack, worldIn, entityplayer, i, itemstack != null || flag);
+            i = ForgeEventFactory.onArrowLoose(stack, worldIn, entityplayer, i, !itemstack.isEmpty() || flag);
             if (i < 0) return;
 
             if (!itemstack.isEmpty() || flag) {
@@ -56,6 +55,7 @@ public class CustomBow extends ItemBow implements IHasModel {
 
                 float f = getArrowVelocity(i);
                 
+                // Apply a speed multiplier
                 f *= this.arrowSpeedMult;
 
                 if ((double) f >= 0.1D) {
@@ -64,12 +64,11 @@ public class CustomBow extends ItemBow implements IHasModel {
                                    ((ItemArrow) itemstack.getItem()).isInfinite(itemstack, stack, entityplayer));
 
                     if (!worldIn.isRemote) {
-                        ItemArrow itemarrow = (ItemArrow) ((ItemArrow) (itemstack.getItem() instanceof ItemArrow ? itemstack.getItem() : Items.ARROW));
+                        ItemArrow itemarrow = (ItemArrow) (itemstack.getItem() instanceof ItemArrow ? itemstack.getItem() : Items.ARROW);
                         EntityArrow entityarrow = itemarrow.createArrow(worldIn, itemstack, entityplayer);
                         entityarrow.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0F, f * 3.0F, 1.0F);
                         
-                        float f2 = getArrowVelocity(i);
-                        float power = f2 * this.arrowSpeedMult;
+                        float power = f;
                         
                         if ((double) power >= 0.5F) {
                             entityarrow.setDamage(entityarrow.getDamage() * this.damageMult);
@@ -80,13 +79,11 @@ public class CustomBow extends ItemBow implements IHasModel {
                         }
 
                         int j = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, stack);
-
                         if (j > 0) {
                             entityarrow.setDamage(entityarrow.getDamage() + (double) j * 0.5D + 0.5D);
                         }
 
                         int k = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, stack);
-
                         if (k > 0) {
                             entityarrow.setKnockbackStrength(k);
                         }
@@ -105,13 +102,12 @@ public class CustomBow extends ItemBow implements IHasModel {
                         worldIn.spawnEntity(entityarrow);
                     }
 
-                    worldIn.playSound((EntityPlayer) null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, 
+                    worldIn.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, 
                                      SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, 
                                      1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
 
                     if (!flag1 && !entityplayer.capabilities.isCreativeMode) {
                         itemstack.shrink(1);
-
                         if (itemstack.isEmpty()) {
                             entityplayer.inventory.deleteStack(itemstack);
                         }
@@ -123,15 +119,13 @@ public class CustomBow extends ItemBow implements IHasModel {
         }
     }
     
-    @Override
-    public float getArrowVelocity(int charge) {
+    // Custom method (DOES NOT override the static method of ItemBow)
+    public float calculateArrowVelocity(int charge) {
         float f = (float) charge / (20.0F * this.pullBackMult);
         f = (f * f + f * 2.0F) / 3.0F;
-
         if (f > 1.0F) {
             f = 1.0F;
         }
-
         return f;
     }
     
@@ -152,27 +146,6 @@ public class CustomBow extends ItemBow implements IHasModel {
             return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
         }
     }
-    
-    @Override
-	public void initItemModel(net.minecraftforge.client.event.ModelRegistryEvent event) {
-		net.minecraftforge.client.model.ModelLoader.setCustomModelResourceLocation(
-			this, 0, 
-			new net.minecraft.client.renderer.block.model.ModelResourceLocation(
-				this.getRegistryName(), "inventory"
-			)
-		);
-		
-		// Register the properties for animation
-		net.minecraftforge.client.model.ModelLoader.setCustomMeshDefinition(
-			this,
-			stack -> {
-				net.minecraft.util.ResourceLocation location = new net.minecraft.util.ResourceLocation(
-					this.getRegistryName().toString()
-				);
-				return new net.minecraft.client.renderer.block.model.ModelResourceLocation(location, "inventory");
-			}
-		);
-	}
     
     @Override
     public void registerModels() {
