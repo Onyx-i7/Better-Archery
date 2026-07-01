@@ -99,6 +99,6 @@ public class ItemQuiver extends Item implements IHasModel {
             }
         }
         
-        return new ActionResult<>(EnumActionResult.PASS, heldStack);
+        return new ActionResult<>(EnumActionResult.SUCCESS, heldStack);
     }
 }
