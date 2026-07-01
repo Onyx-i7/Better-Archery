@@ -3,6 +3,7 @@ package com.onyxi7.betterarchery.client.render;
 import com.onyxi7.betterarchery.config.BetterArcheryConfig;
 import com.onyxi7.betterarchery.init.ItemInit;
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
@@ -48,7 +49,11 @@ public class LayerQuiver implements LayerRenderer<EntityLivingBase> {
             GlStateManager.translate(0.0F, 0.2F, 0.0F);
         }
         
-        this.renderPlayer.getMainModel().bipedBody.postRender(0.0625F);
+        // CORRECCIÓN: Castear a ModelBiped
+        if (this.renderPlayer.getMainModel() instanceof ModelBiped) {
+            ModelBiped modelBiped = (ModelBiped) this.renderPlayer.getMainModel();
+            modelBiped.bipedBody.postRender(0.0625F);
+        }
         
         GlStateManager.rotate(180.0F, 1.0F, 0.0F, 0.0F);
         GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
@@ -95,9 +100,10 @@ public class LayerQuiver implements LayerRenderer<EntityLivingBase> {
     
     private static class ModelQuiver extends ModelBase {
         public ModelQuiver() {
-            this.boxList.add(new ModelRenderer(this, 0, 0)
-                .setTextureSize(16, 16)
-                .addBox(-2.0F, -4.0F, -1.0F, 4, 8, 2, 0.0F));
+            ModelRenderer box = new ModelRenderer(this, 0, 0);
+            box.setTextureSize(16, 16);
+            box.addBox(-2.0F, -4.0F, -1.0F, 4, 8, 2, 0.0F);
+            this.boxList.add(box);
         }
     }
 }
