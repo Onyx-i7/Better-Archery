@@ -1,0 +1,42 @@
+# Items
+item.quiver.name=Carcaj
+item.quiver_with_arrows.name=Carcaj con Flechas
+
+# Flechas especiales
+item.drill_arrow.name=Flecha Taladro
+item.broken_drill_arrow.name=Flecha Taladro Rota
+item.potion_arrow.name=Flecha de Poción
+item.fire_arrow.name=Flecha de Fuego
+item.torch_arrow.name=Flecha Antorcha
+item.impact_arrow.name=Flecha de Impacto
+item.ender_arrow.name=Flecha de Ender
+item.splitting_arrow.name=Flecha Divisora
+
+# Arcos personalizados
+item.long_bow.name=Arco Largo
+item.recurve_bow.name=Arco Recurvo
+item.composite_bow.name=Arco Compuesto
+item.yumi_bow.name=Arco Yumi
+
+# Entidad
+entity.betterarchery.quiver_skeleton.name=Esqueleto con Carcaj
+
+# Tooltips del Carcaj
+tooltip.quiver.arrows=Flechas: %d
+tooltip.quiver.arrows.full=Flechas: %d (Lleno)
+
+# Tooltips de flechas
+tooltip.drill_arrow.desc=Atraviesa bloques y enemigos
+tooltip.drill_arrow.broken=Rota - No puede usarse
+tooltip.potion_arrow.desc=Aplica efectos de poción al impactar
+tooltip.fire_arrow.desc=Prende fuego al objetivo
+tooltip.torch_arrow.desc=Coloca una antorcha al impactar
+tooltip.impact_arrow.desc=Explota al impactar con daño en área
+tooltip.ender_arrow.desc=Te teletransporta a donde cae
+tooltip.splitting_arrow.desc=Se divide en múltiples flechas al impactar
+
+# Tooltips de arcos
+tooltip.long_bow.desc=Lento pero poderoso, las flechas viajan más rápido y lejos
+tooltip.recurve_bow.desc=Arco equilibrado con mayor daño y velocidad
+tooltip.composite_bow.desc=Velocidad de carga muy rápida con alto daño
+tooltip.yumi_bow.desc=Arco japonés con excelente alcance y velocidad
