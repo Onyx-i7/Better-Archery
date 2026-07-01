@@ -18,4 +18,9 @@ public class RenderCustomArrow extends RenderArrow<EntityArrow> {
     protected ResourceLocation getEntityTexture(EntityArrow entity) {
         return texture;
     }
+    
+    @Override
+    public void doRender(EntityArrow entity, double x, double y, double z, float entityYaw, float partialTicks) {
+        super.doRender(entity, x, y, z, entityYaw, partialTicks);
+    }
 }

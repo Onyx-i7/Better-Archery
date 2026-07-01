@@ -63,13 +63,13 @@ public class ItemDrillArrow extends ItemArrow implements IHasModel {
     }
     
     @Override
-    public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        if (isBroken(stack.getMetadata())) {
-            tooltip.add("§7Rota - No puede usarse");
-        } else {
-            tooltip.add("§bAtraviesa bloques y enemigos");
-        }
-    }
+	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		if (isBroken(stack.getMetadata())) {
+			tooltip.add(net.minecraft.util.text.translation.I18n.translateToLocal("tooltip.drill_arrow.broken"));
+		} else {
+			tooltip.add(net.minecraft.util.text.translation.I18n.translateToLocal("tooltip.drill_arrow.desc"));
+		}
+	}
     
     @Override
 	public EntityArrow createArrow(World worldIn, ItemStack stack, EntityLivingBase shooter) {
