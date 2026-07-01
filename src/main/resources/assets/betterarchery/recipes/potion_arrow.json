@@ -5,8 +5,8 @@
       "item": "minecraft:arrow"
     },
     {
-      "item": "minecraft:potion",
-      "data": 0
+      "type": "forge:ore_dict",
+      "ore": "potion"
     }
   ],
   "result": {
