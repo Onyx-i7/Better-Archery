@@ -1,6 +1,7 @@
 package com.onyxi7.betterarchery.items.bows;
 
 import com.onyxi7.betterarchery.betterarchery;
+import com.onyxi7.betterarchery.init.ItemInit;
 import com.onyxi7.betterarchery.util.interfaces.IHasModel;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -10,7 +11,7 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
@@ -34,7 +35,7 @@ public class CustomBow extends ItemBow implements IHasModel {
         setCreativeTab(CreativeTabs.COMBAT);
         setMaxDamage(durability);
         this.maxDurability = durability;
-        betterarchery.ITEMS.add(this);
+        ItemInit.ITEMS.add(this);
     }
     
     @Override
@@ -54,8 +55,9 @@ public class CustomBow extends ItemBow implements IHasModel {
                     itemstack = new ItemStack(Items.ARROW);
                 }
 
-                float f = getArrowVelocity(i);
+                float f = calculateArrowVelocity(i);
                 
+                // Apply a speed multiplier
                 f *= this.arrowSpeedMult;
 
                 if ((double) f >= 0.1D) {
@@ -64,14 +66,14 @@ public class CustomBow extends ItemBow implements IHasModel {
                                    ((ItemArrow) itemstack.getItem()).isInfinite(itemstack, stack, entityplayer));
 
                     if (!worldIn.isRemote) {
-                        ItemArrow itemarrow = (ItemArrow) ((ItemArrow) (itemstack.getItem() instanceof ItemArrow ? itemstack.getItem() : Items.ARROW));
+                        ItemArrow itemarrow = (ItemArrow) (itemstack.getItem() instanceof ItemArrow ? itemstack.getItem() : Items.ARROW);
                         EntityArrow entityarrow = itemarrow.createArrow(worldIn, itemstack, entityplayer);
                         entityarrow.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0F, f * 3.0F, 1.0F);
                         
-                        float f2 = getArrowVelocity(i);
-                        float power = f2 * this.arrowSpeedMult;
+                        float power = f;
                         
                         if ((double) power >= 0.5F) {
+                            // Apply damage multiplier
                             entityarrow.setDamage(entityarrow.getDamage() * this.damageMult);
                         }
                         
@@ -123,8 +125,9 @@ public class CustomBow extends ItemBow implements IHasModel {
         }
     }
     
-    @Override
-    public float getArrowVelocity(int charge) {
+    // Custom method (does not override the static method of ItemBow)
+    public float calculateArrowVelocity(int charge) {
+        // Apply load multiplier
         float f = (float) charge / (20.0F * this.pullBackMult);
         f = (f * f + f * 2.0F) / 3.0F;
 
