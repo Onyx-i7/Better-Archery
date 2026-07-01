@@ -1,8 +1,8 @@
 <div align="center">
   <img src="https://i.ibb.co/4whCmXw3/bbsquare.png" alt="bbsquare" border="0">
 </div>
-<h1 align="center">Better Archery</h1>
 
+<h1 align="center">Better Archery Unofficial Port</h1>
 <div align="center">
 
 ![Version](https://img.shields.io/badge/Version-1.0-green.svg)
@@ -11,29 +11,15 @@
 ![License](https://img.shields.io/badge/License-MIT-red.svg)
 ![Status](https://img.shields.io/badge/Status-beta-yellow.svg)
 
-**A port of the original Better Archery mod by Zaggy1024 for Minecraft 1.12.2**
-
-[Features](#-features) • [Installation](#-installation) • [Credits](#-credits)
+**An unofficial modern port and complete recreation of the Better Archery mod by Zaggy1024 for Minecraft 1.12.2**
 
 </div>
 
 ---
 
-## 📖 About the Project
+## Features
 
-This is a port and, in a sense, a "fork" of the **Better Archery** mod created by Zaggy1024. Since the original source code is not available, this project is a complete recreation based on the decompilation of the original mod's `.class` files.
-
-### 🛠️ Tools Used
-- **cfr-0.152** - Java bytecode decompiler
-- **JD-GUI** - Decompiled code viewer
-
-> **Important Note**: This is a recreation work. I do not have access to the original source code. The process was complex, especially when it came to understanding obfuscated functions such as `field_77779_bT`.
-
----
-
-## ✨ Features
-
-### 🏹 Custom Bows
+### Custom Bows
 
 Four unique bows with balanced stats and complete charging animation:
 
@@ -50,60 +36,53 @@ Each bow features:
 - Unique stats that affect gameplay
 - Full compatibility with vanilla enchantments
 
-### 🎯 Special Arrows
+### Special Arrows
 
 Seven types of arrows with unique effects:
 
-#### 🔥 Fire Arrow
+#### Fire Arrow
 - **Effect**: Sets the target and blocks on fire
 - **Fire Duration**: 5 seconds (configurable)
 - **Recipe**: 2 Blaze Powder + 1 Arrow = 4 Fire Arrows
-- **Dispenser Compatible**: ✅ Yes
 
-#### 🔦 Torch Arrow
+#### Torch Arrow
 - **Effect**: Places a torch where it lands
 - **Best for**: Lighting up caves and dark areas
 - **Recipe**: 1 Torch + 1 Arrow + 1 Stick = 4 Torch Arrows
-- **Dispenser Compatible**: ✅ Yes
 
-#### 💥 Impact Arrow
+#### Impact Arrow
 - **Effect**: Spawns a TNT explosion on impact
 - **Explosion Radius**: 4.0 blocks (configurable)
 - **Damage**: Uses vanilla explosion system (realistic)
 - **Recipe**: 2 TNT + 1 Arrow = 4 Impact Arrows
-- **Dispenser Compatible**: ✅ Yes
 
-#### 🌀 Ender Arrow
+#### Ender Arrow
 - **Effect**: Teleports the player where the arrow lands
 - **Similar to**: Ender Pearl but with a bow
 - **Recipe**: 2 Ender Pearls + 1 Arrow = 4 Ender Arrows
-- **Dispenser Compatible**: ✅ Yes (but doesn't teleport)
 
-#### ⚡ Splitting Arrow
+#### Splitting Arrow
 - **Effect**: Splits into 3 arrows on impact
 - **Damage per split**: 50% of original damage
 - **Number of splits**: 3 (configurable)
 - **Recipe**: 1 Redstone + 1 Arrow + 1 Feather = 4 Splitting Arrows
-- **Dispenser Compatible**: ✅ Yes
 
-#### 🏹 Drill Arrow
+#### Drill Arrow
 - **Effect**: Pierces through blocks and destroys them
 - **Max blocks**: 10 (configurable)
 - **Power loss**: 0.2 per block (configurable)
 - **Cannot destroy**: Bedrock, Obsidian, blocks with hardness ≥ 50
 - **Power based on**: Bow charging time
 - **Recipe**: 2 Iron Ingots + 1 Arrow + 1 Stick = 4 Drill Arrows
-- **Dispenser Compatible**: ✅ Yes
 
-#### 🧪 Potion Arrow
+#### Potion Arrow
 - **Effect**: Applies potion effects on impact
 - **Compatible with**: All vanilla potions
 - **Dynamic colors**: Based on potion type
 - **Custom names**: "Poison Arrow", "Slowness Arrow", etc.
 - **Recipe**: 1 Arrow + 1 Potion (any) = 4 Potion Arrows
-- **Dispenser Compatible**: ✅ Yes (maintains effect)
 
-### 🎒 Quiver System
+### Quiver System
 
 #### Empty Quiver
 - **Function**: Container to store arrows
@@ -119,12 +98,12 @@ Seven types of arrows with unique effects:
 - **Compatibility**: Works with all mod bows
 
 **Advanced quiver features**:
-- ✅ Saves exact arrow type (including potion effects)
-- ✅ Shows correct arrow name in tooltip
-- ✅ Fires the correct arrow when using the bow
-- ✅ Compatible with arrows from other mods
+- Saves exact arrow type (including potion effects)
+- Shows correct arrow name in tooltip
+- Fires the correct arrow when using the bow
+- Compatible with arrows from other mods
 
-### 💀 Quiver Skeleton
+### Quiver Skeleton
 
 A rare skeleton that spawns with a quiver and special arrows:
 
@@ -136,21 +115,9 @@ A rare skeleton that spawns with a quiver and special arrows:
 - **Biomes**: Spawns in all biomes where skeletons appear
 - **Configurable**: Can be completely disabled
 
-### 🔧 Dispensers
-
-All special arrows are compatible with dispensers:
-
-- ✅ Fire Arrow - Fires fire arrows
-- ✅ Torch Arrow - Fires torch arrows
-- ✅ Impact Arrow - Fires explosive arrows
-- ✅ Ender Arrow - Fires teleportation arrows
-- ✅ Splitting Arrow - Fires splitting arrows
-- ✅ Drill Arrow - Fires drill arrows
-- ✅ Potion Arrow - Fires potion arrows (maintains effect)
-
 **Note**: Arrows fired by dispensers cannot be picked up from the ground.
 
-### ⚙️ Configuration System
+### Configuration System
 
 Complete configuration file at `config/BetterArchery.cfg`:
 
@@ -189,53 +156,13 @@ Complete configuration file at `config/BetterArchery.cfg`:
 - `maxArrows` - Maximum arrows in quiver (1 - 64)
 - `specialBowChance` - Special bow probability (0.0 - 1.0)
 
-### 🌐 Compatibility
+### Compatibility
 
-- ✅ **JEI/HEI** - Item descriptions in the item viewer
-
----
-
-## 📥 Installation
-
-### Requirements
-
-- **Minecraft**: 1.12.2
-- **Forge**: 14.23.5.2847 or higher
-- **Java**: 8 or higher
-
-### Installation Steps
-
-1. **Download the mod**
-   - Go to the [Releases](https://github.com/Onyx-i7/Better-Archery/releases) page
-   - Download the file `BetterArchery-1.12.2-1.0.0.jar`
-
-2. **Install Forge** (if you don't have it)
-   - Download Forge from [files.minecraftforge.net](https://files.minecraftforge.net/)
-   - Run the installer and select "Install Client"
-
-3. **Place the mod**
-   - Open your Minecraft folder (`.minecraft`)
-   - Go to the `mods` folder
-   - Place the mod's `.jar` file in this folder
-
-4. **Start the game**
-   - Open the Minecraft launcher
-   - Select the Forge profile
-   - Start the game
-
-5. **Verify installation**
-   - In the main menu, go to "Mods"
-   - You should see "Better Archery" in the list
-
-### Server Installation
-
-1. Place the `.jar` file in the server's `mods` folder
-2. Restart the server
-3. Players need the mod installed on their clients
+- **JEI/HEI** - Item descriptions in the item viewer
 
 ---
 
-## 🎮 Usage
+## Usage
 
 ### Bows
 
@@ -289,7 +216,7 @@ Arrows will maintain all their special effects.
 
 ---
 
-## 📋 Crafting Recipes
+## Crafting Recipes
 
 ### Quiver
 ```
@@ -417,7 +344,7 @@ S = String
 
 ---
 
-## 🐛 Bug Reporting
+## Bug Reporting
 
 If you find a bug, please report it in the [Issues](https://github.com/Onyx-i7/Better-Archery/issues) section, as it helps me improve the mod which is in a very early phase of development.
 
@@ -431,56 +358,40 @@ If you find a bug, please report it in the [Issues](https://github.com/Onyx-i7/B
 
 ---
 
-## 🔮 Future Roadmap
+## Future Roadmap
 
 ### Long-term Ideas
-- Combined arrows system
-- New bows
-- New features
-- Optimization
-- System for adding bows or arrows via files for modpacks
+*   **Combined Arrows System**: Merge multiple arrow effects into a single projectile
+*   **New Bow Variants**: Expand the arsenal with more unique tiers and stats.
+*   **Advanced Optimization**: Refine rendering and NBT data tracking for the Quiver system
+*   **Modpack Customization**: Implement a file-based system (JSON/Config) to allow modpack creators to add custom bows and arrows dynamically
+
 
 ---
 
-## 📄 License
+## License
 
-This project is a port/recreation of the original **Better Archery** mod by Zaggy1024, but this port is under the MIT License.
+This project is a complete recreation of the original **Better Archery** concept by Zaggy1024. While the original mod was closed-source, this modern rewrite is licensed under the **MIT License**
 
 - **Original mod**: [Better Bows - CurseForge](https://www.curseforge.com/minecraft/mc-mods/better-bows)
-- **Original source code**: Not available
-- **This port**: Complete recreation based on decompilation
+- **Original source code**: Unavailable (Closed Source)
+- **This port**: Built from scratch based on decompiled logic analysis
 
-All rights to the original concept belong to Zaggy1024.
+*All rights to the original concept, names, and design belong to Zaggy1024*
 
 ---
 
-## 🙏 Credits
+## Credits
 
 ### Original Author
-- **Zaggy1024** - Creator of the original Better Archery mod
+*   **Zaggy1024** - Creator and designer of the original Better Archery mod
 
-### Port to 1.12.2
-- **Onyx-i7** - Port development, code recreation, new features
-
-### Tools Used
-- **cfr-0.152** - Bytecode decompiler
-- **JD-GUI** - Decompiled code viewer
-- **RetroFuturaGradle** - Build system
+### 1.12.2 Port & Development
+*   **Onyx-i7** - Port management, complete code recreation, and implementation of new features
 
 ---
 
 ## Contact
 
-- **GitHub**: [Onyx-i7](https://github.com/Onyx-i7)
-- **Repository**: [Better-Archery](https://github.com/Onyx-i7/Better-Archery)
-- **Issues**: [Report a bug](https://github.com/Onyx-i7/Better-Archery/issues)
-
----
-
-<div align="center">
-
-**Do you like the mod? Give it a star on GitHub! ⭐**
-
-Ported by Onyx-i7
-
-</div>
+*   **GitHub Repository**: [Onyx-i7/Better-Archery](https://github.com/Onyx-i7/Better-Archery)
+*   **Issue Tracker**: [Report a bug here](https://github.com/Onyx-i7/Better-Archery/issues)
