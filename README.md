@@ -8,9 +8,10 @@ Original mod: [https://www.curseforge.com/minecraft/mc-mods/better-bows](https:/
 
 **NOTE**: It looks like this is going to take a while, it’s taking me a long time to recreate the mod. I can’t even imagine how difficult it will be to adapt it to versions later than 1.13, it’s very complicated to understand functions like this one, `field_77779_bT`, and I still have other mods in mind that I want to adapt
 
-Currently, this port is 96% complete. For now, optimization won't be my top priority, I'll port it first and then work on optimizations and other tasks, including bug fixes
+Currently, this port is **100% complete**. For now, optimization won't be my top priority, I'll port it first and then work on optimizations and other tasks, including bug fixes
 
 ## NEWS ABOUT THE PORT'S DEVELOPMENT
+**3:20 p.m. Venezuelan time, July 1**: I've finished the process. Now I'll add a feature or two, then take a break and continue working on this project and the others. \
 **2:39 a.m. Venezuelan time, July 1**: The porting of the mod's main features is **complete**, now comes the bug-fixing phase, since it has many bugs \
 **12:28 a.m. Venezuelan time, July 1**: All the recipes for the items have been added, which means that the port's development is now complete and it is ready to be fully developed \
 **11:31 p.m. Venezuelan time, June 30**: All the bows from the original mod have been ported/completed thanks to a `CustomBow.java` system I created, which serves as the main component while the bows function as plugins or extensions to it \
