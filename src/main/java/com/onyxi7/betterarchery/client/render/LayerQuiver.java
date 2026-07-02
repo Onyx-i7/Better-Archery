@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.EntityLivingBase;
@@ -21,6 +22,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class LayerQuiver implements LayerRenderer<EntityLivingBase> {
     
     private final RenderLivingBase<?> renderEntity;
+    
+    // Model locations for both quiver types
+    private static final ModelResourceLocation QUIVER_EMPTY = 
+        new ModelResourceLocation("betterarchery:quiver_3d", "inventory");
+    private static final ModelResourceLocation QUIVER_WITH_ARROWS = 
+        new ModelResourceLocation("betterarchery:quiver_3d_with_arrows", "inventory");
     
     public LayerQuiver(RenderLivingBase<?> renderEntity) {
         this.renderEntity = renderEntity;
@@ -61,10 +68,9 @@ public class LayerQuiver implements LayerRenderer<EntityLivingBase> {
         
         GlStateManager.pushMatrix();
         
-        // Base position on the back
+        // === BACKTOOLS COORDINATES ===
         GlStateManager.translate(0.0F, 0.35F, 0.16F);
         
-        // Adjustments for armor
         if (entity instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) entity;
             
@@ -72,24 +78,39 @@ public class LayerQuiver implements LayerRenderer<EntityLivingBase> {
                 GlStateManager.translate(0.0F, player.isSneaking() ? -0.1F : 0.0F, player.isSneaking() ? 0.025F : 0.06F);
             }
             
-            // Adjustments for sneaking
             if (player.isSneaking()) {
                 GlStateManager.translate(0.0F, 0.08F, 0.13F);
                 GlStateManager.rotate(28.8F, 1.0F, 0.0F, 0.0F);
             }
         }
         
-        // Rotate 180° on X axis to fix vertical orientation
+        // Fix vertical orientation
         GlStateManager.rotate(180.0F, 1.0F, 0.0F, 0.0F);
         
-        // Rotate 180° on Y axis to face backwards
+        // Face backwards
         GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
         
-        // Render the 3D model
-        IBakedModel model = Minecraft.getMinecraft().getRenderItem()
-            .getItemModelMesher().getItemModel(quiverStack);
+        // Determine which model to use
+        ModelResourceLocation modelLocation;
+        if (quiverStack.getItem() == ItemInit.QUIVER_WITH_ARROWS) {
+            modelLocation = QUIVER_WITH_ARROWS;
+        } else {
+            modelLocation = QUIVER_EMPTY;
+        }
         
-        Minecraft.getMinecraft().getRenderItem().renderItem(quiverStack, model);
+        // Get the model
+        IBakedModel model = Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getModelManager().getModel(modelLocation);
+        
+        // Check if model is valid to prevent grey square
+        if (model != null && !model.isBuiltInRenderer()) {
+            // Enable lighting for proper rendering
+            GlStateManager.enableRescaleNormal();
+            
+            // Render the model
+            Minecraft.getMinecraft().getRenderItem().renderItem(quiverStack, model);
+            
+            GlStateManager.disableRescaleNormal();
+        }
         
         GlStateManager.popMatrix();
     }
