@@ -1,41 +1,40 @@
 package com.onyxi7.betterarchery.items;
 
+import baubles.api.BaubleType;
+import baubles.api.IBauble;
 import com.onyxi7.betterarchery.betterarchery;
-import com.onyxi7.betterarchery.init.ItemInit;
 import com.onyxi7.betterarchery.init.CreativeTabInit;
+import com.onyxi7.betterarchery.init.ItemInit;
 import com.onyxi7.betterarchery.util.interfaces.IHasModel;
-import java.util.List;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemQuiver extends Item implements IHasModel {
+import java.util.List;
+
+@Optional.Interface(iface = "baubles.api.IBauble", modid = "baubles")
+public class ItemQuiver extends Item implements IHasModel, IBauble {
+    
+    public static final int MAX_ARROWS = 64;
     
     public ItemQuiver(String name) {
         setTranslationKey(name);
         setRegistryName(name);
         setCreativeTab(CreativeTabInit.BETTER_ARCHERY_TAB);
+        setMaxStackSize(1);
         ItemInit.ITEMS.add(this);
     }
-    
-    @Override
-	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.add(net.minecraft.util.text.translation.I18n.translateToLocal("tooltip.quiver.empty"));
-	}
     
     @Override
     public void registerModels() {
@@ -43,75 +42,105 @@ public class ItemQuiver extends Item implements IHasModel {
     }
     
     @Override
-    public int getItemStackLimit(ItemStack stack) {
-        return 1;
+    public boolean isFull3D() {
+        return true;
     }
-    
+        
     @Override
-    public boolean isValidArmor(ItemStack stack, EntityEquipmentSlot armorType, Entity entity) {
-        return armorType == EntityEquipmentSlot.CHEST || 
-               armorType == EntityEquipmentSlot.LEGS || 
-               armorType == EntityEquipmentSlot.MAINHAND || 
-               armorType == EntityEquipmentSlot.OFFHAND;
-    }
-    
-    @Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
-		if (handIn == EnumHand.OFF_HAND) {
-			return new ActionResult<>(EnumActionResult.PASS, playerIn.getHeldItem(handIn));
-		}
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, net.minecraft.util.EnumHand handIn) {
+		ItemStack stack = playerIn.getHeldItem(handIn);
 		
-		ItemStack heldStack = playerIn.getHeldItem(handIn);
-		
-		BlockPos pos = playerIn.getPosition();
-		BlockPos range1 = pos.add(-1, -1, -1);
-		BlockPos range2 = pos.add(1, 3, 1);
-		List<EntityArrow> arrows = worldIn.getEntitiesWithinAABB(EntityArrow.class, new AxisAlignedBB(range1, range2));
-		
-		if (!arrows.isEmpty()) {
-			int count = 0;
-			for (EntityArrow a : arrows) {
-				if (count < ItemQuiverWithArrows.MAX_SIZE) {
-					worldIn.removeEntity(a);
-					count++;
-				}
-			}
+		if (!worldIn.isRemote) {
+			int collected = collectArrowsFromInventory(playerIn, stack);
 			
-			if (count > 0) {
-				NBTTagCompound nbt = new NBTTagCompound();
-				nbt.setInteger("Arrows", count);
-				nbt.setString("ArrowType", "minecraft:arrow");
-				ItemStack quiverWithArrows = new ItemStack(ItemInit.QUIVER_WITH_ARROWS);
-				quiverWithArrows.setTagCompound(nbt);
-				return new ActionResult<>(EnumActionResult.SUCCESS, quiverWithArrows);
+			if (collected > 0) {
+				ItemStack newQuiver = new ItemStack(ItemInit.QUIVER_WITH_ARROWS);
+				ItemQuiverWithArrows.setArrowCount(newQuiver, collected);
+				
+				if (stack.hasTagCompound()) {
+					newQuiver.setTagCompound(stack.getTagCompound());
+				}
+				
+				playerIn.setHeldItem(handIn, newQuiver);
+				playerIn.sendStatusMessage(new net.minecraft.util.text.TextComponentTranslation(
+					"message.betterarchery.quiver.collected", collected), true);
 			}
 		}
 		
-		for (int i = 0; i < playerIn.inventory.getSizeInventory(); i++) {
-			ItemStack slotStack = playerIn.inventory.getStackInSlot(i);
-			if (!slotStack.isEmpty() && slotStack.getItem() instanceof ItemArrow) {
-				int arrowCount = slotStack.getCount();
-				
-				NBTTagCompound nbt = new NBTTagCompound();
-				nbt.setInteger("Arrows", arrowCount);
-				
-				ResourceLocation regName = slotStack.getItem().getRegistryName();
-				if (regName != null) {
-					nbt.setString("ArrowType", regName.toString());
-				}
-				
-				if (slotStack.hasTagCompound()) {
-					nbt.setTag("ArrowNBT", slotStack.getTagCompound().copy());
-				}
-				
-				ItemStack quiverWithArrows = new ItemStack(ItemInit.QUIVER_WITH_ARROWS);
-				quiverWithArrows.setTagCompound(nbt);
-				
-				playerIn.inventory.removeStackFromSlot(i);
-				return new ActionResult<>(EnumActionResult.SUCCESS, quiverWithArrows);
-			}
-		}
-		
-		return new ActionResult<>(EnumActionResult.SUCCESS, heldStack);
+		return ActionResult.newResult(net.minecraft.util.EnumActionResult.SUCCESS, stack);
 	}
+        
+    public int collectArrowsFromInventory(EntityPlayer player, ItemStack quiverStack) {
+        int totalCollected = 0;
+        
+        for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
+            ItemStack slotStack = player.inventory.getStackInSlot(i);
+            
+            if (isArrow(slotStack)) {
+                int spaceLeft = MAX_ARROWS - totalCollected;
+                int toCollect = Math.min(spaceLeft, slotStack.getCount());
+                
+                if (toCollect > 0) {
+                    totalCollected += toCollect;
+                    slotStack.shrink(toCollect);
+                    
+                    if (slotStack.isEmpty()) {
+                        player.inventory.setInventorySlotContents(i, ItemStack.EMPTY);
+                    }
+                    
+                    if (totalCollected >= MAX_ARROWS) {
+                        break;
+                    }
+                }
+            }
+        }
+        
+        return totalCollected;
+    }
+    
+    public boolean isArrow(ItemStack stack) {
+        if (stack.isEmpty()) return false;
+        return stack.getItem() instanceof ItemArrow || stack.getItem() == Items.ARROW;
+    }
+    
+    // === BAUBLES IMPLEMENTATION ===
+    
+    @Override
+    @Optional.Method(modid = "baubles")
+    public BaubleType getBaubleType(ItemStack itemstack) {
+        return BaubleType.BODY;
+    }
+    
+    @Override
+    @Optional.Method(modid = "baubles")
+    public void onWornTick(ItemStack itemstack, EntityLivingBase player) {
+    }
+    
+    @Override
+    @Optional.Method(modid = "baubles")
+    public void onEquipped(ItemStack itemstack, EntityLivingBase player) {
+    }
+    
+    @Override
+    @Optional.Method(modid = "baubles")
+    public void onUnequipped(ItemStack itemstack, EntityLivingBase player) {
+    }
+    
+    @Override
+    @Optional.Method(modid = "baubles")
+    public boolean canEquip(ItemStack itemstack, EntityLivingBase entity) {
+        return true;
+    }
+    
+    @Override
+    @Optional.Method(modid = "baubles")
+    public boolean canUnequip(ItemStack itemstack, EntityLivingBase player) {
+        return true;
+    }
+    
+    @Override
+    @Optional.Method(modid = "baubles")
+    public boolean willAutoSync(ItemStack itemstack, EntityLivingBase player) {
+        return true;
+    }
 }
