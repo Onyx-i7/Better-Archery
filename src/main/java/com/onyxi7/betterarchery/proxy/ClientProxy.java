@@ -2,6 +2,7 @@ package com.onyxi7.betterarchery.proxy;
 
 import com.onyxi7.betterarchery.client.render.LayerQuiver;
 import com.onyxi7.betterarchery.client.render.RenderQuiverSkeleton;
+import com.onyxi7.betterarchery.client.render.RenderCustomArrow;
 import com.onyxi7.betterarchery.entities.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
