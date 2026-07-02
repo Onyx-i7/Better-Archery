@@ -65,7 +65,8 @@ public class LayerQuiver implements LayerRenderer<EntityLivingBase> {
         
         GlStateManager.pushMatrix();
         
-        IBakedModel model = Minecraft.getMinecraft().getModelManager().getModel(QUIVER_MODEL);
+        IBakedModel model = Minecraft.getMinecraft().getRenderItem()
+            .getItemModelMesher().getItemModel(quiverStack);
         
         Minecraft.getMinecraft().getRenderItem().renderItem(quiverStack, model);
         
