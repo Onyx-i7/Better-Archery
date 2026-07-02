@@ -1,7 +1,7 @@
 package com.onyxi7.betterarchery.event;
 
 import com.onyxi7.betterarchery.entities.*;
-import com.onyxi7.betterarchery.items.CustomBow;
+import com.onyxi7.betterarchery.items.bows.CustomBow;
 import com.onyxi7.betterarchery.items.ItemQuiverWithArrows;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,7 +13,6 @@ import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
@@ -22,7 +21,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class BowEventHandler {
     
-    // === ARROW NOCK EVENT - Allow loading bow if quiver has arrows ===
+    // === ARROW NOCK EVENT ===
     @SubscribeEvent(priority = EventPriority.HIGH)
     public void onArrowNock(ArrowNockEvent event) {
         EntityPlayer player = event.getEntityPlayer();
@@ -54,7 +53,7 @@ public class BowEventHandler {
         }
     }
     
-    // === ARROW LOOSE EVENT - Use quiver arrows when shooting ===
+    // === ARROW LOOSE EVENT ===
     @SubscribeEvent(priority = EventPriority.HIGH)
     public void onArrowLoose(ArrowLooseEvent event) {
         EntityPlayer player = event.getEntityPlayer();
@@ -99,55 +98,26 @@ public class BowEventHandler {
             // Create arrow entity
             EntityArrow arrow = createArrow(world, arrowFromQuiver, player);
             
-            // Apply bow stats (for custom bows)
-            if (bowStack.getItem() instanceof CustomBow) {
-                CustomBow customBow = (CustomBow) bowStack.getItem();
-                float arrowSpeedMult = customBow.getArrowSpeedMultiplier(bowStack);
-                float damageMult = customBow.getDamageMultiplier(bowStack);
-                
-                arrow.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, charge * 3.0F * arrowSpeedMult, 1.0F);
-                
-                if (charge == 1.0F) {
-                    arrow.setIsCritical(true);
-                }
-                
-                // Apply enchantments
-                int powerLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, bowStack);
-                if (powerLevel > 0) {
-                    arrow.setDamage((arrow.getDamage() + (double) powerLevel * 0.5D + 0.5D) * damageMult);
-                } else {
-                    arrow.setDamage(arrow.getDamage() * damageMult);
-                }
-                
-                int punchLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, bowStack);
-                if (punchLevel > 0) {
-                    arrow.setKnockbackStrength(punchLevel);
-                }
-                
-                if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, bowStack) > 0) {
-                    arrow.setFire(100);
-                }
-            } else {
-                // Vanilla bow
-                arrow.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, charge * 3.0F, 1.0F);
-                
-                if (charge == 1.0F) {
-                    arrow.setIsCritical(true);
-                }
-                
-                int powerLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, bowStack);
-                if (powerLevel > 0) {
-                    arrow.setDamage(arrow.getDamage() + (double) powerLevel * 0.5D + 0.5D);
-                }
-                
-                int punchLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, bowStack);
-                if (punchLevel > 0) {
-                    arrow.setKnockbackStrength(punchLevel);
-                }
-                
-                if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, bowStack) > 0) {
-                    arrow.setFire(100);
-                }
+            // Apply bow stats
+            arrow.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, charge * 3.0F, 1.0F);
+            
+            if (charge == 1.0F) {
+                arrow.setIsCritical(true);
+            }
+            
+            // Apply enchantments
+            int powerLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, bowStack);
+            if (powerLevel > 0) {
+                arrow.setDamage(arrow.getDamage() + (double) powerLevel * 0.5D + 0.5D);
+            }
+            
+            int punchLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, bowStack);
+            if (punchLevel > 0) {
+                arrow.setKnockbackStrength(punchLevel);
+            }
+            
+            if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, bowStack) > 0) {
+                arrow.setFire(100);
             }
             
             // Damage bow
@@ -159,7 +129,7 @@ public class BowEventHandler {
         }
     }
     
-    // ===== HELPER METHODS =====
+    // === HELPER METHODS ===
     
     private boolean hasArrowsInInventory(EntityPlayer player) {
         // Check main inventory
@@ -183,7 +153,7 @@ public class BowEventHandler {
         ItemArrow itemarrow = (ItemArrow) ((arrowStack.getItem() instanceof ItemArrow) ? arrowStack.getItem() : Items.ARROW);
         EntityArrow entityarrow = itemarrow.createArrow(world, arrowStack, player);
         
-        // Check if it's a special arrow
+        // Check if it's a special arrow 
         String arrowType = arrowStack.getItem().getRegistryName().toString();
         
         if (arrowType.contains("fire_arrow")) {
