@@ -26,7 +26,7 @@ public class ItemInit {
     
     // Carcaj
     public static final Item QUIVER = new ItemQuiver("quiver");
-    public static final Item QUIVER_WITH_ARROWS = new ItemQuiverWithArrows("quiver_with_arrows", 576);
+    public static final Item QUIVER_WITH_ARROWS = new ItemQuiverWithArrows("quiver_with_arrows");
     
 	// Flechas especiales
 	public static final Item DRILL_ARROW = new ItemDrillArrow("drill_arrow");
