@@ -1,0 +1,36 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"parent": "item/generated",
+	"textures": {
+		"0": "betterarchery:items/quiver_with_arrows",
+		"particle": "betterarchery:items/quiver_with_arrows"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 0],
+			"to": [16, 16, 0],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "texture": "#0"},
+				"east": {"uv": [2, 0, 2, 16], "texture": "#0"},
+				"south": {"uv": [16, 0, 0, 16], "texture": "#0"},
+				"west": {"uv": [0, 0, 0, 16], "texture": "#0"},
+				"up": {"uv": [0, 0, 16, 0], "texture": "#0"},
+				"down": {"uv": [0, 2, 16, 2], "texture": "#0"}
+			}
+		}
+	],
+	"display": {
+		"firstperson_righthand": {
+			"translation": [2.5, 0, 2.5]
+		},
+		"gui": {
+			"rotation": [33.75, 0, 0],
+			"scale": [0.98633, 0.86914, 1]
+		},
+		"head": {
+			"translation": [0, -14.25, 11.75],
+			"scale": [1.28516, 1.26758, 1]
+		}
+	}
+}
