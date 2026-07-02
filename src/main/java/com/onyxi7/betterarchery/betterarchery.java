@@ -166,6 +166,10 @@ public class betterarchery {
 			);
 		}
 		
+		net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(
+			new com.onyxi7.betterarchery.event.BowEventHandler()
+		);
+		
 		com.onyxi7.betterarchery.compat.BackToolsCompat.init();
 		DispenserInit.init();
 		proxy.init(event);
