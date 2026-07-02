@@ -1,5 +1,6 @@
 package com.onyxi7.betterarchery.client.render;
 
+import com.onyxi7.betterarchery.compat.BaublesCompat;
 import com.onyxi7.betterarchery.config.BetterArcheryConfig;
 import com.onyxi7.betterarchery.init.ItemInit;
 import net.minecraft.client.Minecraft;
@@ -11,6 +12,7 @@ import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EnumPlayerModelParts;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
@@ -46,8 +48,8 @@ public class LayerQuiver implements LayerRenderer<EntityLivingBase> {
             return;
         }
         
-        // Find quiver in inventory
-        ItemStack quiverStack = findQuiverInInventory(player);
+        // Find quiver - check Baubles first, then inventory
+        ItemStack quiverStack = findQuiver(player);
         
         if (quiverStack.isEmpty()) {
             return;
@@ -61,7 +63,7 @@ public class LayerQuiver implements LayerRenderer<EntityLivingBase> {
         
         GlStateManager.pushMatrix();
         
-        // === BACKTOOLS COPY & PASTE ===
+        // === BACKTOOLS COORDINATES ===
         GlStateManager.translate(0.0F, 0.35F, 0.16F);
         
         // Adjust for armor
@@ -97,6 +99,19 @@ public class LayerQuiver implements LayerRenderer<EntityLivingBase> {
         GlStateManager.enableAlpha();
         
         GlStateManager.popMatrix();
+    }
+    
+    private ItemStack findQuiver(EntityPlayer player) {
+        // First, check Baubles inventory
+        if (BaublesCompat.isBaublesLoaded()) {
+            ItemStack baubleQuiver = BaublesCompat.getQuiverFromBaubles(player);
+            if (!baubleQuiver.isEmpty()) {
+                return baubleQuiver;
+            }
+        }
+        
+        // Then, check regular inventory
+        return findQuiverInInventory(player);
     }
     
     private ItemStack findQuiverInInventory(EntityPlayer player) {
