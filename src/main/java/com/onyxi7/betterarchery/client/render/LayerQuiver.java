@@ -6,7 +6,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.EntityLivingBase;
@@ -22,9 +21,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class LayerQuiver implements LayerRenderer<EntityLivingBase> {
     
     private final RenderLivingBase<?> renderEntity;
-    
-    private static final ModelResourceLocation QUIVER_MODEL = 
-        new ModelResourceLocation("betterarchery:quiver_3d", "inventory");
     
     public LayerQuiver(RenderLivingBase<?> renderEntity) {
         this.renderEntity = renderEntity;
@@ -64,6 +60,23 @@ public class LayerQuiver implements LayerRenderer<EntityLivingBase> {
         }
         
         GlStateManager.pushMatrix();
+        
+        GlStateManager.translate(0.0F, -0.15F, 0.3F);
+        
+        GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
+        
+        if (entity instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) entity;
+            
+            if (!player.inventory.armorItemInSlot(2).isEmpty()) {
+                GlStateManager.translate(0.0F, 0.0F, 0.05F);
+            }
+            
+            if (player.isSneaking()) {
+                GlStateManager.translate(0.0F, 0.05F, 0.1F);
+                GlStateManager.rotate(28.8F, 1.0F, 0.0F, 0.0F);
+            }
+        }
         
         IBakedModel model = Minecraft.getMinecraft().getRenderItem()
             .getItemModelMesher().getItemModel(quiverStack);
