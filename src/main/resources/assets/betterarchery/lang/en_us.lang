@@ -23,11 +23,16 @@ itemGroup.betterarchery_tab=Better Archery
 # Entity
 entity.betterarchery.quiver_skeleton.name=Quiver Skeleton
 
-# Tooltips del Carcaj
-tooltip.quiver.arrows=Arrows: %d
-tooltip.quiver.arrows.full=Arrows: %d (Full)
-tooltip.quiver.empty=Empty Quiver - Right click to collect arrows
+# Quiver tooltips
+tooltip.betterarchery.quiver.arrows=Arrows: §f%s/%s
+tooltip.betterarchery.quiver.type=Type: §f%s
+tooltip.betterarchery.quiver.extract_hint=Shift + Right-click to extract
 
+# Quiver messages
+message.betterarchery.quiver.collected=Collected %s arrows!
+message.betterarchery.quiver.extracted=Extracted %s arrows!
+message.betterarchery.quiver.added=Added %s arrows!
+message.betterarchery.quiver.full=Quiver is full!
 
 # Arrow Tooltips
 tooltip.drill_arrow.desc=Pierces through blocks and enemies
@@ -48,10 +53,10 @@ tooltip.yumi_bow.desc=Japanese bow with excellent range and speed
 # JEI Descriptions
 betterarchery.jei.quiver.description=Empty quiver. Right-click to collect arrows from the ground or your inventory. Place it in your off-hand to automatically supply arrows to your bow.
 betterarchery.jei.quiver_with_arrows.description=Quiver with arrows. Shows the type and count of arrows inside. Sneak + right-click to extract arrows.
-betterarchery.jei.drill_arrow.description=Drill Arrow: Pierces through blocks and enemies. Destroys soft blocks in its path.
-betterarchery.jei.fire_arrow.description=Fire Arrow: Sets targets on fire and ignites blocks on impact.
-betterarchery.jei.torch_arrow.description=Torch Arrow: Places a torch where it lands. Perfect for lighting up caves.
-betterarchery.jei.impact_arrow.description=Impact Arrow: Explodes on impact, dealing area damage and knockback to nearby entities.
-betterarchery.jei.ender_arrow.description=Ender Arrow: Teleports you to where it lands. Like an Ender Pearl but with a bow!
-betterarchery.jei.splitting_arrow.description=Splitting Arrow: Splits into 3 arrows on impact, hitting multiple targets.
-betterarchery.jei.potion_arrow.description=Potion Arrow: Applies potion effects on impact. Craft with any potion to transfer its effect.
+betterarchery.jei.drill_arrow.description=Pierces through blocks and enemies. Destroys soft blocks in its path.
+betterarchery.jei.fire_arrow.description=Sets targets on fire and ignites blocks on impact.
+betterarchery.jei.torch_arrow.description=Places a torch where it lands. Perfect for lighting up caves.
+betterarchery.jei.impact_arrow.description=Explodes on impact, dealing area damage and knockback to nearby entities.
+betterarchery.jei.ender_arrow.description=Teleports you to where it lands. Like an Ender Pearl but with a bow!
+betterarchery.jei.splitting_arrow.description=Splits into 3 arrows on impact, hitting multiple targets.
+betterarchery.jei.potion_arrow.description=Applies potion effects on impact. Craft with any potion to transfer its effect.
