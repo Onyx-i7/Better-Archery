@@ -22,7 +22,7 @@ public class EntityQuiverSkeleton extends EntitySkeleton {
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
 		livingdata = super.onInitialSpawn(difficulty, livingdata);
 		
-		if (BetterArcheryConfig.general.debugMode) {
+		if (BetterArcheryConfig.debug.enableDebug) {
 			System.out.println("[BetterArchery] QuiverSkeleton spawning at " + this.posX + ", " + this.posY + ", " + this.posZ);
 		}
 		

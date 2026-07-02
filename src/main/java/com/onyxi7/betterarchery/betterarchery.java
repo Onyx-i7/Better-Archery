@@ -164,11 +164,7 @@ public class betterarchery {
 				net.minecraft.init.Biomes.ICE_PLAINS,
 				net.minecraft.init.Biomes.COLD_TAIGA
 			);
-		}
-		
-		net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(
-			new com.onyxi7.betterarchery.event.BowEventHandler()
-		);
+		}	
 		
 		com.onyxi7.betterarchery.compat.BackToolsCompat.init();
 		DispenserInit.init();

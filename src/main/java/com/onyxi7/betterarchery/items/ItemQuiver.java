@@ -22,7 +22,7 @@ import net.minecraftforge.fml.common.Optional;
 @Optional.Interface(iface = "baubles.api.IBauble", modid = "baubles")
 public class ItemQuiver extends Item implements IHasModel, IBauble {
     
-    public static final int MAX_ARROWS = 64;
+    public static final int MAX_ARROWS = 128;
     
     public ItemQuiver(String name) {
         setTranslationKey(name);
@@ -54,7 +54,6 @@ public class ItemQuiver extends Item implements IHasModel, IBauble {
             int collected = collectArrowsOfType(playerIn, firstArrowType);
             
             if (collected > 0) {
-                // Transform to QuiverWithArrows
                 ItemStack newQuiver = new ItemStack(ItemInit.QUIVER_WITH_ARROWS);
                 ItemQuiverWithArrows.setArrowCount(newQuiver, collected);
                 ItemQuiverWithArrows.setArrowType(newQuiver, firstArrowType);

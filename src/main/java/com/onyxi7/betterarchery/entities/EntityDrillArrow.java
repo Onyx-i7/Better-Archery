@@ -27,7 +27,7 @@ public class EntityDrillArrow extends EntityArrow {
     
     public EntityDrillArrow(World worldIn, EntityLivingBase shooter) {
         super(worldIn, shooter);
-        if (BetterArcheryConfig.general.debugMode) {
+        if (BetterArcheryConfig.debug.enableDebug) {
             System.out.println("[BetterArchery] EntityDrillArrow created - Config MaxBlocks: " + 
                              BetterArcheryConfig.arrows.drillArrowMaxBlocks);
         }
@@ -67,13 +67,13 @@ public class EntityDrillArrow extends EntityArrow {
                     this.drillPower -= (float) BetterArcheryConfig.arrows.drillArrowPowerLoss;
                     this.blocksDestroyed++;
                     
-                    if (BetterArcheryConfig.general.debugMode) {
+                    if (BetterArcheryConfig.debug.enableDebug) {
                         System.out.println("[BetterArchery] DrillArrow destroyed block - Power: " + this.drillPower + 
                                          ", Blocks: " + this.blocksDestroyed + "/" + BetterArcheryConfig.arrows.drillArrowMaxBlocks);
                     }
                     
                     if (this.drillPower <= 0 || this.blocksDestroyed >= BetterArcheryConfig.arrows.drillArrowMaxBlocks) {
-                        if (BetterArcheryConfig.general.debugMode) {
+                        if (BetterArcheryConfig.debug.enableDebug) {
                             System.out.println("[BetterArchery] DrillArrow stopping");
                         }
                         this.setDead();

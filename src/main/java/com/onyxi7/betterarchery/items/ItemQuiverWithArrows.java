@@ -29,7 +29,7 @@ import java.util.List;
 @Optional.Interface(iface = "baubles.api.IBauble", modid = "baubles")
 public class ItemQuiverWithArrows extends Item implements IHasModel, IBauble {
     
-    public static final int MAX_ARROWS = 64;
+    public static final int MAX_ARROWS = 128;
     
     public ItemQuiverWithArrows(String name) {
         setTranslationKey(name);
@@ -103,19 +103,15 @@ public class ItemQuiverWithArrows extends Item implements IHasModel, IBauble {
         
         if (arrowCount <= 0) return;
         
-        // Create arrow stack with correct type
         int extractAmount = Math.min(arrowCount, 64);
         ItemStack arrowStack = createArrowStack(quiverStack, extractAmount);
         
-        // Try to add to inventory
         boolean added = player.inventory.addItemStackToInventory(arrowStack);
         
         if (added) {
-            // Successfully added to inventory - reduce count
             int newCount = arrowCount - extractAmount;
             
             if (newCount <= 0) {
-                // Transform back to empty quiver
                 ItemStack emptyQuiver = new ItemStack(ItemInit.QUIVER);
                 player.setHeldItem(handIn, emptyQuiver);
             } else {
@@ -125,7 +121,6 @@ public class ItemQuiverWithArrows extends Item implements IHasModel, IBauble {
             player.sendStatusMessage(new TextComponentTranslation(
                 "message.betterarchery.quiver.extracted", extractAmount), true);
         } else {
-            // Inventory full - drop on ground
             player.dropItem(arrowStack, false);
             
             int newCount = arrowCount - extractAmount;
@@ -182,88 +177,6 @@ public class ItemQuiverWithArrows extends Item implements IHasModel, IBauble {
         }
     }
     
-	public static ItemStack peekArrow(EntityPlayer player) {
-		if (BetterArcheryConfig.debug.logQuiverDetection) {
-			System.out.println("[BetterArchery DEBUG] peekArrow() called for player: " + player.getName());
-		}
-		
-		// Check Baubles first
-		if (com.onyxi7.betterarchery.compat.BaublesCompat.isBaublesLoaded()) {
-			if (BetterArcheryConfig.debug.logQuiverDetection) {
-				System.out.println("[BetterArchery DEBUG] Checking Baubles...");
-			}
-			
-			ItemStack baubleQuiver = com.onyxi7.betterarchery.compat.BaublesCompat.getQuiverFromBaubles(player);
-			if (!baubleQuiver.isEmpty() && baubleQuiver.getItem() instanceof ItemQuiverWithArrows) {
-				int count = getArrowCount(baubleQuiver);
-				if (BetterArcheryConfig.debug.logQuiverDetection) {
-					System.out.println("[BetterArchery DEBUG] Found quiver in Baubles with " + count + " arrows");
-				}
-				if (count > 0) {
-					return createArrowStack(baubleQuiver, 1);
-				}
-			}
-		}
-		
-		// Check inventory
-		if (BetterArcheryConfig.debug.logQuiverDetection) {
-			System.out.println("[BetterArchery DEBUG] Checking inventory...");
-		}
-		
-		for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
-			ItemStack stack = player.inventory.getStackInSlot(i);
-			if (!stack.isEmpty() && stack.getItem() instanceof ItemQuiverWithArrows) {
-				int count = getArrowCount(stack);
-				if (BetterArcheryConfig.debug.logQuiverDetection) {
-					System.out.println("[BetterArchery DEBUG] Found quiver in inventory slot " + i + " with " + count + " arrows");
-				}
-				if (count > 0) {
-					return createArrowStack(stack, 1);
-				}
-			}
-		}
-		
-		if (BetterArcheryConfig.debug.logQuiverDetection) {
-			System.out.println("[BetterArchery DEBUG] No quiver with arrows found");
-		}
-		
-		return ItemStack.EMPTY;
-	}
-
-	public static ItemStack supplyArrow(EntityPlayer player) {
-		if (BetterArcheryConfig.debug.logQuiverDetection) {
-			System.out.println("[BetterArchery DEBUG] supplyArrow() called for player: " + player.getName());
-		}
-		
-		// Check Baubles first
-		if (com.onyxi7.betterarchery.compat.BaublesCompat.isBaublesLoaded()) {
-			ItemStack baubleQuiver = com.onyxi7.betterarchery.compat.BaublesCompat.getQuiverFromBaubles(player);
-			if (!baubleQuiver.isEmpty() && baubleQuiver.getItem() instanceof ItemQuiverWithArrows) {
-				if (BetterArcheryConfig.debug.logQuiverDetection) {
-					System.out.println("[BetterArchery DEBUG] Consuming arrow from Baubles quiver");
-				}
-				return consumeArrowFromQuiver(baubleQuiver, player);
-			}
-		}
-		
-		// Check inventory
-		for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
-			ItemStack stack = player.inventory.getStackInSlot(i);
-			if (!stack.isEmpty() && stack.getItem() instanceof ItemQuiverWithArrows) {
-				if (BetterArcheryConfig.debug.logQuiverDetection) {
-					System.out.println("[BetterArchery DEBUG] Consuming arrow from inventory quiver slot " + i);
-				}
-				return consumeArrowFromQuiver(stack, player);
-			}
-		}
-		
-		if (BetterArcheryConfig.debug.logQuiverDetection) {
-			System.out.println("[BetterArchery DEBUG] No quiver found to consume from");
-		}
-		
-		return ItemStack.EMPTY;
-	}
-    
     // === ARROW COMPATIBILITY ===
     
     private boolean isCompatibleArrow(ItemStack stack, String quiverArrowType) {
@@ -279,81 +192,12 @@ public class ItemQuiverWithArrows extends Item implements IHasModel, IBauble {
     public static ItemStack createArrowStack(ItemStack quiverStack, int count) {
         String arrowType = getArrowType(quiverStack);
         
-        // Try to get the arrow item from registry
         Item arrowItem = Item.getByNameOrId(arrowType);
         if (arrowItem != null && (arrowItem instanceof ItemArrow || arrowItem == Items.ARROW)) {
             return new ItemStack(arrowItem, count);
         }
         
-        // Fallback to regular arrow
         return new ItemStack(Items.ARROW, count);
-    }
-    
-    // === SUPPLY ARROW FOR BOW ===
-    
-    public static ItemStack supplyArrow(EntityPlayer player) {
-        // Check Baubles first
-        if (com.onyxi7.betterarchery.compat.BaublesCompat.isBaublesLoaded()) {
-            ItemStack baubleQuiver = com.onyxi7.betterarchery.compat.BaublesCompat.getQuiverFromBaubles(player);
-            if (!baubleQuiver.isEmpty() && baubleQuiver.getItem() instanceof ItemQuiverWithArrows) {
-                return consumeArrowFromQuiver(baubleQuiver, player);
-            }
-        }
-        
-        // Check inventory
-        for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
-            ItemStack stack = player.inventory.getStackInSlot(i);
-            if (!stack.isEmpty() && stack.getItem() instanceof ItemQuiverWithArrows) {
-                return consumeArrowFromQuiver(stack, player);
-            }
-        }
-        
-        return ItemStack.EMPTY;
-    }
-    
-    private static ItemStack consumeArrowFromQuiver(ItemStack quiverStack, EntityPlayer player) {
-        int count = getArrowCount(quiverStack);
-        
-        if (count <= 0) {
-            return ItemStack.EMPTY;
-        }
-        
-        // Create single arrow
-        ItemStack arrow = createArrowStack(quiverStack, 1);
-        
-        // Reduce count
-        int newCount = count - 1;
-        
-        if (newCount <= 0) {
-            // Transform back to empty quiver
-            ItemStack emptyQuiver = new ItemStack(ItemInit.QUIVER);
-            
-            // Find quiver location and replace
-            replaceQuiverWithEmpty(quiverStack, emptyQuiver, player);
-        } else {
-            setArrowCount(quiverStack, newCount);
-        }
-        
-        return arrow;
-    }
-    
-    private static void replaceQuiverWithEmpty(ItemStack oldQuiver, ItemStack emptyQuiver, EntityPlayer player) {
-        // Check Baubles first
-        if (com.onyxi7.betterarchery.compat.BaublesCompat.isBaublesLoaded()) {
-            int slot = com.onyxi7.betterarchery.compat.BaublesCompat.findQuiverSlot(player);
-            if (slot != -1) {
-                com.onyxi7.betterarchery.compat.BaublesCompat.setBaubleSlot(player, slot, emptyQuiver);
-                return;
-            }
-        }
-        
-        // Check regular inventory
-        for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
-            if (ItemStack.areItemStacksEqual(player.inventory.getStackInSlot(i), oldQuiver)) {
-                player.inventory.setInventorySlotContents(i, emptyQuiver);
-                return;
-            }
-        }
     }
     
     // === TOOLTIP ===
