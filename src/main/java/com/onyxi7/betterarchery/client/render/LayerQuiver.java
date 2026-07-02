@@ -22,6 +22,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class LayerQuiver implements LayerRenderer<EntityLivingBase> {
     
     private final RenderLivingBase<?> renderEntity;
+    
     private static final ModelResourceLocation QUIVER_MODEL = 
         new ModelResourceLocation("betterarchery:quiver_3d", "inventory");
     
@@ -64,32 +65,7 @@ public class LayerQuiver implements LayerRenderer<EntityLivingBase> {
         
         GlStateManager.pushMatrix();
         
-        // Posición en la espalda
-        GlStateManager.translate(0.0F, 0.30F, 0.30F);
-        
-        // Ajustes por armadura
-        if (entity instanceof EntityPlayer) {
-            EntityPlayer player = (EntityPlayer) entity;
-            
-            if (!player.inventory.armorItemInSlot(2).isEmpty()) {
-                GlStateManager.translate(0.0F, 0.0F, 0.05F);
-            }
-            
-            if (player.isSneaking()) {
-                GlStateManager.translate(0.0F, 0.05F, 0.1F);
-                GlStateManager.rotate(28.8F, 1.0F, 0.0F, 0.0F);
-            }
-        }
-        
-        // Rotación
-        GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
-        
-        // Escalar
-        GlStateManager.scale(0.5F, 0.5F, 0.5F);
-        
-        // Cargar y renderizar el modelo 3D JSON
-        IBakedModel model = Minecraft.getMinecraft().getRenderItem()
-            .getItemModelMesher().getItemModel(quiverStack);
+        IBakedModel model = Minecraft.getMinecraft().getModelManager().getModel(QUIVER_MODEL);
         
         Minecraft.getMinecraft().getRenderItem().renderItem(quiverStack, model);
         
