@@ -23,10 +23,16 @@ itemGroup.betterarchery_tab=Better Archery
 # Entidad
 entity.betterarchery.quiver_skeleton.name=Esqueleto con Carcaj
 
-# Tooltips del Carcaj
-tooltip.quiver.arrows=Flechas: %d
-tooltip.quiver.arrows.full=Flechas: %d (Lleno)
-tooltip.quiver.empty=Carcaj Vacío - Click derecho para recoger flechas
+# Quiver tooltips
+tooltip.betterarchery.quiver.arrows=Flechas: §f%s/%s
+tooltip.betterarchery.quiver.type=Tipo: §f%s
+tooltip.betterarchery.quiver.extract_hint=Shift + Click derecho para extraer
+
+# Quiver messages
+message.betterarchery.quiver.collected=¡Recogidas %s flechas!
+message.betterarchery.quiver.extracted=¡Extraídas %s flechas!
+message.betterarchery.quiver.added=¡Añadidas %s flechas!
+message.betterarchery.quiver.full=¡El carcaj está lleno!
 
 # Tooltips de flechas
 tooltip.drill_arrow.desc=Atraviesa bloques y enemigos
@@ -47,10 +53,10 @@ tooltip.yumi_bow.desc=Arco japonés con excelente alcance y velocidad
 # JEI/HEI Descriptions
 betterarchery.jei.quiver.description=Carcaj vacío. Click derecho para recoger flechas del suelo o tu inventario. Colócalo en tu mano secundaria para suministrar flechas automáticamente a tu arco.
 betterarchery.jei.quiver_with_arrows.description=Carcaj con flechas. Muestra el tipo y cantidad de flechas dentro. Agacharse + click derecho para extraer flechas.
-betterarchery.jei.drill_arrow.description=Flecha Taladro: Atraviesa bloques y enemigos. Destruye bloques blandos en su camino.
-betterarchery.jei.fire_arrow.description=Flecha de Fuego: Prende fuego a los objetivos e ignora bloques al impactar.
-betterarchery.jei.torch_arrow.description=Flecha Antorcha: Coloca una antorcha donde cae. Perfecta para iluminar cuevas.
-betterarchery.jei.impact_arrow.description=Flecha de Impacto: Explota al impactar, causando daño en área y empuje a las entidades cercanas.
-betterarchery.jei.ender_arrow.description=Flecha de Ender: Te teletransporta a donde cae. ¡Como una Perla de Ender pero con arco!
-betterarchery.jei.splitting_arrow.description=Flecha Divisora: Se divide en 3 flechas al impactar, golpeando múltiples objetivos.
-betterarchery.jei.potion_arrow.description=Flecha de Poción: Aplica efectos de poción al impactar. Craftea con cualquier poción para transferir su efecto.
+betterarchery.jei.drill_arrow.description=Atraviesa bloques y enemigos. Destruye bloques blandos en su camino.
+betterarchery.jei.fire_arrow.description=Prende fuego a los objetivos e ignora bloques al impactar.
+betterarchery.jei.torch_arrow.description=Coloca una antorcha donde cae. Perfecta para iluminar cuevas.
+betterarchery.jei.impact_arrow.description=Explota al impactar, causando daño en área y empuje a las entidades cercanas.
+betterarchery.jei.ender_arrow.description=Te teletransporta a donde cae. ¡Como una Perla de Ender pero con arco!
+betterarchery.jei.splitting_arrow.description=Se divide en 3 flechas al impactar, golpeando múltiples objetivos.
+betterarchery.jei.potion_arrow.description=Aplica efectos de poción al impactar. Craftea con cualquier poción para transferir su efecto.
