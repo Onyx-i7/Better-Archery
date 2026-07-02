@@ -182,6 +182,32 @@ public class ItemQuiverWithArrows extends Item implements IHasModel, IBauble {
         }
     }
     
+	public static ItemStack peekArrow(EntityPlayer player) {
+		// Check Baubles first
+		if (com.onyxi7.betterarchery.compat.BaublesCompat.isBaublesLoaded()) {
+			ItemStack baubleQuiver = com.onyxi7.betterarchery.compat.BaublesCompat.getQuiverFromBaubles(player);
+			if (!baubleQuiver.isEmpty() && baubleQuiver.getItem() instanceof ItemQuiverWithArrows) {
+				int count = getArrowCount(baubleQuiver);
+				if (count > 0) {
+					return createArrowStack(baubleQuiver, 1);
+				}
+			}
+		}
+		
+		// Check inventory
+		for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
+			ItemStack stack = player.inventory.getStackInSlot(i);
+			if (!stack.isEmpty() && stack.getItem() instanceof ItemQuiverWithArrows) {
+				int count = getArrowCount(stack);
+				if (count > 0) {
+					return createArrowStack(stack, 1);
+				}
+			}
+		}
+		
+		return ItemStack.EMPTY;
+	}
+    
     // === ARROW COMPATIBILITY ===
     
     private boolean isCompatibleArrow(ItemStack stack, String quiverArrowType) {
