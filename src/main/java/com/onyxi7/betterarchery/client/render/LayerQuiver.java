@@ -61,10 +61,20 @@ public class LayerQuiver implements LayerRenderer<EntityLivingBase> {
         
         GlStateManager.pushMatrix();
         
-        GlStateManager.translate(0.0F, -0.15F, 0.3F);
+        // === MOVE FROM HEAD TO BACK ===
+        // Move down from head to back
+        GlStateManager.translate(0.0F, -0.6F, 0.0F);
         
+        // Move backwards to the back
+        GlStateManager.translate(0.0F, 0.0F, 0.25F);
+        
+        // Rotate 180° on X axis to fix vertical orientation
+        GlStateManager.rotate(180.0F, 1.0F, 0.0F, 0.0F);
+        
+        // Rotate 180° on Y axis to face backwards
         GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
         
+        // Adjustments for armor
         if (entity instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) entity;
             
@@ -72,12 +82,14 @@ public class LayerQuiver implements LayerRenderer<EntityLivingBase> {
                 GlStateManager.translate(0.0F, 0.0F, 0.05F);
             }
             
+            // Adjustment for sneaking
             if (player.isSneaking()) {
                 GlStateManager.translate(0.0F, 0.05F, 0.1F);
                 GlStateManager.rotate(28.8F, 1.0F, 0.0F, 0.0F);
             }
         }
         
+        // Render the 3D model
         IBakedModel model = Minecraft.getMinecraft().getRenderItem()
             .getItemModelMesher().getItemModel(quiverStack);
         
