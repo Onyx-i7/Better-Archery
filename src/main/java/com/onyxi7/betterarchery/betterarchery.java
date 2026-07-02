@@ -22,12 +22,12 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = "betterarchery", name = "Better Archery", version = "1.0", acceptedMinecraftVersions = "[1.12.2]")
+@Mod(modid = "betterarchery", name = "Better Archery", version = "1.1", acceptedMinecraftVersions = "[1.12.2]")
 public class betterarchery {
     
     public static final String MODID = "betterarchery";
     public static final String NAME = "Better Archery";
-    public static final String VERSION = "1.0";
+    public static final String VERSION = "1.1";
     
     @Instance
     public static betterarchery instance;
@@ -166,6 +166,7 @@ public class betterarchery {
 			);
 		}
 		
+		com.onyxi7.betterarchery.compat.BackToolsCompat.init();
 		DispenserInit.init();
 		proxy.init(event);
 	}
