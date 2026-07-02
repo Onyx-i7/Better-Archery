@@ -105,7 +105,7 @@ public class ItemQuiverWithArrows extends Item implements IHasModel, IBauble {
 						NBTTagCompound nbt = quiverStack.getTagCompound();
 						nbt.removeTag("Arrows");
 						nbt.removeTag("ArrowType");
-						if (!nbt.hasNoTags()) {
+						if (!nbt.isEmpty()()) {
 							emptyQuiver.setTagCompound(nbt);
 						}
 					}
