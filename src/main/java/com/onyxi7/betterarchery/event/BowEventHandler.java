@@ -21,7 +21,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class BowEventHandler {
     
-    // === ARROW NOCK EVENT ===
+    // === ARROW NOCK EVENT - Allow loading bow if quiver has arrows ===
     @SubscribeEvent(priority = EventPriority.HIGH)
     public void onArrowNock(ArrowNockEvent event) {
         EntityPlayer player = event.getEntityPlayer();
@@ -53,7 +53,7 @@ public class BowEventHandler {
         }
     }
     
-    // === ARROW LOOSE EVENT ===
+    // === ARROW LOOSE EVENT - Use quiver arrows when shooting ===
     @SubscribeEvent(priority = EventPriority.HIGH)
     public void onArrowLoose(ArrowLooseEvent event) {
         EntityPlayer player = event.getEntityPlayer();
@@ -98,17 +98,29 @@ public class BowEventHandler {
             // Create arrow entity
             EntityArrow arrow = createArrow(world, arrowFromQuiver, player);
             
-            // Apply bow stats
-            arrow.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, charge * 3.0F, 1.0F);
+            // Apply bow stats based on bow type
+            float arrowSpeedMult = 1.0F;
+            float damageMult = 1.0F;
+            
+            if (bowStack.getItem() instanceof CustomBow) {
+                CustomBow customBow = (CustomBow) bowStack.getItem();
+                arrowSpeedMult = customBow.getArrowSpeedMultiplier(bowStack);
+                damageMult = customBow.getDamageMultiplier(bowStack);
+            }
+            
+            // Shoot arrow with custom speed
+            arrow.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, charge * 3.0F * arrowSpeedMult, 1.0F);
             
             if (charge == 1.0F) {
                 arrow.setIsCritical(true);
             }
             
-            // Apply enchantments
+            // Apply enchantments with damage multiplier
             int powerLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, bowStack);
             if (powerLevel > 0) {
-                arrow.setDamage(arrow.getDamage() + (double) powerLevel * 0.5D + 0.5D);
+                arrow.setDamage((arrow.getDamage() + (double) powerLevel * 0.5D + 0.5D) * damageMult);
+            } else {
+                arrow.setDamage(arrow.getDamage() * damageMult);
             }
             
             int punchLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, bowStack);
@@ -153,7 +165,7 @@ public class BowEventHandler {
         ItemArrow itemarrow = (ItemArrow) ((arrowStack.getItem() instanceof ItemArrow) ? arrowStack.getItem() : Items.ARROW);
         EntityArrow entityarrow = itemarrow.createArrow(world, arrowStack, player);
         
-        // Check if it's a special arrow 
+        // Check if it's a special arrow
         String arrowType = arrowStack.getItem().getRegistryName().toString();
         
         if (arrowType.contains("fire_arrow")) {
