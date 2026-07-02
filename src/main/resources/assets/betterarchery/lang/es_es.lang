@@ -23,16 +23,16 @@ itemGroup.betterarchery_tab=Better Archery
 # Entidad
 entity.betterarchery.quiver_skeleton.name=Esqueleto con Carcaj
 
-# Quiver tooltips
+# Quiver tooltips & Messajes
 tooltip.betterarchery.quiver.arrows=Flechas: §f%s/%s
 tooltip.betterarchery.quiver.type=Tipo: §f%s
 tooltip.betterarchery.quiver.extract_hint=Shift + Click derecho para extraer
+tooltip.betterarchery.quiver.add_hint=Click derecho para añadir flechas del inventario
 
-# Quiver messages
-message.betterarchery.quiver.collected=¡Recogidas %s flechas!
-message.betterarchery.quiver.extracted=¡Extraídas %s flechas!
-message.betterarchery.quiver.added=¡Añadidas %s flechas!
-message.betterarchery.quiver.full=¡El carcaj está lleno!
+message.betterarchery.quiver.collected=Recogidas %s flechas
+message.betterarchery.quiver.extracted=Extraídas %s flechas
+message.betterarchery.quiver.added=Añadidas %s flechas
+message.betterarchery.quiver.full=El carcaj está lleno
 
 # Tooltips de flechas
 tooltip.drill_arrow.desc=Atraviesa bloques y enemigos

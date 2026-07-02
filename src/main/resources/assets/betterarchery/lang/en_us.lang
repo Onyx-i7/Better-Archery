@@ -23,16 +23,15 @@ itemGroup.betterarchery_tab=Better Archery
 # Entity
 entity.betterarchery.quiver_skeleton.name=Quiver Skeleton
 
-# Quiver tooltips
 tooltip.betterarchery.quiver.arrows=Arrows: §f%s/%s
 tooltip.betterarchery.quiver.type=Type: §f%s
-tooltip.betterarchery.quiver.extract_hint=Shift + Right-click to extract
+tooltip.betterarchery.quiver.extract_hint=§7Shift + Right-click to extract
+tooltip.betterarchery.quiver.add_hint=Right-click to add arrows from inventory
 
-# Quiver messages
-message.betterarchery.quiver.collected=Collected %s arrows!
-message.betterarchery.quiver.extracted=Extracted %s arrows!
-message.betterarchery.quiver.added=Added %s arrows!
-message.betterarchery.quiver.full=Quiver is full!
+message.betterarchery.quiver.collected=Collected %s arrows
+message.betterarchery.quiver.extracted=Extracted %s arrows
+message.betterarchery.quiver.added=Added %s arrows
+message.betterarchery.quiver.full=Quiver is full
 
 # Arrow Tooltips
 tooltip.drill_arrow.desc=Pierces through blocks and enemies
