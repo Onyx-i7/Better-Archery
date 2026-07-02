@@ -8,11 +8,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
@@ -31,25 +33,25 @@ public class BowEventHandler {
             return;
         }
         
-        // Check if vanilla would allow it (arrows in inventory)
+        // If vanilla already found arrows, let it handle
         boolean hasVanillaArrows = hasArrowsInInventory(player);
-        
         if (hasVanillaArrows) {
-            return; // Let vanilla handle it
+            return;
         }
         
-        // Check if player has Infinity
+        // Check Infinity
         boolean hasInfinity = EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, bowStack) > 0;
         
-        // Check if quiver has arrows
+        // Check quiver
         ItemStack quiverArrow = ItemQuiverWithArrows.peekArrow(player);
         boolean hasQuiverArrows = !quiverArrow.isEmpty();
         
-        // If has Infinity OR quiver has arrows, allow the nock
+        // FIX: Don't cancel, just set action to SUCCESS
+        // Vanilla code: if (!flag && !ret.isSuccess()) return ret;
+        // So if we make it SUCCESS, vanilla will continue and load the bow
         if (hasInfinity || hasQuiverArrows) {
-            player.setActiveHand(event.getHand());
             event.setAction(new ActionResult<>(EnumActionResult.SUCCESS, bowStack));
-            event.setCanceled(true); // Cancel vanilla behavior, we handled it
+            // DO NOT cancel the event!
         }
     }
     
@@ -64,11 +66,10 @@ public class BowEventHandler {
             return;
         }
         
-        // Check if player has vanilla arrows
+        // If vanilla has arrows, let it handle
         boolean hasVanillaArrows = hasArrowsInInventory(player);
-        
         if (hasVanillaArrows) {
-            return; // Let vanilla handle it
+            return;
         }
         
         // Check Infinity
@@ -78,12 +79,16 @@ public class BowEventHandler {
         ItemStack arrowFromQuiver = ItemQuiverWithArrows.supplyArrow(player);
         
         if (arrowFromQuiver.isEmpty() && !hasInfinity) {
+            // No arrows at all - cancel the shot
             event.setCanceled(true);
             return;
         }
         
-        // Handle the shot manually
+        // If we got arrow from quiver, handle manually
         if (!arrowFromQuiver.isEmpty()) {
+            // Cancel vanilla handling
+            event.setCanceled(true);
+            
             float charge = (float) event.getCharge() / 20.0F;
             charge = (charge * charge + charge * 2.0F) / 3.0F;
             
@@ -102,14 +107,15 @@ public class BowEventHandler {
             float arrowSpeedMult = getArrowSpeedMultiplier(bowStack);
             float damageMult = getDamageMultiplier(bowStack);
             
-            // Shoot arrow with custom speed
-            arrow.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, charge * 3.0F * arrowSpeedMult, 1.0F);
+            // Shoot arrow
+            arrow.shoot(player, player.rotationPitch, player.rotationYaw, 
+                0.0F, charge * 3.0F * arrowSpeedMult, 1.0F);
             
             if (charge == 1.0F) {
                 arrow.setIsCritical(true);
             }
             
-            // Apply enchantments with damage multiplier
+            // Apply enchantments
             int powerLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, bowStack);
             if (powerLevel > 0) {
                 arrow.setDamage((arrow.getDamage() + (double) powerLevel * 0.5D + 0.5D) * damageMult);
@@ -129,16 +135,19 @@ public class BowEventHandler {
             // Damage bow
             bowStack.damageItem(1, player);
             
+            // Spawn arrow
             world.spawnEntity(arrow);
             
-            event.setCanceled(true);
+            // Play shoot sound
+            world.playSound(null, player.posX, player.posY, player.posZ, 
+                SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 
+                1.0F, 1.0F / (world.rand.nextFloat() * 0.4F + 1.2F) + charge * 0.5F);
         }
     }
     
     // === HELPER METHODS ===
     
     private boolean hasArrowsInInventory(EntityPlayer player) {
-        // Check main inventory
         for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
             ItemStack stack = player.inventory.getStackInSlot(i);
             if (!stack.isEmpty() && (stack.getItem() instanceof ItemArrow || stack.getItem() == Items.ARROW)) {
@@ -146,7 +155,6 @@ public class BowEventHandler {
             }
         }
         
-        // Check off-hand
         ItemStack offhand = player.getHeldItemOffhand();
         if (!offhand.isEmpty() && (offhand.getItem() instanceof ItemArrow || offhand.getItem() == Items.ARROW)) {
             return true;
@@ -157,42 +165,30 @@ public class BowEventHandler {
     
     private float getArrowSpeedMultiplier(ItemStack bowStack) {
         if (bowStack.isEmpty() || !(bowStack.getItem() instanceof CustomBow)) {
-            return 1.0F; // Vanilla bow
+            return 1.0F;
         }
         
         String registryName = bowStack.getItem().getRegistryName().toString();
         
-        // Return multipliers based on bow type
-        if (registryName.contains("long_bow")) {
-            return 2.0F;
-        } else if (registryName.contains("recurve_bow")) {
-            return 1.25F;
-        } else if (registryName.contains("composite_bow")) {
-            return 0.65F;
-        } else if (registryName.contains("yumi_bow")) {
-            return 1.5F;
-        }
+        if (registryName.contains("long_bow")) return 2.0F;
+        if (registryName.contains("recurve_bow")) return 1.25F;
+        if (registryName.contains("composite_bow")) return 0.65F;
+        if (registryName.contains("yumi_bow")) return 1.5F;
         
         return 1.0F;
     }
     
     private float getDamageMultiplier(ItemStack bowStack) {
         if (bowStack.isEmpty() || !(bowStack.getItem() instanceof CustomBow)) {
-            return 1.0F; // Vanilla bow
+            return 1.0F;
         }
         
         String registryName = bowStack.getItem().getRegistryName().toString();
         
-        // Return multipliers based on bow type
-        if (registryName.contains("long_bow")) {
-            return 1.0F;
-        } else if (registryName.contains("recurve_bow")) {
-            return 1.1F;
-        } else if (registryName.contains("composite_bow")) {
-            return 1.25F;
-        } else if (registryName.contains("yumi_bow")) {
-            return 1.0F;
-        }
+        if (registryName.contains("long_bow")) return 1.0F;
+        if (registryName.contains("recurve_bow")) return 1.1F;
+        if (registryName.contains("composite_bow")) return 1.25F;
+        if (registryName.contains("yumi_bow")) return 1.0F;
         
         return 1.0F;
     }
@@ -201,7 +197,6 @@ public class BowEventHandler {
         ItemArrow itemarrow = (ItemArrow) ((arrowStack.getItem() instanceof ItemArrow) ? arrowStack.getItem() : Items.ARROW);
         EntityArrow entityarrow = itemarrow.createArrow(world, arrowStack, player);
         
-        // Check if it's a special arrow from our mod
         String arrowType = arrowStack.getItem().getRegistryName().toString();
         
         if (arrowType.contains("fire_arrow")) {
