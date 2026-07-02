@@ -2,6 +2,7 @@
     "parent": "item/generated",
     "textures": {
         "layer0": "betterarchery:items/quiverbowrecurve2",
-        "layer1": "betterarchery:items/quiverbowrecurvestring2"
+        "layer1": "betterarchery:items/quiverbowrecurvestring2",
+        "layer2": "betterarchery:items/arrowpulling2"
     }
 }

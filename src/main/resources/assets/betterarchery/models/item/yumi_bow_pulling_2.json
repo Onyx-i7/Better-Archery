@@ -2,6 +2,7 @@
     "parent": "item/generated",
     "textures": {
         "layer0": "betterarchery:items/quiverbowyumi3",
-        "layer1": "betterarchery:items/quiverbowyumistring3"
+        "layer1": "betterarchery:items/quiverbowyumistring3",
+        "layer2": "betterarchery:items/arrowpulling3"
     }
 }
