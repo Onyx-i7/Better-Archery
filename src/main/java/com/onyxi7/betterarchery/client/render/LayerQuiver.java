@@ -61,33 +61,29 @@ public class LayerQuiver implements LayerRenderer<EntityLivingBase> {
         
         GlStateManager.pushMatrix();
         
-        // === MOVE FROM HEAD TO BACK ===
-        // Move down from head to back
-        GlStateManager.translate(0.0F, -0.6F, 0.0F);
-        
-        // Move backwards to the back
-        GlStateManager.translate(0.0F, 0.0F, 0.25F);
-        
-        // Rotate 180° on X axis to fix vertical orientation
-        GlStateManager.rotate(180.0F, 1.0F, 0.0F, 0.0F);
-        
-        // Rotate 180° on Y axis to face backwards
-        GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
+        // Base position on the back
+        GlStateManager.translate(0.0F, 0.35F, 0.16F);
         
         // Adjustments for armor
         if (entity instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) entity;
             
             if (!player.inventory.armorItemInSlot(2).isEmpty()) {
-                GlStateManager.translate(0.0F, 0.0F, 0.05F);
+                GlStateManager.translate(0.0F, player.isSneaking() ? -0.1F : 0.0F, player.isSneaking() ? 0.025F : 0.06F);
             }
             
-            // Adjustment for sneaking
+            // Adjustments for sneaking
             if (player.isSneaking()) {
-                GlStateManager.translate(0.0F, 0.05F, 0.1F);
+                GlStateManager.translate(0.0F, 0.08F, 0.13F);
                 GlStateManager.rotate(28.8F, 1.0F, 0.0F, 0.0F);
             }
         }
+        
+        // Rotate 180° on X axis to fix vertical orientation
+        GlStateManager.rotate(180.0F, 1.0F, 0.0F, 0.0F);
+        
+        // Rotate 180° on Y axis to face backwards
+        GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
         
         // Render the 3D model
         IBakedModel model = Minecraft.getMinecraft().getRenderItem()
