@@ -15,6 +15,7 @@ import net.minecraft.entity.player.EnumPlayerModelParts;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -101,16 +102,25 @@ public class LayerQuiver implements LayerRenderer<EntityLivingBase> {
         // Get the model
         IBakedModel model = Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getModelManager().getModel(modelLocation);
         
-        // Check if model is valid to prevent grey square
-        if (model != null && !model.isBuiltInRenderer()) {
-            // Enable lighting for proper rendering
-            GlStateManager.enableRescaleNormal();
-            
-            // Render the model
-            Minecraft.getMinecraft().getRenderItem().renderItem(quiverStack, model);
-            
-            GlStateManager.disableRescaleNormal();
-        }
+        // FIX: Bind texture explicitly to prevent purple/black square
+        ResourceLocation textureLocation = new ResourceLocation("betterarchery", "textures/entity/quiver.png");
+        Minecraft.getMinecraft().renderEngine.bindTexture(textureLocation);
+        
+        // FIX: Disable culling to prevent invisible cube with borders
+        GlStateManager.disableCull();
+        
+        // Enable lighting and rescale for proper rendering
+        GlStateManager.enableRescaleNormal();
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        
+        // Render the model
+        Minecraft.getMinecraft().getRenderItem().renderItem(quiverStack, model);
+        
+        // Restore state
+        GlStateManager.disableBlend();
+        GlStateManager.disableRescaleNormal();
+        GlStateManager.enableCull();
         
         GlStateManager.popMatrix();
     }
