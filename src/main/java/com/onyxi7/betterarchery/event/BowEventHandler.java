@@ -1,5 +1,6 @@
 package com.onyxi7.betterarchery.event;
 
+import com.onyxi7.betterarchery.config.BetterArcheryConfig;
 import com.onyxi7.betterarchery.entities.*;
 import com.onyxi7.betterarchery.items.bows.CustomBow;
 import com.onyxi7.betterarchery.items.ItemQuiverWithArrows;
@@ -23,76 +24,143 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class BowEventHandler {
     
-    // === ARROW NOCK EVENT - Allow loading bow if quiver has arrows ===
+    private static void debugLog(String message) {
+        if (BetterArcheryConfig.debug.enableDebug) {
+            System.out.println("[BetterArchery DEBUG] " + message);
+        }
+    }
+    
+    // === ARROW NOCK EVENT ===
     @SubscribeEvent(priority = EventPriority.HIGH)
     public void onArrowNock(ArrowNockEvent event) {
         EntityPlayer player = event.getEntityPlayer();
         ItemStack bowStack = event.getBow();
         
+        if (BetterArcheryConfig.debug.logArrowNock) {
+            debugLog("=== ArrowNockEvent triggered ===");
+            debugLog("Player: " + player.getName());
+            debugLog("Bow: " + bowStack.getDisplayName());
+            debugLog("Bow registry: " + bowStack.getItem().getRegistryName());
+        }
+        
         if (bowStack.isEmpty() || !(bowStack.getItem() instanceof ItemBow)) {
+            if (BetterArcheryConfig.debug.logArrowNock) {
+                debugLog("Not a bow, ignoring");
+            }
             return;
         }
         
-        // If vanilla already found arrows, let it handle
+        // Check vanilla arrows
         boolean hasVanillaArrows = hasArrowsInInventory(player);
+        if (BetterArcheryConfig.debug.logArrowNock) {
+            debugLog("Has vanilla arrows: " + hasVanillaArrows);
+        }
+        
         if (hasVanillaArrows) {
+            if (BetterArcheryConfig.debug.logArrowNock) {
+                debugLog("Vanilla has arrows, letting vanilla handle");
+            }
             return;
         }
         
         // Check Infinity
         boolean hasInfinity = EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, bowStack) > 0;
+        if (BetterArcheryConfig.debug.logArrowNock) {
+            debugLog("Has Infinity: " + hasInfinity);
+        }
         
         // Check quiver
         ItemStack quiverArrow = ItemQuiverWithArrows.peekArrow(player);
         boolean hasQuiverArrows = !quiverArrow.isEmpty();
         
-        // FIX: Don't cancel, just set action to SUCCESS
-        // Vanilla code: if (!flag && !ret.isSuccess()) return ret;
-        // So if we make it SUCCESS, vanilla will continue and load the bow
+        if (BetterArcheryConfig.debug.logArrowNock) {
+            debugLog("Quiver has arrows: " + hasQuiverArrows);
+            if (hasQuiverArrows) {
+                debugLog("Quiver arrow type: " + quiverArrow.getDisplayName());
+            }
+        }
+        
+        // Allow nock if has Infinity OR quiver has arrows
         if (hasInfinity || hasQuiverArrows) {
+            if (BetterArcheryConfig.debug.logArrowNock) {
+                debugLog("Setting action to SUCCESS");
+            }
             event.setAction(new ActionResult<>(EnumActionResult.SUCCESS, bowStack));
-            // DO NOT cancel the event!
+        } else {
+            if (BetterArcheryConfig.debug.logArrowNock) {
+                debugLog("No arrows available, nock will fail");
+            }
         }
     }
     
-    // === ARROW LOOSE EVENT - Use quiver arrows when shooting ===
+    // === ARROW LOOSE EVENT ===
     @SubscribeEvent(priority = EventPriority.HIGH)
     public void onArrowLoose(ArrowLooseEvent event) {
         EntityPlayer player = event.getEntityPlayer();
         World world = player.world;
         ItemStack bowStack = event.getBow();
         
+        if (BetterArcheryConfig.debug.logArrowLoose) {
+            debugLog("=== ArrowLooseEvent triggered ===");
+            debugLog("Charge: " + event.getCharge());
+        }
+        
         if (bowStack.isEmpty() || !(bowStack.getItem() instanceof ItemBow)) {
+            if (BetterArcheryConfig.debug.logArrowLoose) {
+                debugLog("Not a bow, ignoring");
+            }
             return;
         }
         
-        // If vanilla has arrows, let it handle
+        // Check vanilla arrows
         boolean hasVanillaArrows = hasArrowsInInventory(player);
+        if (BetterArcheryConfig.debug.logArrowLoose) {
+            debugLog("Has vanilla arrows: " + hasVanillaArrows);
+        }
+        
         if (hasVanillaArrows) {
+            if (BetterArcheryConfig.debug.logArrowLoose) {
+                debugLog("Vanilla has arrows, letting vanilla handle");
+            }
             return;
         }
         
         // Check Infinity
         boolean hasInfinity = EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, bowStack) > 0;
+        if (BetterArcheryConfig.debug.logArrowLoose) {
+            debugLog("Has Infinity: " + hasInfinity);
+        }
         
         // Try to get arrow from quiver
         ItemStack arrowFromQuiver = ItemQuiverWithArrows.supplyArrow(player);
         
+        if (BetterArcheryConfig.debug.logArrowLoose) {
+            debugLog("Arrow from quiver: " + (!arrowFromQuiver.isEmpty() ? arrowFromQuiver.getDisplayName() : "EMPTY"));
+        }
+        
         if (arrowFromQuiver.isEmpty() && !hasInfinity) {
-            // No arrows at all - cancel the shot
+            if (BetterArcheryConfig.debug.logArrowLoose) {
+                debugLog("No arrows available, canceling shot");
+            }
             event.setCanceled(true);
             return;
         }
         
-        // If we got arrow from quiver, handle manually
+        // Handle shot manually
         if (!arrowFromQuiver.isEmpty()) {
-            // Cancel vanilla handling
+            if (BetterArcheryConfig.debug.logArrowLoose) {
+                debugLog("Handling shot manually");
+            }
+            
             event.setCanceled(true);
             
             float charge = (float) event.getCharge() / 20.0F;
             charge = (charge * charge + charge * 2.0F) / 3.0F;
             
             if (charge < 0.1D) {
+                if (BetterArcheryConfig.debug.logArrowLoose) {
+                    debugLog("Charge too low, ignoring");
+                }
                 return;
             }
             
@@ -100,14 +168,23 @@ public class BowEventHandler {
                 charge = 1.0F;
             }
             
-            // Create arrow entity
+            if (BetterArcheryConfig.debug.logArrowLoose) {
+                debugLog("Final charge: " + charge);
+            }
+            
+            // Create arrow
             EntityArrow arrow = createArrow(world, arrowFromQuiver, player);
             
-            // Get bow multipliers
+            // Get multipliers
             float arrowSpeedMult = getArrowSpeedMultiplier(bowStack);
             float damageMult = getDamageMultiplier(bowStack);
             
-            // Shoot arrow
+            if (BetterArcheryConfig.debug.logArrowLoose) {
+                debugLog("Speed multiplier: " + arrowSpeedMult);
+                debugLog("Damage multiplier: " + damageMult);
+            }
+            
+            // Shoot
             arrow.shoot(player, player.rotationPitch, player.rotationYaw, 
                 0.0F, charge * 3.0F * arrowSpeedMult, 1.0F);
             
@@ -138,26 +215,44 @@ public class BowEventHandler {
             // Spawn arrow
             world.spawnEntity(arrow);
             
-            // Play shoot sound
+            // Play sound
             world.playSound(null, player.posX, player.posY, player.posZ, 
                 SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 
                 1.0F, 1.0F / (world.rand.nextFloat() * 0.4F + 1.2F) + charge * 0.5F);
+            
+            if (BetterArcheryConfig.debug.logArrowLoose) {
+                debugLog("Arrow spawned successfully");
+            }
         }
     }
     
     // === HELPER METHODS ===
     
     private boolean hasArrowsInInventory(EntityPlayer player) {
+        if (BetterArcheryConfig.debug.logInventoryChecks) {
+            debugLog("Checking inventory for arrows...");
+        }
+        
         for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
             ItemStack stack = player.inventory.getStackInSlot(i);
             if (!stack.isEmpty() && (stack.getItem() instanceof ItemArrow || stack.getItem() == Items.ARROW)) {
+                if (BetterArcheryConfig.debug.logInventoryChecks) {
+                    debugLog("Found arrows in slot " + i + ": " + stack.getDisplayName());
+                }
                 return true;
             }
         }
         
         ItemStack offhand = player.getHeldItemOffhand();
         if (!offhand.isEmpty() && (offhand.getItem() instanceof ItemArrow || offhand.getItem() == Items.ARROW)) {
+            if (BetterArcheryConfig.debug.logInventoryChecks) {
+                debugLog("Found arrows in offhand: " + offhand.getDisplayName());
+            }
             return true;
+        }
+        
+        if (BetterArcheryConfig.debug.logInventoryChecks) {
+            debugLog("No arrows found in inventory");
         }
         
         return false;
