@@ -98,15 +98,9 @@ public class BowEventHandler {
             // Create arrow entity
             EntityArrow arrow = createArrow(world, arrowFromQuiver, player);
             
-            // Apply bow stats based on bow type
-            float arrowSpeedMult = 1.0F;
-            float damageMult = 1.0F;
-            
-            if (bowStack.getItem() instanceof CustomBow) {
-                CustomBow customBow = (CustomBow) bowStack.getItem();
-                arrowSpeedMult = customBow.getArrowSpeedMultiplier(bowStack);
-                damageMult = customBow.getDamageMultiplier(bowStack);
-            }
+            // Get bow multipliers
+            float arrowSpeedMult = getArrowSpeedMultiplier(bowStack);
+            float damageMult = getDamageMultiplier(bowStack);
             
             // Shoot arrow with custom speed
             arrow.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, charge * 3.0F * arrowSpeedMult, 1.0F);
@@ -161,11 +155,53 @@ public class BowEventHandler {
         return false;
     }
     
+    private float getArrowSpeedMultiplier(ItemStack bowStack) {
+        if (bowStack.isEmpty() || !(bowStack.getItem() instanceof CustomBow)) {
+            return 1.0F; // Vanilla bow
+        }
+        
+        String registryName = bowStack.getItem().getRegistryName().toString();
+        
+        // Return multipliers based on bow type
+        if (registryName.contains("long_bow")) {
+            return 2.0F;
+        } else if (registryName.contains("recurve_bow")) {
+            return 1.25F;
+        } else if (registryName.contains("composite_bow")) {
+            return 0.65F;
+        } else if (registryName.contains("yumi_bow")) {
+            return 1.5F;
+        }
+        
+        return 1.0F;
+    }
+    
+    private float getDamageMultiplier(ItemStack bowStack) {
+        if (bowStack.isEmpty() || !(bowStack.getItem() instanceof CustomBow)) {
+            return 1.0F; // Vanilla bow
+        }
+        
+        String registryName = bowStack.getItem().getRegistryName().toString();
+        
+        // Return multipliers based on bow type
+        if (registryName.contains("long_bow")) {
+            return 1.0F;
+        } else if (registryName.contains("recurve_bow")) {
+            return 1.1F;
+        } else if (registryName.contains("composite_bow")) {
+            return 1.25F;
+        } else if (registryName.contains("yumi_bow")) {
+            return 1.0F;
+        }
+        
+        return 1.0F;
+    }
+    
     private EntityArrow createArrow(World world, ItemStack arrowStack, EntityPlayer player) {
         ItemArrow itemarrow = (ItemArrow) ((arrowStack.getItem() instanceof ItemArrow) ? arrowStack.getItem() : Items.ARROW);
         EntityArrow entityarrow = itemarrow.createArrow(world, arrowStack, player);
         
-        // Check if it's a special arrow
+        // Check if it's a special arrow from our mod
         String arrowType = arrowStack.getItem().getRegistryName().toString();
         
         if (arrowType.contains("fire_arrow")) {
