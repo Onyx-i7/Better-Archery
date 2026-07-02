@@ -1,6 +1,7 @@
 package com.onyxi7.betterarchery.compat;
 
 import baubles.api.BaublesApi;
+import baubles.api.cap.IBaublesItemHandler;
 import com.onyxi7.betterarchery.init.ItemInit;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -24,21 +25,60 @@ public class BaublesCompat {
         }
         
         try {
-            // Check if quiver is equipped in baubles slots
-            int slot = BaublesApi.isBaubleEquipped(player, ItemInit.QUIVER);
-            if (slot != -1) {
-                return BaublesApi.getBaublesHandler(player).getStackInSlot(slot);
-            }
+            IBaublesItemHandler handler = BaublesApi.getBaublesHandler(player);
             
-            // Check if quiver with arrows is equipped
-            slot = BaublesApi.isBaubleEquipped(player, ItemInit.QUIVER_WITH_ARROWS);
-            if (slot != -1) {
-                return BaublesApi.getBaublesHandler(player).getStackInSlot(slot);
+            for (int i = 0; i < handler.getSlots(); i++) {
+                ItemStack stack = handler.getStackInSlot(i);
+                if (!stack.isEmpty()) {
+                    Item item = stack.getItem();
+                    if (item == ItemInit.QUIVER || item == ItemInit.QUIVER_WITH_ARROWS) {
+                        return stack;
+                    }
+                }
             }
         } catch (Exception e) {
             System.err.println("[BetterArchery] Failed to get quiver from Baubles: " + e.getMessage());
         }
         
         return ItemStack.EMPTY;
+    }
+    
+    @Optional.Method(modid = "baubles")
+    public static int findQuiverSlot(EntityPlayer player) {
+        if (!isBaublesLoaded()) {
+            return -1;
+        }
+        
+        try {
+            IBaublesItemHandler handler = BaublesApi.getBaublesHandler(player);
+            
+            for (int i = 0; i < handler.getSlots(); i++) {
+                ItemStack stack = handler.getStackInSlot(i);
+                if (!stack.isEmpty()) {
+                    Item item = stack.getItem();
+                    if (item == ItemInit.QUIVER || item == ItemInit.QUIVER_WITH_ARROWS) {
+                        return i;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("[BetterArchery] Failed to find quiver slot: " + e.getMessage());
+        }
+        
+        return -1;
+    }
+    
+    @Optional.Method(modid = "baubles")
+    public static void setBaubleSlot(EntityPlayer player, int slot, ItemStack stack) {
+        if (!isBaublesLoaded()) {
+            return;
+        }
+        
+        try {
+            IBaublesItemHandler handler = BaublesApi.getBaublesHandler(player);
+            handler.setStackInSlot(slot, stack);
+        } catch (Exception e) {
+            System.err.println("[BetterArchery] Failed to set bauble slot: " + e.getMessage());
+        }
     }
 }
