@@ -11,6 +11,7 @@ public class BetterArcheryConfig {
     
     public static General general = new General();
     public static Mobs mobs = new Mobs();
+    public static Arrows arrows = new Arrows();
     public static Debug debug = new Debug();
     
     public static class General {
@@ -29,6 +30,32 @@ public class BetterArcheryConfig {
         @Config.Comment("Quiver Skeleton spawn weight")
         @Config.RangeInt(min = 1, max = 100)
         public int quiverSkeletonSpawnWeight = 10;
+        
+        @Config.Comment("Maximum arrows Quiver Skeleton can have")
+        @Config.RangeInt(min = 1, max = 64)
+        public int maxArrows = 32;
+        
+        @Config.Comment("Minimum arrows Quiver Skeleton can have")
+        @Config.RangeInt(min = 1, max = 64)
+        public int minArrows = 8;
+        
+        @Config.Comment("Chance for Quiver Skeleton to have special bow (0.0-1.0)")
+        @Config.RangeDouble(min = 0.0, max = 1.0)
+        public double specialBowChance = 0.2;
+    }
+    
+    public static class Arrows {
+        @Config.Comment("Drill Arrow - Maximum blocks it can destroy")
+        @Config.RangeInt(min = 1, max = 64)
+        public int drillArrowMaxBlocks = 10;
+        
+        @Config.Comment("Drill Arrow - Power loss per block")
+        @Config.RangeDouble(min = 0.0, max = 1.0)
+        public double drillArrowPowerLoss = 0.1;
+        
+        @Config.Comment("Impact Arrow - Explosion radius")
+        @Config.RangeDouble(min = 0.1, max = 10.0)
+        public double impactArrowExplosionRadius = 2.0;
     }
     
     public static class Debug {
