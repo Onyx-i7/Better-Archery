@@ -60,7 +60,7 @@ repositories {
 // =============================================================================
 
 dependencies {
-    compileOnly rtg.deobf('curse.maven:bubbles-a-baubles-fork-995393:7736064')
+    compileOnly rfg.deobf('curse.maven:bubbles-a-baubles-fork-995393:7736064')
     compileOnly rfg.deobf('curse.maven:had-enough-items-557549:8081514')
 }
 
