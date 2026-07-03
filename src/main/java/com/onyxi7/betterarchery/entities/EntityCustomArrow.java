@@ -1,6 +1,5 @@
 package com.onyxi7.betterarchery.entities;
 
-import com.onyxi7.betterarchery.init.EnchantmentInit;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
