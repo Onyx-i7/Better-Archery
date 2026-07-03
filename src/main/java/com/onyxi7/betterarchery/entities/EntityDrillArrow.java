@@ -13,6 +13,7 @@ import net.minecraft.world.World;
 public class EntityDrillArrow extends EntityCustomArrow {
     
     private int blocksDestroyed = 0;
+    private float drillPower = 1.0F;
     private static final int MAX_BLOCKS = 10;
     
     public EntityDrillArrow(World worldIn) {
@@ -27,6 +28,14 @@ public class EntityDrillArrow extends EntityCustomArrow {
         super(worldIn, x, y, z);
     }
     
+    public void setDrillPower(float power) {
+        this.drillPower = power;
+    }
+    
+    public float getDrillPower() {
+        return this.drillPower;
+    }
+    
     @Override
     protected void onHit(RayTraceResult raytraceResultIn) {
         if (!this.world.isRemote && raytraceResultIn.typeOfHit == RayTraceResult.Type.BLOCK) {
@@ -36,10 +45,12 @@ public class EntityDrillArrow extends EntityCustomArrow {
             // Don't break unbreakable blocks
             if (state.getBlockHardness(this.world, blockpos) >= 0 && 
                 state.getBlock() != Blocks.BEDROCK &&
-                blocksDestroyed < MAX_BLOCKS) {
+                blocksDestroyed < MAX_BLOCKS &&
+                drillPower > 0) {
                 
                 this.world.destroyBlock(blockpos, true);
                 blocksDestroyed++;
+                drillPower -= 0.1F; // Reduce power per block
                 
                 // Continue through the block
                 Vec3d motion = new Vec3d(this.motionX, this.motionY, this.motionZ).normalize();
