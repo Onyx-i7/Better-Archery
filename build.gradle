@@ -53,6 +53,11 @@ repositories {
         name = 'CleanroomMC'
         url = 'https://maven.cleanroommc.com'
     }
+
+    maven {
+        name = "BlameJared Maven"
+        url = "https://maven.blamejared.com/"
+    }
 }
 
 // =============================================================================
@@ -62,7 +67,7 @@ repositories {
 dependencies {
     compileOnly rfg.deobf('curse.maven:bubbles-a-baubles-fork-995393:7736064')
     compileOnly rfg.deobf('curse.maven:had-enough-items-557549:8081514')
-    compileOnly rfg.deobf('curse.maven:crafting-tweaks-unofficial-633720:3852709')
+    compileOnly rfg.deobf('CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.715')
 }
 
 // =============================================================================
