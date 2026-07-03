@@ -79,10 +79,6 @@ public class CustomBow extends ItemBow implements IHasModel {
                         if (power >= 1.0F) {
                             entityarrow.setIsCritical(true);
                         }
-
-						if (entityarrow instanceof EntityCustomArrow) {
-						    ((EntityCustomArrow) entityarrow).setBowStack(stack);
-						}
                         
 						// If it's a Drill Arrow, apply the force based on the charge time
 						if (entityarrow instanceof com.onyxi7.betterarchery.entities.EntityDrillArrow) {
