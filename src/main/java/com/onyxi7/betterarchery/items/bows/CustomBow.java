@@ -81,7 +81,7 @@ public class CustomBow extends ItemBow implements IHasModel {
                         }
 
 						if (entityarrow instanceof EntityCustomArrow) {
-						    ((EntityCustomArrow) entityarrow).setBowStack(bow);
+						    ((EntityCustomArrow) entityarrow).setBowStack(stack);
 						}
                         
 						// If it's a Drill Arrow, apply the force based on the charge time
