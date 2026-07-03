@@ -3,6 +3,7 @@ package com.onyxi7.betterarchery.entities;
 import com.onyxi7.betterarchery.init.ItemInit;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+import net.minecraft.init.PotionTypes;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionType;
 import net.minecraft.potion.PotionUtils;
