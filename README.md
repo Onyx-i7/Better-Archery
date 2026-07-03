@@ -5,7 +5,7 @@
 <h1 align="center">Better Archery Unofficial Port</h1>
 <div align="center">
 
-![Version](https://img.shields.io/badge/Version-1.0-green.svg)
+![Version](https://img.shields.io/badge/Version-1.1-green.svg)
 ![Minecraft](https://img.shields.io/badge/Minecraft-1.12.2-blue.svg)
 ![Forge](https://img.shields.io/badge/Forge-14.23.5.2847+-orange.svg)
 ![License](https://img.shields.io/badge/License-MIT-red.svg)
@@ -158,7 +158,9 @@ Complete configuration file at `config/BetterArchery.cfg`:
 
 ### Compatibility
 
-- **JEI/HEI** - Item descriptions in the item viewer
+- **JEI** - Item descriptions in the item viewer
+- **BackTools** - Displays the quiver on the player's back
+- **CraftTweaker** - For Modpacks (One of my goals was to add compatibility with this mod so you can modify item properties)
 
 ---
 
@@ -361,10 +363,10 @@ If you find a bug, please report it in the [Issues](https://github.com/Onyx-i7/B
 ## Future Roadmap
 
 ### Long-term Ideas
-*   **Combined Arrows System**: Merge multiple arrow effects into a single projectile
-*   **New Bow Variants**: Expand the arsenal with more unique tiers and stats.
-*   **Advanced Optimization**: Refine rendering and NBT data tracking for the Quiver system
-*   **Modpack Customization**: Implement a file-based system (JSON/Config) to allow modpack creators to add custom bows and arrows dynamically
+- [ ]   **Combined Arrows System**: Merge multiple arrow effects into a single projectile \
+- [ ]   **New Bow Variants**: Expand the arsenal with more unique tiers and stats \
+- [ ]   **Advanced Optimization**: Refine rendering and NBT data tracking for the Quiver system \
+- [x]   **Modpack Customization**: Implement a file-based system (JSON/Config) to allow modpack creators to add custom bows and arrows dynamically
 
 
 ---
