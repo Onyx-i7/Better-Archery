@@ -61,20 +61,23 @@ public abstract class EntityCustomArrow extends EntityArrow {
         // Detection radius based on level: 8, 12, 16 blocks
         double radius = 8.0D + (level * 4.0D);
         
-        // Find nearest living entity
-        List<Entity> entities = this.world.getEntitiesWithinAABBExcludingEntity(
+        // Get all entities in radius
+        List<Entity> allEntities = this.world.getEntitiesWithinAABBExcludingEntity(
             this,
             new AxisAlignedBB(
                 this.posX - radius, this.posY - radius, this.posZ - radius,
                 this.posX + radius, this.posY + radius, this.posZ + radius
-            ),
-            entity -> entity instanceof EntityLivingBase && entity != this.shootingEntity
+            )
         );
         
         EntityLivingBase target = null;
         double minDistance = Double.MAX_VALUE;
         
-        for (Entity entity : entities) {
+        for (Entity entity : allEntities) {
+            // Filter: must be living entity and not the shooter
+            if (!(entity instanceof EntityLivingBase)) continue;
+            if (entity == this.shootingEntity) continue;
+            
             EntityLivingBase living = (EntityLivingBase) entity;
             
             // Don't target dead entities
