@@ -2,8 +2,7 @@ package com.onyxi7.betterarchery.handler;
 
 import com.onyxi7.betterarchery.init.EnchantmentInit;
 import com.onyxi7.betterarchery.init.ItemInit;
-import com.onyxi7.betterarchery.util.IHasModel;
-import com.onyxi7.betterarchery.util.interfaces.IHasModel as IHasModelInterface;
+import com.onyxi7.betterarchery.util.interfaces.IHasModel;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.Item;
@@ -34,8 +33,8 @@ public class RegistryHandler {
     @SubscribeEvent
     public static void onModelRegister(ModelRegistryEvent event) {
         for (Item item : ItemInit.ITEMS) {
-            if (item instanceof IHasModelInterface) {
-                ((IHasModelInterface) item).registerModels();
+            if (item instanceof IHasModel) {
+                ((IHasModel) item).registerModels();
             }
         }
     }
