@@ -5,6 +5,7 @@ import com.onyxi7.betterarchery.init.ItemInit;
 import com.onyxi7.betterarchery.util.interfaces.IHasModel;
 import com.onyxi7.betterarchery.init.CreativeTabInit;
 import com.onyxi7.betterarchery.entities.EntityCustomArrow;
+import com.onyxi7.betterarchery.config.ModpackOverrides;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -38,6 +39,22 @@ public class CustomBow extends ItemBow implements IHasModel {
         ItemInit.ITEMS.add(this);
     }
     
+    // CRAFTTWEAKER OVERRIDE: Get effective stats with overrides applied
+    private float getEffectiveDamageMult() {
+        String registryName = this.getRegistryName().toString();
+        return ModpackOverrides.getBowDamageMultiplier(registryName, this.damageMult);
+    }
+    
+    private float getEffectiveSpeedMult() {
+        String registryName = this.getRegistryName().toString();
+        return ModpackOverrides.getBowSpeedMultiplier(registryName, this.arrowSpeedMult);
+    }
+    
+    private float getEffectivePullBackMult() {
+        String registryName = this.getRegistryName().toString();
+        return ModpackOverrides.getBowPullBackMultiplier(registryName, this.pullBackMult);
+    }
+    
     @Override
     public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
         if (entityLiving instanceof EntityPlayer) {
@@ -57,8 +74,9 @@ public class CustomBow extends ItemBow implements IHasModel {
 
                 float f = getArrowVelocity(i);
                 
-                // Apply a speed multiplier
-                f *= this.arrowSpeedMult;
+                // CRAFTTWEAKER OVERRIDE: Use effective speed multiplier
+                float effectiveSpeedMult = getEffectiveSpeedMult();
+                f *= effectiveSpeedMult;
 
                 if ((double) f >= 0.1D) {
                     boolean flag1 = entityplayer.capabilities.isCreativeMode || 
@@ -73,7 +91,9 @@ public class CustomBow extends ItemBow implements IHasModel {
                         float power = f;
                         
                         if ((double) power >= 0.5F) {
-                            entityarrow.setDamage(entityarrow.getDamage() * this.damageMult);
+                            // CRAFTTWEAKER OVERRIDE: Use effective damage multiplier
+                            float effectiveDamageMult = getEffectiveDamageMult();
+                            entityarrow.setDamage(entityarrow.getDamage() * effectiveDamageMult);
                         }
                         
                         if (power >= 1.0F) {
@@ -88,8 +108,9 @@ public class CustomBow extends ItemBow implements IHasModel {
 							// Calculate force based on load time (0.0 to 1.0)
 							float chargePower = getArrowVelocity(i);
 							
-							// Multiply by the bow's damage multiplier
-							float finalPower = chargePower * this.damageMult;
+							// CRAFTTWEAKER OVERRIDE: Use effective damage multiplier
+							float effectiveDamageMult = getEffectiveDamageMult();
+							float finalPower = chargePower * effectiveDamageMult;
 							
 							drillArrow.setDrillPower(finalPower);
 						}
@@ -135,9 +156,9 @@ public class CustomBow extends ItemBow implements IHasModel {
         }
     }
     
-    // Custom method (DOES NOT override the static method of ItemBow)
     public float calculateArrowVelocity(int charge) {
-        float f = (float) charge / (20.0F * this.pullBackMult);
+        float effectivePullBackMult = getEffectivePullBackMult();
+        float f = (float) charge / (20.0F * effectivePullBackMult);
         f = (f * f + f * 2.0F) / 3.0F;
         if (f > 1.0F) {
             f = 1.0F;
@@ -147,7 +168,8 @@ public class CustomBow extends ItemBow implements IHasModel {
     
     @Override
     public int getMaxItemUseDuration(ItemStack stack) {
-        return (int) (72000 * this.pullBackMult);
+        float effectivePullBackMult = getEffectivePullBackMult();
+        return (int) (72000 * effectivePullBackMult);
     }
     
     @Override
