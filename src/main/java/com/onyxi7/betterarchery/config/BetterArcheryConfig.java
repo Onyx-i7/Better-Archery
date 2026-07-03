@@ -10,6 +10,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class BetterArcheryConfig {
     
     public static General general = new General();
+    public static Modpack modpack = new Modpack();
     public static Mobs mobs = new Mobs();
     public static Arrows arrows = new Arrows();
     public static Debug debug = new Debug();
@@ -22,6 +23,13 @@ public class BetterArcheryConfig {
         @Config.RangeInt(min = 1, max = 512)
         public int maxQuiverArrows = 128;
     }
+    
+    public static class Modpack {
+		public Map<String, Float> bowDamageOverrides = new HashMap<>();
+		public Map<String, Float> bowSpeedOverrides = new HashMap<>();
+		public JsonObject arrowOverrides = new JsonObject();
+	}
+
     
     public static class Mobs {
         @Config.Comment("Enable Quiver Skeleton spawning")
