@@ -6,12 +6,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionType;
 import net.minecraft.potion.PotionUtils;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class EntityPotionArrow extends EntityCustomArrow {
     
-    private PotionType potionType;
+    private String potionTypeName = "minecraft:empty";
     
     public EntityPotionArrow(World worldIn) {
         super(worldIn);
@@ -25,17 +26,35 @@ public class EntityPotionArrow extends EntityCustomArrow {
         super(worldIn, x, y, z);
     }
     
-    public void setPotionType(PotionType type) {
-        this.potionType = type;
+    // Accept String parameter
+    public void setPotionType(String potionType) {
+        this.potionTypeName = potionType;
+    }
+    
+    public String getPotionTypeName() {
+        return this.potionTypeName;
     }
     
     @Override
     protected void arrowHit(EntityLivingBase living) {
         super.arrowHit(living);
         
-        if (potionType != null && living != this.shootingEntity) {
-            for (PotionEffect potioneffect : potionType.getEffects()) {
-                living.addPotionEffect(new PotionEffect(potioneffect));
+        if (living != this.shootingEntity && potionTypeName != null) {
+            // Get PotionType from registry
+            PotionType type = ForgeRegistries.POTION_TYPES.getValue(new ResourceLocation(potionTypeName));
+            
+            if (type != null && type != PotionTypes.EMPTY) {
+                for (PotionEffect effect : type.getEffects()) {
+                    // Apply effect with 75% duration (like splash potions)
+                    PotionEffect reducedEffect = new PotionEffect(
+                        effect.getPotion(),
+                        (int)(effect.getDuration() * 0.75),
+                        effect.getAmplifier(),
+                        effect.getIsAmbient(),
+                        effect.doesShowParticles()
+                    );
+                    living.addPotionEffect(reducedEffect);
+                }
             }
         }
     }
