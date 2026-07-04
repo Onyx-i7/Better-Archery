@@ -5,7 +5,6 @@ item.quiver_with_arrows.name=Carcaj con Flechas
 # Flechas especiales
 item.drill_arrow.name=Flecha Taladro
 item.broken_drill_arrow.name=Flecha Taladro Rota
-item.potion_arrow.name=Flecha de Poción
 item.fire_arrow.name=Flecha de Fuego
 item.torch_arrow.name=Flecha Antorcha
 item.impact_arrow.name=Flecha de Impacto
@@ -37,7 +36,6 @@ message.betterarchery.quiver.full=El carcaj está lleno
 # Tooltips de flechas
 tooltip.drill_arrow.desc=Atraviesa bloques y enemigos
 tooltip.drill_arrow.broken=Rota - No puede usarse
-tooltip.potion_arrow.desc=Aplica efectos de poción al impactar
 tooltip.fire_arrow.desc=Prende fuego al objetivo
 tooltip.torch_arrow.desc=Coloca una antorcha al impactar
 tooltip.impact_arrow.desc=Explota al impactar con daño en área
@@ -59,4 +57,3 @@ betterarchery.jei.torch_arrow.description=Coloca una antorcha donde cae. Perfect
 betterarchery.jei.impact_arrow.description=Explota al impactar, causando daño en área y empuje a las entidades cercanas.
 betterarchery.jei.ender_arrow.description=Te teletransporta a donde cae. ¡Como una Perla de Ender pero con arco!
 betterarchery.jei.splitting_arrow.description=Se divide en 3 flechas al impactar, golpeando múltiples objetivos.
-betterarchery.jei.potion_arrow.description=Aplica efectos de poción al impactar. Craftea con cualquier poción para transferir su efecto.

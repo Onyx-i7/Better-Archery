@@ -21,7 +21,7 @@ apply plugin: 'com.gtnewhorizons.retrofuturagradle'
 // MOD CONFIGURATION
 // =============================================================================
 
-version = "1.1"
+version = "1.2"
 group = "com.onyxi7.betterarchery"
 
 base {

@@ -34,8 +34,5 @@ public class JEICompat implements IModPlugin {
         
         registry.addIngredientInfo(new ItemStack(ItemInit.SPLITTING_ARROW), ItemStack.class, 
             "betterarchery.jei.splitting_arrow.description");
-        
-        registry.addIngredientInfo(new ItemStack(ItemInit.POTION_ARROW), ItemStack.class, 
-            "betterarchery.jei.potion_arrow.description");
     }
 }

@@ -5,7 +5,6 @@ item.quiver_with_arrows.name=Quiver with Arrows
 # Special Arrows
 item.drill_arrow.name=Drill Arrow
 item.broken_drill_arrow.name=Broken Drill Arrow
-item.potion_arrow.name=Potion Arrow
 item.fire_arrow.name=Fire Arrow
 item.torch_arrow.name=Torch Arrow
 item.impact_arrow.name=Impact Arrow
@@ -58,4 +57,4 @@ betterarchery.jei.torch_arrow.description=Places a torch where it lands. Perfect
 betterarchery.jei.impact_arrow.description=Explodes on impact, dealing area damage and knockback to nearby entities.
 betterarchery.jei.ender_arrow.description=Teleports you to where it lands. Like an Ender Pearl but with a bow!
 betterarchery.jei.splitting_arrow.description=Splits into 3 arrows on impact, hitting multiple targets.
-betterarchery.jei.potion_arrow.description=Applies potion effects on impact. Craft with any potion to transfer its effect.
+item.ruby.name=Ruby
