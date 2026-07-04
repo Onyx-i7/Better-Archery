@@ -31,6 +31,7 @@ Four unique bows with balanced stats and complete charging animation:
 | **Yumi Bow** | 384 | 1.15x | 1.0x | 1.5x | 1.5x |
 
 Each bow features:
+
 - 3-stage charging animation (0%, 65%, 90%)
 - Custom textures with visible bowstring
 - Unique stats that affect gameplay
@@ -41,33 +42,39 @@ Each bow features:
 Seven types of arrows with unique effects:
 
 #### Fire Arrow
+
 - **Effect**: Sets the target and blocks on fire
 - **Fire Duration**: 5 seconds (configurable)
 - **Recipe**: 2 Blaze Powder + 1 Arrow = 4 Fire Arrows
 
 #### Torch Arrow
+
 - **Effect**: Places a torch where it lands
 - **Best for**: Lighting up caves and dark areas
 - **Recipe**: 1 Torch + 1 Arrow + 1 Stick = 4 Torch Arrows
 
 #### Impact Arrow
+
 - **Effect**: Spawns a TNT explosion on impact
 - **Explosion Radius**: 4.0 blocks (configurable)
 - **Damage**: Uses vanilla explosion system (realistic)
 - **Recipe**: 2 TNT + 1 Arrow = 4 Impact Arrows
 
 #### Ender Arrow
+
 - **Effect**: Teleports the player where the arrow lands
 - **Similar to**: Ender Pearl but with a bow
 - **Recipe**: 2 Ender Pearls + 1 Arrow = 4 Ender Arrows
 
 #### Splitting Arrow
+
 - **Effect**: Splits into 3 arrows on impact
 - **Damage per split**: 50% of original damage
 - **Number of splits**: 3 (configurable)
 - **Recipe**: 1 Redstone + 1 Arrow + 1 Feather = 4 Splitting Arrows
 
 #### Drill Arrow
+
 - **Effect**: Pierces through blocks and destroys them
 - **Max blocks**: 10 (configurable)
 - **Power loss**: 0.2 per block (configurable)
@@ -76,6 +83,7 @@ Seven types of arrows with unique effects:
 - **Recipe**: 2 Iron Ingots + 1 Arrow + 1 Stick = 4 Drill Arrows
 
 #### Potion Arrow
+
 - **Effect**: Applies potion effects on impact
 - **Compatible with**: All vanilla potions
 - **Dynamic colors**: Based on potion type
@@ -85,12 +93,14 @@ Seven types of arrows with unique effects:
 ### Quiver System
 
 #### Empty Quiver
+
 - **Function**: Container to store arrows
 - **Capacity**: 64 arrows
 - **Usage**: Right-click to collect arrows from the ground or inventory
 - **Equippable**: Chest, legs, main hand, off-hand
 
 #### Quiver with Arrows
+
 - **Function**: Full quiver that supplies arrows automatically
 - **NBT System**: Saves arrow type and quantity
 - **Extraction**: Sneak + right-click to remove arrows
@@ -98,6 +108,7 @@ Seven types of arrows with unique effects:
 - **Compatibility**: Works with all mod bows
 
 **Advanced quiver features**:
+
 - Saves exact arrow type (including potion effects)
 - Shows correct arrow name in tooltip
 - Fires the correct arrow when using the bow
@@ -108,7 +119,7 @@ Seven types of arrows with unique effects:
 A rare skeleton that spawns with a quiver and special arrows:
 
 - **Spawn probability**: 3% (configurable)
-- **Equipment**: 
+- **Equipment**:
   - Quiver with 10-30 random arrows
   - 30% chance to have a special bow
 - **Drops**: Drops the quiver with its arrows when killed
@@ -122,10 +133,12 @@ A rare skeleton that spawns with a quiver and special arrows:
 Complete configuration file at `config/BetterArchery.cfg`:
 
 #### General
+
 - `renderQuiverOnBack` - Enable/disable quiver rendering
 - `debugMode` - Show debug information in console
 
 #### Arrows
+
 - `enableFireArrow` - Enable/disable Fire Arrow
 - `enableTorchArrow` - Enable/disable Torch Arrow
 - `enableImpactArrow` - Enable/disable Impact Arrow
@@ -140,6 +153,7 @@ Complete configuration file at `config/BetterArchery.cfg`:
 - `fireArrowDuration` - Fire duration in seconds (1 - 30)
 
 #### Bows
+
 - `longBowDurability` - Long Bow durability (1 - 5000)
 - `recurveBowDurability` - Recurve Bow durability (1 - 5000)
 - `compositeBowDurability` - Composite Bow durability (1 - 5000)
@@ -150,6 +164,7 @@ Complete configuration file at `config/BetterArchery.cfg`:
 - `yumiBowDamageMult` - Damage multiplier (0.5 - 3.0)
 
 #### Mobs
+
 - `enableQuiverSkeleton` - Enable/disable spawn
 - `quiverSkeletonSpawnWeight` - Spawn probability (1 - 100)
 - `minArrows` - Minimum arrows in quiver (1 - 64)
@@ -221,6 +236,7 @@ Arrows will maintain all their special effects.
 ## Crafting Recipes
 
 ### Quiver
+
 ```
 LFL
 L L
@@ -233,6 +249,7 @@ F = String
 ### Arrows
 
 #### Fire Arrow
+
 ```
  B 
  A 
@@ -243,6 +260,7 @@ A = Arrow
 ```
 
 #### Torch Arrow
+
 ```
  T 
  A 
@@ -254,6 +272,7 @@ S = Stick
 ```
 
 #### Impact Arrow
+
 ```
  T 
  A 
@@ -264,6 +283,7 @@ A = Arrow
 ```
 
 #### Ender Arrow
+
 ```
  E 
  A 
@@ -274,6 +294,7 @@ A = Arrow
 ```
 
 #### Splitting Arrow
+
 ```
  R 
  A 
@@ -285,6 +306,7 @@ F = Feather
 ```
 
 #### Drill Arrow
+
 ```
  I 
 IAI
@@ -296,6 +318,7 @@ S = Stick
 ```
 
 #### Potion Arrow
+
 ```
 Shapeless: 1 Arrow + 1 Potion (any) = 4 Potion Arrows
 ```
@@ -303,6 +326,7 @@ Shapeless: 1 Arrow + 1 Potion (any) = 4 Potion Arrows
 ### Bows
 
 #### Long Bow
+
 ```
   S
  LS
@@ -314,6 +338,7 @@ F = Feather
 ```
 
 #### Recurve Bow
+
 ```
  SL
 S I
@@ -325,6 +350,7 @@ I = Iron Ingot
 ```
 
 #### Composite Bow
+
 ```
 ISI
 S S
@@ -335,6 +361,7 @@ S = String
 ```
 
 #### Yumi Bow
+
 ```
   B
  BS
@@ -351,6 +378,7 @@ S = String
 If you find a bug, please report it in the [Issues](https://github.com/Onyx-i7/Better-Archery/issues) section, as it helps me improve the mod which is in a very early phase of development.
 
 **Please include the following information**:
+
 - Mod version
 - Forge version
 - Detailed description of the problem
@@ -363,11 +391,11 @@ If you find a bug, please report it in the [Issues](https://github.com/Onyx-i7/B
 ## Future Roadmap
 
 ### Long-term Ideas
+
 - [ ]   **Combined Arrows System**: Merge multiple arrow effects into a single projectile \
 - [ ]   **New Bow Variants**: Expand the arsenal with more unique tiers and stats \
 - [ ]   **Advanced Optimization**: Refine rendering and NBT data tracking for the Quiver system \
 - [x]   **Modpack Customization**: Implement a file-based system (JSON/Config) to allow modpack creators to add custom bows and arrows dynamically
-
 
 ---
 
@@ -386,14 +414,16 @@ This project is a complete recreation of the original **Better Archery** concept
 ## Credits
 
 ### Original Author
-*   **Zaggy1024** - Creator and designer of the original Better Archery mod
+
+- **Zaggy1024** - Creator and designer of the original Better Archery mod
 
 ### 1.12.2 Port & Development
-*   **Onyx-i7** - Port management, complete code recreation, and implementation of new features
+
+- **Onyx-i7** - Port management, complete code recreation, and implementation of new features
 
 ---
 
 ## Contact
 
-*   **GitHub Repository**: [Onyx-i7/Better-Archery](https://github.com/Onyx-i7/Better-Archery)
-*   **Issue Tracker**: [Report a bug here](https://github.com/Onyx-i7/Better-Archery/issues)
+- **GitHub Repository**: [Onyx-i7/Better-Archery](https://github.com/Onyx-i7/Better-Archery)
+- **Issue Tracker**: [Report a bug here](https://github.com/Onyx-i7/Better-Archery/issues)

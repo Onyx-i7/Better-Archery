@@ -3,7 +3,6 @@ package com.onyxi7.betterarchery.init;
 import com.onyxi7.betterarchery.items.ItemQuiver;
 import com.onyxi7.betterarchery.items.ItemQuiverWithArrows;
 import com.onyxi7.betterarchery.items.arrows.ItemDrillArrow;
-import com.onyxi7.betterarchery.items.arrows.ItemPotionArrow;
 import com.onyxi7.betterarchery.items.arrows.ItemFireArrow;
 import com.onyxi7.betterarchery.items.arrows.ItemTorchArrow;
 import com.onyxi7.betterarchery.items.arrows.ItemImpactArrow;
@@ -24,20 +23,19 @@ public class ItemInit {
     
     public static final List<Item> ITEMS = new ArrayList<>();
     
-    // Carcaj
+    // Quiver
     public static final Item QUIVER = new ItemQuiver("quiver");
     public static final Item QUIVER_WITH_ARROWS = new ItemQuiverWithArrows("quiver_with_arrows");
     
-	// Flechas especiales
+	// Special Arrows
 	public static final Item DRILL_ARROW = new ItemDrillArrow("drill_arrow");
-	public static final Item POTION_ARROW = new ItemPotionArrow("potion_arrow");
 	public static final Item FIRE_ARROW = new ItemFireArrow("fire_arrow");
 	public static final Item TORCH_ARROW = new ItemTorchArrow("torch_arrow");
 	public static final Item IMPACT_ARROW = new ItemImpactArrow("impact_arrow");
 	public static final Item ENDER_ARROW = new ItemEnderArrow("ender_arrow");
 	public static final Item SPLITTING_ARROW = new ItemSplittingArrow("splitting_arrow");
 	
-	// Arcos personalizados
+	// Custom Bows
 	public static final Item LONG_BOW = new LongBow("long_bow");
 	public static final Item RECURVE_BOW = new RecurveBow("recurve_bow");
 	public static final Item COMPOSITE_BOW = new CompositeBow("composite_bow");

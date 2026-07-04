@@ -59,11 +59,6 @@ public class ClientProxy extends CommonProxy {
             EntityDrillArrow.class,
             manager -> new RenderCustomArrow(manager, new ResourceLocation("betterarchery:textures/entity/arrow.png"))
         );
-        
-        RenderingRegistry.registerEntityRenderingHandler(
-            EntityPotionArrow.class,
-            manager -> new RenderCustomArrow(manager, new ResourceLocation("betterarchery:textures/entity/arrow.png"))
-        );
     }
     
     @Override
