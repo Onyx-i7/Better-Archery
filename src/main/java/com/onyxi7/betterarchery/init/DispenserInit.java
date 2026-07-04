@@ -123,26 +123,5 @@ public class DispenserInit {
                 return stack;
             }
         });
-        
-        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemInit.POTION_ARROW, new BehaviorDefaultDispenseItem() {
-            @Override
-            public ItemStack dispenseStack(IBlockSource source, ItemStack stack) {
-                EnumFacing enumfacing = source.getBlockState().getValue(BlockDispenser.FACING);
-                IPosition iposition = BlockDispenser.getDispensePosition(source);
-                World world = source.getWorld();
-                
-                EntityPotionArrow arrow = new EntityPotionArrow(world, iposition.getX(), iposition.getY(), iposition.getZ());
-                
-                String potionType = com.onyxi7.betterarchery.items.arrows.ItemPotionArrow.getPotionType(stack);
-                arrow.setPotionType(potionType);
-                
-                arrow.pickupStatus = EntityArrow.PickupStatus.DISALLOWED;
-                arrow.shoot(enumfacing.getXOffset(), enumfacing.getYOffset() + 0.1F, enumfacing.getZOffset(), 1.1F, 6.0F);
-                world.spawnEntity(arrow);
-                
-                stack.shrink(1);
-                return stack;
-            }
-        });
     }
 }
