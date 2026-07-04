@@ -27,7 +27,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
      updateJSON = "https://raw.githubusercontent.com/Onyx-i7/Better-Archery/main/modupdatechecker.json")
 public class betterarchery {
     public static final String MODID = "betterarchery";
-    public static final String NAME = "Better Archery Unofficial Port";
+    public static final String NAME = "Better Archery";
     public static final String VERSION = "1.2";
     
     @Instance
