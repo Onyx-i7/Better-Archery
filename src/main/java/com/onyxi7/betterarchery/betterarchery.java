@@ -21,7 +21,10 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = "betterarchery", name = "Better Archery", version = "1.2", acceptedMinecraftVersions = "[1.12.2]")
+@Mod(modid = BetterArchery.MODID, 
+     name = BetterArchery.NAME, 
+     version = BetterArchery.VERSION,
+     updateJSON = "https://raw.githubusercontent.com/Onyx-i7/Better-Archery/main/modupdatechecker.json")
 public class betterarchery {
     
     public static final String MODID = "betterarchery";
