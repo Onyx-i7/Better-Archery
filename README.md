@@ -39,7 +39,7 @@ Each bow features:
 
 ### Special Arrows
 
-Seven types of arrows with unique effects:
+Six types of arrows with unique effects:
 
 #### Fire Arrow
 
@@ -81,14 +81,6 @@ Seven types of arrows with unique effects:
 - **Cannot destroy**: Bedrock, Obsidian, blocks with hardness ≥ 50
 - **Power based on**: Bow charging time
 - **Recipe**: 2 Iron Ingots + 1 Arrow + 1 Stick = 4 Drill Arrows
-
-#### Potion Arrow
-
-- **Effect**: Applies potion effects on impact
-- **Compatible with**: All vanilla potions
-- **Dynamic colors**: Based on potion type
-- **Custom names**: "Poison Arrow", "Slowness Arrow", etc.
-- **Recipe**: 1 Arrow + 1 Potion (any) = 4 Potion Arrows
 
 ### Quiver System
 
@@ -221,15 +213,6 @@ Each arrow has a specific use:
 - **Ender Arrow**: Excellent for quick mobility
 - **Splitting Arrow**: Ideal for fighting groups of enemies
 - **Drill Arrow**: Perfect for mining or creating tunnels
-- **Potion Arrow**: Versatile, applies any potion effect
-
-### Dispensers
-
-1. **Place a dispenser**
-2. **Insert special arrows** into the dispenser's inventory
-3. **Activate with redstone** to fire
-
-Arrows will maintain all their special effects.
 
 ---
 
@@ -315,12 +298,6 @@ IAI
 I = Iron Ingot
 A = Arrow
 S = Stick
-```
-
-#### Potion Arrow
-
-```
-Shapeless: 1 Arrow + 1 Potion (any) = 4 Potion Arrows
 ```
 
 ### Bows
