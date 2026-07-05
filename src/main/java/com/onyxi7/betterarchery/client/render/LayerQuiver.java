@@ -19,6 +19,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
+// TODO - Add support for future colored quivers
+
 @SideOnly(Side.CLIENT)
 public class LayerQuiver implements LayerRenderer<EntityLivingBase> {
     

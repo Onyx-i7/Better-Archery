@@ -18,7 +18,7 @@ import net.minecraft.world.World;
 
 public class ItemDrillArrow extends ItemArrow implements IHasModel {
     
-    // Bit 4 (valor 16) indica si está rota
+    // Bit 4 (value 16) indicates whether it is broken
     private static final int BROKEN_BIT = 4;
     
     public ItemDrillArrow(String name) {
@@ -30,12 +30,12 @@ public class ItemDrillArrow extends ItemArrow implements IHasModel {
         ItemInit.ITEMS.add(this);
     }
     
-    // Verifica si la flecha está rota usando el bit 4 del metadata
+    // Check whether the arrow is broken using bit 4 of the metadata
     public static boolean isBroken(int damage) {
         return (damage & (1 << BROKEN_BIT)) != 0;
     }
     
-    // Establece el estado de "roto" en el metadata
+    // Sets the "broken" status in the metadata
     public static int setBroken(int damage, boolean broken) {
         if (broken) {
             return damage | (1 << BROKEN_BIT);
@@ -47,9 +47,9 @@ public class ItemDrillArrow extends ItemArrow implements IHasModel {
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
         if (isInCreativeTab(tab)) {
-            // Flecha intacta
+            // Intact arrow
             items.add(new ItemStack(this, 1, 0));
-            // Flecha rota
+            // Broken Arrow
             items.add(new ItemStack(this, 1, setBroken(0, true)));
         }
     }
@@ -75,7 +75,7 @@ public class ItemDrillArrow extends ItemArrow implements IHasModel {
 	public EntityArrow createArrow(World worldIn, ItemStack stack, EntityLivingBase shooter) {
 		EntityDrillArrow arrow = new EntityDrillArrow(worldIn, shooter);
     
-		// Si está rota, no debería poder dispararse
+		// If it's broken, it shouldn't be able to fire
 		if (isBroken(stack.getMetadata())) {
 			arrow.setDamage(0);
 		}
@@ -85,15 +85,15 @@ public class ItemDrillArrow extends ItemArrow implements IHasModel {
     
     @Override
     public boolean isInfinite(ItemStack stack, ItemStack bow, EntityPlayer player) {
-        // Las flechas drill NO son infinitas, incluso con encantamiento Infinity
+        // Drill arrows are NOT infinite, even with the Infinity enchantment
         return false;
     }
     
     @Override
     public void registerModels() {
-        // Modelo normal (intacta)
+        // Normal model
         betterarchery.proxy.registerItemRenderer(this, 0, "inventory");
-        // Modelo roto
+        // Broken model
         betterarchery.proxy.registerItemRenderer(this, setBroken(0, true), "broken");
     }
 }

@@ -1,5 +1,21 @@
-.gradle/
+/build/
+/.gradle/
+/run/
+/out/
+gradle.properties
+local.properties
+/.classpath
+/.project
+/.settings/
+/bin/
+/*.launch
+/.vscode/
+/*.iml
+/*.ipr
+/*.iws
 .vscode/
+.idea/
+.DS_Store
 
 # Compiled class file
 *.class
