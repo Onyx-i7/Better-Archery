@@ -1,5 +1,6 @@
 package com.onyxi7.betterarchery.handler;
 
+import com.onyxi7.betterarchery.init.BlockInit;
 import com.onyxi7.betterarchery.init.ItemInit;
 import com.onyxi7.betterarchery.util.interfaces.IHasModel;
 import net.minecraft.block.Block;
@@ -21,7 +22,7 @@ public class RegistryHandler {
     
     @SubscribeEvent
     public static void onBlockRegister(RegistryEvent.Register<Block> event) {
-        // Block registration if needed
+        event.getRegistry().registerAll(BlockInit.BLOCKS.toArray(new Block[0]));
     }
     
     @SubscribeEvent

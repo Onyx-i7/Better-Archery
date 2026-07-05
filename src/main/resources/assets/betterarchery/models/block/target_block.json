@@ -1,0 +1,6 @@
+{
+    "parent": "betterarchery:block/target_block",
+    "textures": {
+        "all": "betterarchery:block/target_block"
+    }
+}

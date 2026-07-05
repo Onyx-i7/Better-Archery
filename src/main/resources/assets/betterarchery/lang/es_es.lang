@@ -57,3 +57,4 @@ betterarchery.jei.torch_arrow.description=Coloca una antorcha donde cae. Perfect
 betterarchery.jei.impact_arrow.description=Explota al impactar, causando daño en área y empuje a las entidades cercanas.
 betterarchery.jei.ender_arrow.description=Te teletransporta a donde cae. ¡Como una Perla de Ender pero con arco!
 betterarchery.jei.splitting_arrow.description=Se divide en 3 flechas al impactar, golpeando múltiples objetivos.
+tile.target.name=Diana
