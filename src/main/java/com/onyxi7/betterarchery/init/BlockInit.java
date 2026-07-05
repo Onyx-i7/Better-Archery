@@ -8,21 +8,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BlockInit {
+    
     public static final List<Block> BLOCKS = new ArrayList<>();
-    public static final Block TARGET_BLOCK = register(new TargetBlock(), "target_block");
-
-    private static Block registerBlock(Block block) {
-        BLOCKS.add(block);
-        block.setRegistryName(block.getTranslationKey().substring(5));
-        block.setTranslationKey(block.getTranslationKey().substring(5));
-        return block;
+    
+    public static final Block TARGET_BLOCK = new TargetBlock();
+    
+    static {
+        BLOCKS.add(TARGET_BLOCK);
     }
-
+    
     public static void registerItems() {
         for (Block block : BLOCKS) {
-            ItemBlock itemBlock = new ItemBlock(block);
-            itemBlock.setRegistryName(block.getRegistryName());
-            itemBlock.setTranslationKey(block.getTranslationKey());
+            ItemInit.ITEMS.add(new ItemBlock(block).setRegistryName(block.getRegistryName()));
         }
     }
 }
