@@ -8,7 +8,6 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 public class CommonProxy {
     
     public void registerItemRenderer(Item item, int meta, String id) {
-        // Método vacío en el servidor
     }
     
     public void preInit(FMLPreInitializationEvent event) {

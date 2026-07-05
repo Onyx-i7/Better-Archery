@@ -1,7 +1,7 @@
 {
 	"parent": "item/handheld",
 	"textures": {
-		"layer0": "betterarchery:quiver_with_arrows"
+		"layer0": "betterarchery:items/quiver_with_arrows"
 	}
 	
 }
