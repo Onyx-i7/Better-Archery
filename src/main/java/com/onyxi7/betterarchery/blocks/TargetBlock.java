@@ -24,7 +24,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-public class TargetBlock extends Block {
+public class TargetBlock extends Block implements IHasModel {
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
     protected static final AxisAlignedBB AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D);
     
@@ -38,6 +38,13 @@ public class TargetBlock extends Block {
         setCreativeTab(com.onyxi7.betterarchery.init.CreativeTabInit.BETTER_ARCHERY_TAB);
         
         GameRegistry.registerTileEntity(TileEntityTarget.class, "target_block_tileentity");
+    }
+
+    @Override
+    public void registerModels() {
+        com.onyxi7.betterarchery.betterarchery.proxy.registerItemRenderer(
+            Item.getItemFromBlock(this), 0, "inventory"
+        );
     }
     
     @Override
