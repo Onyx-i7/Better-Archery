@@ -1,7 +1,7 @@
 {
 	"format_version": "1.9.0",
 	"credit": "Made with Blockbench",
-	"parent": "Gunpowder_barrel",
+	"parent": "block/cube_all",
 	"textures": {
 		"1": "betterarchery:block/gunpowder_barrel_bottom",
 		"2": "betterarchery:block/gunpowder_barrel_side",
