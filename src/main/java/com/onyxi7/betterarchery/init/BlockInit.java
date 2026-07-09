@@ -19,9 +19,11 @@ public class BlockInit {
         BLOCKS.add(GUNPOWDER_BARREL);
     }
     
-    public static void registerItems() {
+    public static void registerItemBlocks() {
         for (Block block : BLOCKS) {
-            ItemInit.ITEMS.add(new ItemBlock(block).setRegistryName(block.getRegistryName()));
+            ItemBlock itemBlock = new ItemBlock(block);
+            itemBlock.setRegistryName(block.getRegistryName());
+            ItemInit.ITEMS.add(itemBlock);
         }
     }
 }
