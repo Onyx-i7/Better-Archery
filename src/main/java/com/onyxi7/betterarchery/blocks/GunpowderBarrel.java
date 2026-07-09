@@ -14,7 +14,7 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-public class GunpowderBarrel extends Block {
+public class GunpowderBarrel extends Block implements IHasModel {
     
     public GunpowderBarrel() {
         super(Material.WOOD);
@@ -26,6 +26,13 @@ public class GunpowderBarrel extends Block {
         setCreativeTab(com.onyxi7.betterarchery.init.CreativeTabInit.BETTER_ARCHERY_TAB);
         
         GameRegistry.registerTileEntity(TileEntityGunpowderBarrel.class, "gunpowder_barrel_tileentity");
+    }
+
+    @Override
+    public void registerModels() {
+        com.onyxi7.betterarchery.betterarchery.proxy.registerItemRenderer(
+            Item.getItemFromBlock(this), 0, "inventory"
+        );
     }
     
     @Override
