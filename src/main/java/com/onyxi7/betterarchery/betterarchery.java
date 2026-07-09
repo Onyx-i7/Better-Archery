@@ -1,6 +1,7 @@
 package com.onyxi7.betterarchery;
 
 import com.onyxi7.betterarchery.proxy.CommonProxy;
+com.onyxi7.betterarchery.compat.BackToolsCompat;
 import com.onyxi7.betterarchery.entities.EntityDrillArrow;
 import com.onyxi7.betterarchery.entities.EntityFireArrow;
 import com.onyxi7.betterarchery.entities.EntityTorchArrow;
@@ -8,6 +9,7 @@ import com.onyxi7.betterarchery.entities.EntityImpactArrow;
 import com.onyxi7.betterarchery.entities.EntityEnderArrow;
 import com.onyxi7.betterarchery.entities.EntitySplittingArrow;
 import com.onyxi7.betterarchery.entities.EntityQuiverSkeleton;
+import com.onyxi7.betterarchery.handler.BarrelEventHandler;
 import com.onyxi7.betterarchery.init.DispenserInit;
 import com.onyxi7.betterarchery.config.BetterArcheryConfig;
 import net.minecraft.util.ResourceLocation;
@@ -156,7 +158,10 @@ public class betterarchery {
 			);
 		}	
 		
-		com.onyxi7.betterarchery.compat.BackToolsCompat.init();
+		BackToolsCompat.init();
+		net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(
+	        new BarrelEventHandler()
+	    );
 		DispenserInit.init();
 		proxy.init(event);
 	}
