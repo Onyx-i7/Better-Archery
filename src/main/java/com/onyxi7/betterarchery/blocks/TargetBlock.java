@@ -132,24 +132,4 @@ public class TargetBlock extends Block {
     public EnumBlockRenderType getRenderType(IBlockState state) {
         return EnumBlockRenderType.MODEL;
     }
-    
-    public void onProjectileHit(World worldIn, BlockPos pos, IBlockState state, RayTraceResult trace) {
-        if (!worldIn.isRemote) {
-            TileEntity tileentity = worldIn.getTileEntity(pos);
-            if (tileentity instanceof TileEntityTarget) {
-                TileEntityTarget target = (TileEntityTarget) tileentity;
-                double hitX = trace.hitVec.x - pos.getX();
-                double hitZ = trace.hitVec.z - pos.getZ();
-                double distanceFromCenter = Math.sqrt(Math.pow(hitX - 0.5D, 2) + Math.pow(hitZ - 0.5D, 2));
-                
-                int signalStrength = 15 - (int) (distanceFromCenter * 15.0D);
-                signalStrength = MathHelper.clamp(signalStrength, 1, 15);
-                
-                target.setSignalStrength(signalStrength);
-                target.activate();
-                
-                worldIn.playEvent(null, 1023, pos, 0);
-            }
-        }
-    }
 }
