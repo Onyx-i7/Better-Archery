@@ -1,5 +1,6 @@
 package com.onyxi7.betterarchery.init;
 
+import com.onyxi7.betterarchery.blocks.TargetBlock;
 import com.onyxi7.betterarchery.blocks.GunpowderBarrel;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
