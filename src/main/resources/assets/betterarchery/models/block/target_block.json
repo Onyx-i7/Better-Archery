@@ -1,5 +1,5 @@
 {
-    "parent": "betterarchery:block/target_block",
+    "parent": "block/cube_all",
     "textures": {
         "all": "betterarchery:block/target_block"
     }
