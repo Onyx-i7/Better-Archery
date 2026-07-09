@@ -1,6 +1,8 @@
 package com.onyxi7.betterarchery.blocks;
 
+import com.onyxi7.betterarchery.betterarchery;
 import com.onyxi7.betterarchery.tileentity.TileEntityGunpowderBarrel;
+import com.onyxi7.betterarchery.util.interfaces.IHasModel;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
