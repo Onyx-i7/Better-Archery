@@ -1,0 +1,21 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "PPP",
+        "GGG",
+        "PPP"
+    ],
+    "key": {
+        "P": {
+            "item": "minecraft:planks",
+            "data": 32767
+        },
+        "G": {
+            "item": "minecraft:gunpowder"
+        }
+    },
+    "result": {
+        "item": "betterarchery:gunpowder_barrel",
+        "count": 1
+    }
+}
