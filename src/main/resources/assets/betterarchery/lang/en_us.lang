@@ -57,4 +57,7 @@ betterarchery.jei.torch_arrow.description=Places a torch where it lands. Perfect
 betterarchery.jei.impact_arrow.description=Explodes on impact, dealing area damage and knockback to nearby entities.
 betterarchery.jei.ender_arrow.description=Teleports you to where it lands. Like an Ender Pearl but with a bow!
 betterarchery.jei.splitting_arrow.description=Splits into 3 arrows on impact, hitting multiple targets.
+
+# Blocks
 tile.target.name=Target
+tile.gunpowder_barrel.name=Gunpowder Barrel
