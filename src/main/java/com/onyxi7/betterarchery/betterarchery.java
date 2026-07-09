@@ -10,6 +10,7 @@ import com.onyxi7.betterarchery.entities.EntityEnderArrow;
 import com.onyxi7.betterarchery.entities.EntitySplittingArrow;
 import com.onyxi7.betterarchery.entities.EntityQuiverSkeleton;
 import com.onyxi7.betterarchery.handler.BarrelEventHandler;
+import com.onyxi7.betterarchery.init.BlockInit;
 import com.onyxi7.betterarchery.init.DispenserInit;
 import com.onyxi7.betterarchery.config.BetterArcheryConfig;
 import net.minecraft.util.ResourceLocation;
@@ -162,6 +163,7 @@ public class betterarchery {
 		net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(
 	        new BarrelEventHandler()
 	    );
+		BlockInit.registerItemBlocks();
 		DispenserInit.init();
 		proxy.init(event);
 	}
