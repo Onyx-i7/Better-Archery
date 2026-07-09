@@ -1,7 +1,7 @@
 package com.onyxi7.betterarchery;
 
 import com.onyxi7.betterarchery.proxy.CommonProxy;
-com.onyxi7.betterarchery.compat.BackToolsCompat;
+import com.onyxi7.betterarchery.compat.BackToolsCompat;
 import com.onyxi7.betterarchery.entities.EntityDrillArrow;
 import com.onyxi7.betterarchery.entities.EntityFireArrow;
 import com.onyxi7.betterarchery.entities.EntityTorchArrow;
