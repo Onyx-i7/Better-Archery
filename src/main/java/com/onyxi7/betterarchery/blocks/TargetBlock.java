@@ -1,7 +1,9 @@
 package com.onyxi7.betterarchery.blocks;
 
 import com.onyxi7.betterarchery.init.BlockInit;
+import com.onyxi7.betterarchery.betterarchery;
 import com.onyxi7.betterarchery.tileentity.TileEntityTarget;
+import com.onyxi7.betterarchery.util.interfaces.IHasModel;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
