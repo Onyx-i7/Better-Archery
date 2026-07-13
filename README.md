@@ -16,6 +16,7 @@
 </div>
 
 ---
+> **Note**: Development is slow because I don't like adding blocks and items I'm more into optimization, and for me, it's harder to create a complex mod than to optimize an existing one
 
 ## Features
 
