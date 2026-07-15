@@ -1,12 +1,12 @@
 {
   "pools": [
     {
-      "name": "main_drops",
+      "name": "vanilla_drops",
       "rolls": 1,
       "entries": [
         {
           "type": "item",
-          "name": "minecraft:bone",
+          "name": "minecraft:arrow",
           "weight": 1,
           "functions": [
             {
@@ -27,7 +27,7 @@
         },
         {
           "type": "item",
-          "name": "minecraft:arrow",
+          "name": "minecraft:bone",
           "weight": 1,
           "functions": [
             {
@@ -49,7 +49,7 @@
       ]
     },
     {
-      "name": "special_drops",
+      "name": "better_archery_drops",
       "rolls": 1,
       "entries": [
         {

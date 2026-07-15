@@ -26,11 +26,6 @@ public class ClientProxy extends CommonProxy {
         super.preInit(event);
         
         RenderingRegistry.registerEntityRenderingHandler(
-            EntityQuiverSkeleton.class,
-            RenderQuiverSkeleton::new
-        );
-        
-        RenderingRegistry.registerEntityRenderingHandler(
             EntityFireArrow.class,
             manager -> new RenderCustomArrow(manager, new ResourceLocation("betterarchery:textures/entity/arrow.png"))
         );

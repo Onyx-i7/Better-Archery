@@ -8,7 +8,6 @@ import com.onyxi7.betterarchery.entities.EntityTorchArrow;
 import com.onyxi7.betterarchery.entities.EntityImpactArrow;
 import com.onyxi7.betterarchery.entities.EntityEnderArrow;
 import com.onyxi7.betterarchery.entities.EntitySplittingArrow;
-import com.onyxi7.betterarchery.entities.EntityQuiverSkeleton;
 import com.onyxi7.betterarchery.handler.BarrelEventHandler;
 import com.onyxi7.betterarchery.init.BlockInit;
 import com.onyxi7.betterarchery.init.DispenserInit;
@@ -112,17 +111,6 @@ public class betterarchery {
 			true
 		);
 		
-		EntityRegistry.registerModEntity(
-			new ResourceLocation("betterarchery", "quiver_skeleton"),
-			EntityQuiverSkeleton.class,
-			"quiver_skeleton",
-			7,
-			this,
-			80,
-			3,
-			true
-		);
-		
 		System.out.println("[BetterArchery] Forcing config reload...");
 		net.minecraftforge.common.config.ConfigManager.sync("betterarchery", net.minecraftforge.common.config.Config.Type.INSTANCE);
 		
@@ -130,35 +118,12 @@ public class betterarchery {
 		System.out.println("[BetterArchery] Drill Max Blocks: " + BetterArcheryConfig.arrows.drillArrowMaxBlocks);
 		System.out.println("[BetterArchery] Drill Power Loss: " + BetterArcheryConfig.arrows.drillArrowPowerLoss);
 		System.out.println("[BetterArchery] Impact Radius: " + BetterArcheryConfig.arrows.impactArrowExplosionRadius);
-		System.out.println("[BetterArchery] Quiver Skeleton Enabled: " + BetterArcheryConfig.mobs.enableQuiverSkeleton);
 		
 		proxy.preInit(event);
 	}
     
     @Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
-		if (BetterArcheryConfig.mobs.enableQuiverSkeleton) {
-			net.minecraftforge.fml.common.registry.EntityRegistry.addSpawn(
-				EntityQuiverSkeleton.class,
-				BetterArcheryConfig.mobs.quiverSkeletonSpawnWeight,
-				1,
-				1,
-				net.minecraft.entity.EnumCreatureType.MONSTER,
-				net.minecraft.init.Biomes.PLAINS,
-				net.minecraft.init.Biomes.FOREST,
-				net.minecraft.init.Biomes.TAIGA,
-				net.minecraft.init.Biomes.DESERT,
-				net.minecraft.init.Biomes.JUNGLE,
-				net.minecraft.init.Biomes.BIRCH_FOREST,
-				net.minecraft.init.Biomes.ROOFED_FOREST,
-				net.minecraft.init.Biomes.EXTREME_HILLS,
-				net.minecraft.init.Biomes.SAVANNA,
-				net.minecraft.init.Biomes.MESA,
-				net.minecraft.init.Biomes.ICE_PLAINS,
-				net.minecraft.init.Biomes.COLD_TAIGA
-			);
-		}	
-		
 		BackToolsCompat.init();
 		net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(
 	        new BarrelEventHandler()

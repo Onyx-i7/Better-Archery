@@ -10,7 +10,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class BetterArcheryConfig {
     
     public static General general = new General();
-    public static Mobs mobs = new Mobs();
     public static Arrows arrows = new Arrows();
     public static Debug debug = new Debug();
     
@@ -21,27 +20,6 @@ public class BetterArcheryConfig {
         @Config.Comment("Maximum arrows that can be stored in quiver")
         @Config.RangeInt(min = 1, max = 512)
         public int maxQuiverArrows = 128;
-    }
-    
-    public static class Mobs {
-        @Config.Comment("Enable Quiver Skeleton spawning")
-        public boolean enableQuiverSkeleton = true;
-        
-        @Config.Comment("Quiver Skeleton spawn weight")
-        @Config.RangeInt(min = 1, max = 100)
-        public int quiverSkeletonSpawnWeight = 10;
-        
-        @Config.Comment("Maximum arrows Quiver Skeleton can have")
-        @Config.RangeInt(min = 1, max = 64)
-        public int maxArrows = 32;
-        
-        @Config.Comment("Minimum arrows Quiver Skeleton can have")
-        @Config.RangeInt(min = 1, max = 64)
-        public int minArrows = 8;
-        
-        @Config.Comment("Chance for Quiver Skeleton to have special bow (0.0-1.0)")
-        @Config.RangeDouble(min = 0.0, max = 1.0)
-        public double specialBowChance = 0.2;
     }
     
     public static class Arrows {
