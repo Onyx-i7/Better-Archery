@@ -8,12 +8,12 @@ on:
   workflow_dispatch:
     inputs:
       version_name:
-        description: 'Nombre de la versión estable (Ej: v1.0.0)'
+        description: 'Stable version name (e.g., v1.0.0)'
         required: true
         default: 'v1.0.0'
       # SWITCH: You decide whether or not to publish during manual execution
       create_release:
-        description: '¿Quieres crear un Release oficial en GitHub?'
+        description: 'Do you want to create an official release on GitHub?'
         type: boolean
         required: true
         default: false
