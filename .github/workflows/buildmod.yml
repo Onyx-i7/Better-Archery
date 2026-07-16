@@ -48,6 +48,16 @@ jobs:
             const sha = context.sha.substring(0, 7);
             core.setOutput('short_sha', sha);
 
+      - name: Cache Gradle packages
+        uses: actions/cache@v6.1.0
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
       - name: Build with Gradle
         run: ./gradlew build --no-daemon --stacktrace
       
