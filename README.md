@@ -370,9 +370,9 @@ If you find a bug, please report it in the [Issues](https://github.com/Onyx-i7/B
 
 ### Long-term Ideas
 
-- [ ]   **Combined Arrows System**: Merge multiple arrow effects into a single projectile \
-- [ ]   **New Bow Variants**: Expand the arsenal with more unique tiers and stats \
-- [ ]   **Advanced Optimization**: Refine rendering and NBT data tracking for the Quiver system \
+- [ ]   **Combined Arrows System**: Merge multiple arrow effects into a single projectile
+- [ ]   **New Bow Variants**: Expand the arsenal with more unique tiers and stats
+- [ ]   **Advanced Optimization**: Refine rendering and NBT data tracking for the Quiver system
 - [x]   **Modpack Customization**: Implement a file-based system (JSON/Config) to allow modpack creators to add custom bows and arrows dynamically
 
 ---
